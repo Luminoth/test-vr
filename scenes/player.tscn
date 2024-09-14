@@ -1,20 +1,35 @@
-[gd_scene format=3 uid="uid://ba3tvhshr6d03"]
+[gd_scene load_steps=4 format=3 uid="uid://ba3tvhshr6d03"]
 
-[node name="Player" type="XROrigin3D"]
+[ext_resource type="Script" path="res://scripts/Player/Player.cs" id="1_6oq7a"]
+[ext_resource type="Script" path="res://scripts/Player/PlayerInput.cs" id="2_pidub"]
 
-[node name="XRCamera3D" type="XRCamera3D" parent="."]
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1r3dp"]
+
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("_input")]
+script = ExtResource("1_6oq7a")
+_input = NodePath("Input")
+
+[node name="XROrigin3D" type="XROrigin3D" parent="."]
+
+[node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
 
-[node name="LeftHand" type="XRController3D" parent="."]
+[node name="LeftHand" type="XRController3D" parent="XROrigin3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1, -1)
 tracker = &"left_hand"
 
-[node name="CSGSphere3D" type="CSGSphere3D" parent="LeftHand"]
+[node name="CSGSphere3D" type="CSGSphere3D" parent="XROrigin3D/LeftHand"]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 
-[node name="RightHand" type="XRController3D" parent="."]
+[node name="RightHand" type="XRController3D" parent="XROrigin3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1, -1)
 tracker = &"right_hand"
 
-[node name="CSGSphere3D" type="CSGSphere3D" parent="RightHand"]
+[node name="CSGSphere3D" type="CSGSphere3D" parent="XROrigin3D/RightHand"]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_1r3dp")
+
+[node name="Input" type="Node" parent="."]
+script = ExtResource("2_pidub")
