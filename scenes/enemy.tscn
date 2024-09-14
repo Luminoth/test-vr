@@ -1,6 +1,15 @@
-[gd_scene format=3 uid="uid://bhux5cc60eoc1"]
+[gd_scene load_steps=3 format=3 uid="uid://bhux5cc60eoc1"]
 
-[node name="Enemy" type="Node3D"]
+[ext_resource type="Script" path="res://scripts/NPCs/Enemy.cs" id="1_35hw1"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xqngv"]
+
+[node name="Enemy" type="CharacterBody3D"]
+script = ExtResource("1_35hw1")
 
 [node name="CSGBox3D" type="CSGBox3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("BoxShape3D_xqngv")
