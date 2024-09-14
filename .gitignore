@@ -3,3 +3,4 @@
 /android/
 builds/
 .scons*
+ovr_platform_sdk/
