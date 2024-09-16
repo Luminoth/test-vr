@@ -23,6 +23,10 @@ XrManager="*res://scenes/managers/xr_manager.tscn"
 
 project/assembly_name="Test-VR"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/godot_oculus_platform/android_plugin/plugin.cfg")
+
 [rendering]
 
 renderer/rendering_method="mobile"
