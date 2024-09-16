@@ -12,6 +12,7 @@
 
 ## Running locally on Quest
 
+* Have to enable Developer Mode through the Meta Quest app
 * https://www.reddit.com/r/godot/comments/zsluh8/comment/j1a9iai/
 * https://forum.godotengine.org/t/how-can-i-connect-my-android-phone-to-godot-and-live-preview/22744/2
 

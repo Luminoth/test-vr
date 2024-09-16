@@ -4,9 +4,7 @@ namespace VrTest.Util;
 // (because it has direct access to the SceneTree that way)
 public static class OculusHelper
 {
-    public static bool IsOculusInitialized()
-    {
-        var oculusManager = (Engine.GetMainLoop() as SceneTree).Root.GetNode("OculusManager");
-        return oculusManager.GetIndexed("oculus_initialized").AsBool();
-    }
+    private static Node OculusManager => (Engine.GetMainLoop() as SceneTree).Root.GetNode("OculusManager");
+
+    public static bool IsOculusInitialized => OculusManager.GetIndexed("oculus_initialized").AsBool();
 }
