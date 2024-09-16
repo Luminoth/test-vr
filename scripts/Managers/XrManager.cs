@@ -6,7 +6,7 @@ public partial class XrManager : SingletonNode<XrManager>
 {
     private XRInterface _xrInterface;
 
-    public bool XrInitialized => _xrInterface != null && _xrInterface.IsInitialized();
+    public bool IsXrInitialized => _xrInterface != null && _xrInterface.IsInitialized();
 
     #region Godot Lifecycle
 
@@ -15,7 +15,7 @@ public partial class XrManager : SingletonNode<XrManager>
         GD.Print($"XR Platform: {OS.GetName()}");
 
         _xrInterface = XRServer.FindInterface("OpenXR");
-        if(XrInitialized) {
+        if(IsXrInitialized) {
             GD.Print("OpenXR initialized successfully");
 
             // Turn off v-sync!

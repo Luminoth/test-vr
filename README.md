@@ -5,6 +5,7 @@
 * Godot 4.3
 * https://docs.godotengine.org/en/stable/tutorials/export/exporting_for_android.html
   * OpenJDK (17+)
+    * sudo apt install openjdk-17-jdk openjdk-17-jre
   * Android SDK (35)
   * Android NDK
   * CMake
