@@ -4,7 +4,7 @@
 
 * Godot 4.3
 * https://docs.godotengine.org/en/stable/tutorials/export/exporting_for_android.html
-  * OpenJDK (11+)
+  * OpenJDK (17+)
   * Android SDK (35)
   * Android NDK
   * CMake
