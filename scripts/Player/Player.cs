@@ -2,6 +2,7 @@ using VrTest.Managers;
 
 namespace VrTest.Player;
 
+// TODO: https://docs.godotengine.org/en/stable/tutorials/xr/xr_room_scale.html
 public partial class Player : CharacterBody3D
 {
     [Export]
