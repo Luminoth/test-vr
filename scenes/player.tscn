@@ -5,8 +5,9 @@
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1r3dp"]
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("_input")]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("_origin", "_input")]
 script = ExtResource("1_6oq7a")
+_origin = NodePath("XROrigin3D")
 _input = NodePath("Input")
 
 [node name="XROrigin3D" type="XROrigin3D" parent="."]
