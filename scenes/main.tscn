@@ -11,9 +11,10 @@
 environment = SubResource("Environment_u4jql")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.707107, -0.707107, 0, 0.707107, 0.707107, 0, 10, 0)
+transform = Transform3D(1.19249e-08, 0.707107, -0.707107, 0, 0.707107, 0.707107, 1, -8.43217e-09, 8.43217e-09, 0, 10, 0)
 
 [node name="Player" parent="." instance=ExtResource("1_irsne")]
+transform = Transform3D(1.19249e-08, 0, -1, 0, 1, 0, 1, 0, 1.19249e-08, 0, 0, 0)
 
 [node name="Enemy" parent="." instance=ExtResource("2_txd32")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 0)

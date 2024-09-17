@@ -19,6 +19,8 @@
 * Have to set XR mode to OpenXR (defaults to Regular) and include the Meta OpenXR vendor plugin
 * Deploy with Remote Debug is useful to get logs in the editor
 * Small Deploy with Network Filesystem seems to crash the app when used
+* Have to use test users until a first build can be uploaded (and this is a long process to kick off)
+  * https://developers.meta.com/horizon/resources/test-users/
 
 ## Misc
 

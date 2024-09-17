@@ -14,9 +14,11 @@ public partial class XrManager : SingletonNode<XrManager>
     {
         // PC not supported by OpenXR
         if(OS.GetName() != "Android") {
-            GD.Print($"Skipping OpenXR init on unsupported platform ${OS.GetName()}");
+            GD.Print($"Skipping OpenXR init on unsupported platform {OS.GetName()}");
             return;
         }
+
+        GD.Print("Initializing OpenXR ...");
 
         _xrInterface = XRServer.FindInterface("OpenXR");
         if(IsXrInitialized) {
