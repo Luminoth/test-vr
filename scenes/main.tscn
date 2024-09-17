@@ -16,4 +16,4 @@ transform = Transform3D(1, 0, 0, 0, 0.707107, -0.707107, 0, 0.707107, 0.707107, 
 [node name="Player" parent="." instance=ExtResource("1_irsne")]
 
 [node name="Enemy" parent="." instance=ExtResource("2_txd32")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 0)

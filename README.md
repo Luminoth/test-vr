@@ -12,11 +12,20 @@
 
 ## Running locally on Quest
 
+* https://docs.godotengine.org/en/stable/tutorials/xr/deploying_to_android.html
+* https://github.com/GodotVR/godot_openxr_vendors
 * Have to enable Developer Mode through the Meta Quest app
-* https://www.reddit.com/r/godot/comments/zsluh8/comment/j1a9iai/
-* https://forum.godotengine.org/t/how-can-i-connect-my-android-phone-to-godot-and-live-preview/22744/2
+  * Make sure to allow access to files in the headset (notification may be in the notifications tab, it goes away kinda quick)
+* Have to set XR mode to OpenXR (defaults to Regular) and include the Meta OpenXR vendor plugin
+* Deploy with Remote Debug is useful to get logs in the editor
+* Small Deploy with Network Filesystem seems to crash the app when used
 
 ## Misc
 
 * https://docs.godotengine.org/en/stable/tutorials/xr/setting_up_xr.html
 * https://decacis.github.io/godot_oculus_platform/
+
+## TODO
+
+* https://docs.godotengine.org/en/stable/tutorials/xr/a_better_xr_start_script.html
+* https://docs.godotengine.org/en/stable/tutorials/xr/xr_next_steps.html

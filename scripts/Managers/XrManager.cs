@@ -12,22 +12,42 @@ public partial class XrManager : SingletonNode<XrManager>
 
     public override void _Ready()
     {
-        GD.Print($"XR Platform: {OS.GetName()}");
+        // PC not supported by OpenXR
+        if(OS.GetName() != "Android") {
+            GD.Print($"Skipping OpenXR init on unsupported platform ${OS.GetName()}");
+            return;
+        }
 
         _xrInterface = XRServer.FindInterface("OpenXR");
         if(IsXrInitialized) {
             GD.Print("OpenXR initialized successfully");
+            var vp = GetViewport();
 
-            // Turn off v-sync!
+            // Enable XR on our viewport
+            vp.UseXR = true;
+
+            // Make sure v-sync is off, v-sync is handled by OpenXR
             DisplayServer.WindowSetVsyncMode(DisplayServer.VSyncMode.Disabled);
 
-            // Change our main viewport to output to the HMD
-            GetViewport().UseXR = true;
+            // Enable VRS
+            if(RenderingServer.GetRenderingDevice() != null) {
+                vp.VrsMode = Viewport.VrsModeEnum.XR;
+            } else if((int)ProjectSettings.GetSetting("xr/openxr/foveation_level") == 0) {
+                GD.PushWarning("OpenXR: Recommend setting Foveation level to High in Project Settings");
+            }
 
             // TODO: Also note that by default the physics engine runs at 60Hz as well and this can result in choppy physics.
             // You should set Engine.physics_ticks_per_second to a higher value.
+
+            // Connect the OpenXR events
+            /*_xrInterface.SessionBegun += OnOpenXRSessionBegun;
+            _xrInterface.SessionVisible += OnOpenXRVisibleState;
+            _xrInterface.SessionFocussed += OnOpenXRFocusedState;
+            _xrInterface.SessionStopping += OnOpenXRStopping;
+            _xrInterface.PoseRecentered += OnOpenXRPoseRecentered;*/
         } else {
             GD.PushError("OpenXR not initialized, please check if your headset is connected");
+            GetTree().Quit();
         }
     }
 
