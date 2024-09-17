@@ -56,21 +56,8 @@ func _ready():
 
             oculus_initialized = true
 
-            GDOculusPlatform.user_get_logged_in_user() \
-            .then(func(resp):
-                # TODO: store this stuff
-                print("LOGGED IN USER INFO:")
-                print("--------------------")
-
-                print("ID: ", resp.id)
-                print("OCULUS ID: ", resp.oculus_id)
-                print("DISPLAY NAME: ", resp.display_name)
-                print("IMAGE URL: ", resp.image_url)
-                print("SMALL IMAGE URL: ", resp.small_image_url)
-            ).error(func(logged_in_user_error):
-                print("Oculus Platform logged in user error: ", logged_in_user_error)
-                get_tree().quit()
-            )
+            # TODO: have to use a fake user or something here
+            # the Oculus call won't return anything
     ) \
     .error(func(initialization_err):
         push_error("Oculus Platform initialization error: ", initialization_err)
