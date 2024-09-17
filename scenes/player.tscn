@@ -1,13 +1,20 @@
-[gd_scene load_steps=4 format=3 uid="uid://ba3tvhshr6d03"]
+[gd_scene load_steps=7 format=3 uid="uid://ba3tvhshr6d03"]
 
 [ext_resource type="Script" path="res://scripts/Player/Player.cs" id="1_6oq7a"]
 [ext_resource type="Script" path="res://scripts/Player/PlayerInput.cs" id="2_pidub"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_waxra"]
+albedo_color = Color(0.618933, 8.0619e-07, 2.40654e-07, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_i8pr7"]
+albedo_color = Color(0.619608, 0, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u2bv2"]
+
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1r3dp"]
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("_origin", "_input")]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("_input")]
 script = ExtResource("1_6oq7a")
-_origin = NodePath("XROrigin3D")
 _input = NodePath("Input")
 
 [node name="XROrigin3D" type="XROrigin3D" parent="."]
@@ -21,6 +28,7 @@ tracker = &"left_hand"
 
 [node name="CSGSphere3D" type="CSGSphere3D" parent="XROrigin3D/LeftHand"]
 transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)
+material = SubResource("StandardMaterial3D_waxra")
 
 [node name="RightHand" type="XRController3D" parent="XROrigin3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1, -1)
@@ -28,13 +36,33 @@ tracker = &"right_hand"
 
 [node name="CSGSphere3D" type="CSGSphere3D" parent="XROrigin3D/RightHand"]
 transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)
+material = SubResource("StandardMaterial3D_i8pr7")
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+material = SubResource("StandardMaterial3D_u2bv2")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_1r3dp")
 
-[node name="CSGCylinder3D" type="CSGCylinder3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-
 [node name="Input" type="Node" parent="."]
 script = ExtResource("2_pidub")
+
+[node name="HUD" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="CanvasLayer" type="CanvasLayer" parent="HUD"]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HUD/CanvasLayer"]
+offset_left = 474.0
+offset_top = 540.0
+offset_right = 684.0
+offset_bottom = 580.0
+
+[node name="Label" type="Label" parent="HUD/CanvasLayer/VBoxContainer"]
+layout_mode = 2
+text = "This text does not show up in XR"

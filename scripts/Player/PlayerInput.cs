@@ -17,7 +17,7 @@ public partial class PlayerInput : Node
     public override void _Process(double delta)
     {
         _moveDirection = Input.GetVector("move left", "move right", "move forward", "move back");
-        _lookDirection = Input.GetVector("look left", "look right", "look forward", "look back");
+        _lookDirection = Input.GetVector("look left", "look right", "look up", "look down");
     }
 
     #endregion

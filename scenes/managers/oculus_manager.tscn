@@ -4,3 +4,5 @@
 
 [node name="Node" type="Node"]
 script = ExtResource("1_i78np")
+app_id = "8476343025745495"
+skip_entitlement_check = true
