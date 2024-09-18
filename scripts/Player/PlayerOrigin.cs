@@ -57,7 +57,7 @@ public partial class PlayerOrigin : XROrigin3D
         newCameraTransform.Origin.Y = _neck.GlobalPosition.Y;
 
         // apply the transform
-        newCameraTransform = newCameraTransform * _neck.Transform.Inverse();
+        newCameraTransform *= _neck.Transform.Inverse();
 
         // remove tilt
         var cameraTransform = _camera.Transform;
@@ -133,10 +133,16 @@ public partial class PlayerOrigin : XROrigin3D
 
         // move
         var input = _input.MoveDirection;
-        var movement = _character.GlobalBasis * new Vector3(input.X, 0.0f, input.Y);
-        velocity.X = movement.X * _moveSpeed;
-        velocity.Y = movement.Y;
-        _character.Velocity = velocity * _moveSpeed;
+        var direction = _character.GlobalBasis * new Vector3(input.X, 0.0f, input.Y);
+        if(direction.LengthSquared() > 0.0f) {
+            velocity.X = direction.X * _moveSpeed;
+            velocity.Z = direction.Z * _moveSpeed;
+        } else {
+            // slow down
+            velocity.X = Mathf.MoveToward(velocity.X, 0.0f, (float)delta);
+            velocity.Z = Mathf.MoveToward(velocity.Z, 0.0f, (float)delta);
+        }
+        _character.Velocity = velocity;
         _character.MoveAndSlide();
 
         // apply movement to origin

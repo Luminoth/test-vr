@@ -56,7 +56,7 @@ public partial class PlayerCharacter : CharacterBody3D
         newCameraTransform.Origin.Y = _neck.GlobalPosition.Y;
 
         // apply the transform
-        newCameraTransform = newCameraTransform * _neck.Transform.Inverse();
+        newCameraTransform *= _neck.Transform.Inverse();
 
         // remove tilt
         var cameraTransform = _camera.Transform;
@@ -88,6 +88,8 @@ public partial class PlayerCharacter : CharacterBody3D
         var bodyLocation = _origin.Transform * _camera.Transform * _neck.Position;
         bodyLocation.Y = 0.0f;
         bodyLocation = GlobalTransform * bodyLocation;
+
+        // move
         Velocity = (bodyLocation - characterPosition) / (float)delta;
         MoveAndSlide();
 
@@ -117,9 +119,13 @@ public partial class PlayerCharacter : CharacterBody3D
 
     private void ProcessMovementOnInput(double delta)
     {
+        // apply gravity
+        var velocity = Velocity;
+        velocity.Y -= (float)(_gravity * delta);
+
+        // move
         var input = _input.MoveDirection;
         var direction = GlobalBasis * new Vector3(input.X, 0, input.Y);
-        var velocity = Velocity;
         if(direction.LengthSquared() > 0.0f) {
             velocity.X = direction.X * _moveSpeed;
             velocity.Z = direction.Z * _moveSpeed;
@@ -129,7 +135,6 @@ public partial class PlayerCharacter : CharacterBody3D
             velocity.Z = Mathf.MoveToward(velocity.Z, 0.0f, (float)delta);
         }
         Velocity = velocity;
-
         MoveAndSlide();
     }
 }
