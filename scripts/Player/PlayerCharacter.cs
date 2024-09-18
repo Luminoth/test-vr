@@ -30,6 +30,8 @@ public partial class PlayerCharacter : CharacterBody3D
     public override void _Ready()
     {
         _gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsDouble();
+
+        Recenter();
     }
 
     public override void _PhysicsProcess(double delta)
@@ -42,6 +44,29 @@ public partial class PlayerCharacter : CharacterBody3D
     }
 
     #endregion
+
+    public void Recenter()
+    {
+        GD.Print("Recentering ...");
+
+        // where should the camera be
+        var newCameraTransform = GlobalTransform;
+
+        // height at neck join
+        newCameraTransform.Origin.Y = _neck.GlobalPosition.Y;
+
+        // apply the transform
+        newCameraTransform = newCameraTransform * _neck.Transform.Inverse();
+
+        // remove tilt
+        var cameraTransform = _camera.Transform;
+        var forward = _camera.Basis.Z;
+        forward.Y = 0.0f;
+        cameraTransform = cameraTransform.LookingAt(cameraTransform.Origin + forward.Normalized(), Vector3.Up, true);
+
+        // update XR location
+        _origin.GlobalTransform = newCameraTransform * cameraTransform.Inverse();
+    }
 
     private bool ProcessOnPhysicalMovement(double delta)
     {
