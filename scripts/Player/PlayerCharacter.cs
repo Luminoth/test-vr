@@ -58,7 +58,8 @@ public partial class PlayerCharacter : CharacterBody3D
         Basis = Basis.Rotated(Vector3.Up, angle);
 
         // reverse the rotation on the origin
-        _origin.Transform = new Transform3D().Rotated(Vector3.Up, -angle) * _origin.Transform;
+        // TODO: this is crashing atm
+        //_origin.Transform = new Transform3D().Rotated(Vector3.Up, -angle) * _origin.Transform;
 
         // move
         var characterPosition = GlobalPosition;
