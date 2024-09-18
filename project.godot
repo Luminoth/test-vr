@@ -17,6 +17,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
+EngineManager="*res://scripts/Managers/EngineManager.cs"
 XrManager="*res://scenes/managers/xr_manager.tscn"
 OculusManager="*res://scenes/managers/oculus_manager.tscn"
 

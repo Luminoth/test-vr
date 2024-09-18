@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://ba3tvhshr6d03"]
 
-[ext_resource type="Script" path="res://scripts/Player/Player.cs" id="1_6oq7a"]
+[ext_resource type="Script" path="res://scripts/Player/PlayerCharacter.cs" id="1_7a6fe"]
 [ext_resource type="Script" path="res://scripts/Player/PlayerInput.cs" id="2_pidub"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_waxra"]
@@ -13,14 +13,20 @@ albedo_color = Color(0.619608, 0, 0, 1)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1r3dp"]
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("_input")]
-script = ExtResource("1_6oq7a")
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("_origin", "_camera", "_neck", "_input")]
+script = ExtResource("1_7a6fe")
+_origin = NodePath("XROrigin3D")
+_camera = NodePath("XROrigin3D/XRCamera3D")
+_neck = NodePath("XROrigin3D/XRCamera3D/Neck")
 _input = NodePath("Input")
 
 [node name="XROrigin3D" type="XROrigin3D" parent="."]
 
 [node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
+
+[node name="Neck" type="Node3D" parent="XROrigin3D/XRCamera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0.1)
 
 [node name="LeftHand" type="XRController3D" parent="XROrigin3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1, -1)
@@ -59,20 +65,18 @@ disable_3d = true
 transparent_bg = true
 render_target_update_mode = 4
 
-[node name="HUD" type="Control" parent="SubViewport"]
+[node name="Control" type="Control" parent="SubViewport"]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="CanvasLayer" type="CanvasLayer" parent="SubViewport/HUD"]
+[node name="CanvasLayer" type="CanvasLayer" parent="SubViewport/Control"]
 
-[node name="VBoxContainer" type="VBoxContainer" parent="SubViewport/HUD/CanvasLayer"]
-offset_left = 474.0
-offset_top = 540.0
-offset_right = 724.0
-offset_bottom = 580.0
+[node name="VBoxContainer" type="VBoxContainer" parent="SubViewport/Control/CanvasLayer"]
+offset_right = 40.0
+offset_bottom = 40.0
 
-[node name="Label" type="Label" parent="SubViewport/HUD/CanvasLayer/VBoxContainer"]
+[node name="Label" type="Label" parent="SubViewport/Control/CanvasLayer/VBoxContainer"]
 layout_mode = 2
-text = "This text does not show up in XR"
+text = "Test Text"
