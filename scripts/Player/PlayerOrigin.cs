@@ -3,6 +3,7 @@ namespace VrTest.Player;
 // origin-centric player
 // https://docs.godotengine.org/en/stable/tutorials/xr/xr_room_scale.html
 // TODO: https://github.com/godotengine/godot-demo-projects/blob/master/xr/openxr_origin_centric_movement/player.gd is more complete than this
+// TODO: this is untested
 public partial class PlayerOrigin : XROrigin3D
 {
     [Export]
@@ -86,6 +87,7 @@ public partial class PlayerOrigin : XROrigin3D
 
         t1.Origin = -position;
         t2.Origin = position;
+        // TODO:
         //rot = rot.Rotated(Vector3.Up, _input.LookDirection * (float)delta);
         GlobalTransform = (GlobalTransform * t2 * rot * t1).Orthonormalized();
 

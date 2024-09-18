@@ -37,10 +37,10 @@ public partial class PlayerCharacter : CharacterBody3D
     public override void _PhysicsProcess(double delta)
     {
         bool isColliding = ProcessOnPhysicalMovement(delta);
-        /*if(!isColliding) {
+        if(!isColliding) {
             ProcessRotationOnInput(delta);
             ProcessMovementOnInput(delta);
-        }*/
+        }
     }
 
     #endregion
@@ -88,6 +88,7 @@ public partial class PlayerCharacter : CharacterBody3D
     private void ProcessRotationOnInput(double delta)
     {
         var rot = Rotation;
+        // TODO:
         //rot.Y += _input.LookDirection * (float)delta;
         Rotation = rot;
     }
