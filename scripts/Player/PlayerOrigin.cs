@@ -78,9 +78,9 @@ public partial class PlayerOrigin : XROrigin3D
 
     private void ProcessRotationOnInput(double delta)
     {
-        var t1 = new Transform3D();
-        var t2 = new Transform3D();
-        var rot = new Transform3D();
+        var t1 = Transform3D.Identity;
+        var t2 = Transform3D.Identity;
+        var rot = Transform3D.Identity;
 
         // rotate origin around the player
         var position = _character.GlobalPosition - GlobalPosition;

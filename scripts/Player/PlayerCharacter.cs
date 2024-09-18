@@ -1,5 +1,3 @@
-using VrTest.Managers;
-
 namespace VrTest.Player;
 
 // body-centric player
@@ -58,8 +56,7 @@ public partial class PlayerCharacter : CharacterBody3D
         Basis = Basis.Rotated(Vector3.Up, angle);
 
         // reverse the rotation on the origin
-        // TODO: this is crashing atm
-        //_origin.Transform = new Transform3D().Rotated(Vector3.Up, -angle) * _origin.Transform;
+        _origin.Transform = Transform3D.Identity.Rotated(Vector3.Up, -angle) * _origin.Transform;
 
         // move
         var characterPosition = GlobalPosition;
@@ -74,9 +71,9 @@ public partial class PlayerCharacter : CharacterBody3D
         _origin.GlobalPosition -= deltaMovement;
 
         // negate height changes
-        var position = Position;
+        var position = _origin.Position;
         position.Y = 0.0f;
-        Position = position;
+        _origin.Position = position;
 
         // reset velocity
         Velocity = currentVelocity;
