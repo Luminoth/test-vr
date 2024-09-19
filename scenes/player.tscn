@@ -57,8 +57,10 @@ material = SubResource("StandardMaterial3D_u2bv2")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_1r3dp")
 
-[node name="Input" type="Node" parent="."]
+[node name="Input" type="Node" parent="." node_paths=PackedStringArray("_leftHand", "_rightHand")]
 script = ExtResource("2_pidub")
+_leftHand = NodePath("../XROrigin3D/LeftHand")
+_rightHand = NodePath("../XROrigin3D/RightHand")
 _invertVerticalLook = true
 
 [node name="SubViewport" type="SubViewport" parent="."]

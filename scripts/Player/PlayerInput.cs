@@ -6,6 +6,12 @@ namespace VrTest.Player;
 public partial class PlayerInput : Node
 {
     [Export]
+    private XRController3D _leftHand;
+
+    [Export]
+    private XRController3D _rightHand;
+
+    [Export]
     private Vector2 _moveState;
 
     public Vector2 MoveState => _moveState;
@@ -28,7 +34,7 @@ public partial class PlayerInput : Node
     public override void _Process(double delta)
     {
         if(XrManager.Instance.IsXrInitialized) {
-            // TODO: handle the XR controller actions
+            _moveState = _leftHand.GetVector2("move");
         } else {
             _moveState = Input.GetVector("move left", "move right", "move forward", "move back");
 
