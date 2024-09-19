@@ -18,6 +18,12 @@ public partial class PlayerCharacter : CharacterBody3D
     private PlayerInput _input;
 
     [Export]
+    private float _tiltLowerLimit = Mathf.DegToRad(-90.0f);
+
+    [Export]
+    private float _tiltUpperLimit = Mathf.DegToRad(90.0f);
+
+    [Export]
     private float _rotationSpeed = 1.0f;
 
     [Export]
@@ -98,9 +104,7 @@ public partial class PlayerCharacter : CharacterBody3D
         _origin.GlobalPosition -= deltaMovement;
 
         // negate height changes
-        var position = _origin.Position;
-        position.Y = 0.0f;
-        _origin.Position = position;
+        _origin.Position = _origin.Position with { Y = 0.0f };
 
         // reset velocity
         Velocity = currentVelocity;
@@ -111,10 +115,7 @@ public partial class PlayerCharacter : CharacterBody3D
 
     private void ProcessRotationOnInput(double delta)
     {
-        var rot = Rotation;
-        // TODO:
-        //rot.Y += _input.LookDirection * (float)delta;
-        Rotation = rot;
+        RotateY(-_input.LookState.X * (float)delta);
     }
 
     private void ProcessMovementOnInput(double delta)
@@ -124,15 +125,13 @@ public partial class PlayerCharacter : CharacterBody3D
         velocity.Y -= (float)(_gravity * delta);
 
         // move
-        var input = _input.MoveDirection;
+        var input = _input.MoveState;
         var direction = GlobalBasis * new Vector3(input.X, 0, input.Y);
         if(direction.LengthSquared() > 0.0f) {
             velocity.X = direction.X * _moveSpeed;
             velocity.Z = direction.Z * _moveSpeed;
         } else {
-            // slow down
-            velocity.X = Mathf.MoveToward(velocity.X, 0.0f, (float)delta);
-            velocity.Z = Mathf.MoveToward(velocity.Z, 0.0f, (float)delta);
+            velocity.X = velocity.Z = 0.0f;
         }
         Velocity = velocity;
         MoveAndSlide();

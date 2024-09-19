@@ -6,25 +6,35 @@ namespace VrTest.Player;
 public partial class PlayerInput : Node
 {
     [Export]
-    private Vector2 _moveDirection;
+    private Vector2 _moveState;
 
-    public Vector2 MoveDirection => _moveDirection;
+    public Vector2 MoveState => _moveState;
 
     [Export]
-    private Vector2 _lookDirection;
+    private Vector2 _lookState;
 
-    public Vector2 LookDirection => _lookDirection;
+    public Vector2 LookState => _lookState;
+
+    // TODO: move to game settings
+    [Export]
+    private bool _invertVerticalLook;
+
+    // TODO: move to game settings
+    [Export]
+    private int _lookSensitivity = 4;
 
     #region Godot Lifecycle
 
     public override void _Process(double delta)
     {
-        if(!XrManager.Instance.IsXrInitialized) {
+        if(XrManager.Instance.IsXrInitialized) {
             // TODO: handle the XR controller actions
-        }
+        } else {
+            _moveState = Input.GetVector("move left", "move right", "move forward", "move back");
 
-        _moveDirection = Input.GetVector("move left", "move right", "move forward", "move back");
-        _lookDirection = Input.GetVector("look left", "look right", "look up", "look down");
+            _lookState = Input.GetVector("look left", "look right", "look up", "look down") * _lookSensitivity;
+            _lookState.Y *= _invertVerticalLook ? 1.0f : -1.0f;
+        }
     }
 
     #endregion
