@@ -35,6 +35,7 @@ public partial class PlayerInput : Node
     {
         if(XrManager.Instance.IsXrInitialized) {
             _moveState = _leftHand.GetVector2("move");
+            _moveState.Y *= -1.0f;
         } else {
             _moveState = Input.GetVector("move left", "move right", "move forward", "move back");
 
