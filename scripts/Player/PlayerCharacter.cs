@@ -32,6 +32,12 @@ public partial class PlayerCharacter : CharacterBody3D
     [Export]
     private int _lookSensitivity = 4;
 
+    [Export]
+    private float _lookClickThreshold = 0.8f;
+
+    [Export]
+    private float _lookClickAngle = Mathf.DegToRad(30.0f);
+
     private double _gravity;
 
     #region Godot Lifecycle
@@ -98,10 +104,10 @@ public partial class PlayerCharacter : CharacterBody3D
             var input = _input.LookState;
 
             // "click" style look
-            if(previousInput.X < 0.8 && input.X > 0.8) {
-                RotateY(Mathf.DegToRad(-30.0f));
-            } else if(previousInput.X > -0.8 && input.X < -0.8) {
-                RotateY(Mathf.DegToRad(30.0f));
+            if(previousInput.X < _lookClickThreshold && input.X > _lookClickThreshold) {
+                RotateY(-_lookClickAngle);
+            } else if(previousInput.X > -_lookClickThreshold && input.X < -_lookClickThreshold) {
+                RotateY(_lookClickAngle);
             }
         } else {
             var input = _input.LookState;
