@@ -26,10 +26,12 @@
 
 * https://docs.godotengine.org/en/stable/tutorials/xr/setting_up_xr.html
 * https://decacis.github.io/godot_oculus_platform/
-* Reference Space is set to Local Floor
+* https://godotvr.github.io/godot-xr-tools/
+* Reference Space is set to Local (don't follow player height)
 
 ## TODO
 
+* Player is 1.0 off the ground right now because the XR tools I think setup their own collider ? Idk
 * https://docs.godotengine.org/en/stable/tutorials/xr/a_better_xr_start_script.html
 * https://docs.godotengine.org/en/stable/tutorials/xr/xr_next_steps.html
 * https://github.com/godotengine/godot-demo-projects/tree/master/viewport/gui_in_3d

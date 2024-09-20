@@ -38,8 +38,8 @@ public partial class XrManager : SingletonNode<XrManager>
                 GD.PushWarning("OpenXR: Recommend setting Foveation level to High in Project Settings");
             }
 
-            // TODO: Also note that by default the physics engine runs at 60Hz as well and this can result in choppy physics.
-            // You should set Engine.physics_ticks_per_second to a higher value.
+            // Sync physics with VR framerate
+            Engine.PhysicsTicksPerSecond = 90;
 
             // Connect the OpenXR events
             /*_xrInterface.SessionBegun += OnOpenXRSessionBegun;
