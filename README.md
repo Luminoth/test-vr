@@ -26,8 +26,10 @@
 
 * https://docs.godotengine.org/en/stable/tutorials/xr/setting_up_xr.html
 * https://decacis.github.io/godot_oculus_platform/
+* Reference Space is set to Local Floor
 
 ## TODO
 
 * https://docs.godotengine.org/en/stable/tutorials/xr/a_better_xr_start_script.html
 * https://docs.godotengine.org/en/stable/tutorials/xr/xr_next_steps.html
+* https://github.com/godotengine/godot-demo-projects/tree/master/viewport/gui_in_3d

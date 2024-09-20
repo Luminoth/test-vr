@@ -1,3 +1,5 @@
+using VrTest.Managers;
+
 namespace VrTest.Player;
 
 // body-centric player
@@ -24,10 +26,11 @@ public partial class PlayerCharacter : CharacterBody3D
     private float _tiltUpperLimit = Mathf.DegToRad(90.0f);
 
     [Export]
-    private float _rotationSpeed = 1.0f;
-
-    [Export]
     private float _moveSpeed = 5.0f;
+
+    // TODO: move to game settings
+    [Export]
+    private int _lookSensitivity = 4;
 
     private double _gravity;
 
@@ -36,8 +39,6 @@ public partial class PlayerCharacter : CharacterBody3D
     public override void _Ready()
     {
         _gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsDouble();
-
-        Recenter();
     }
 
     public override void _PhysicsProcess(double delta)
@@ -50,29 +51,6 @@ public partial class PlayerCharacter : CharacterBody3D
     }
 
     #endregion
-
-    public void Recenter()
-    {
-        GD.Print("Recentering ...");
-
-        // where should the camera be
-        var newCameraTransform = GlobalTransform;
-
-        // height at neck join
-        newCameraTransform.Origin.Y = _neck.GlobalPosition.Y;
-
-        // apply the transform
-        newCameraTransform *= _neck.Transform.Inverse();
-
-        // remove tilt
-        var cameraTransform = _camera.Transform;
-        var forward = _camera.Basis.Z;
-        forward.Y = 0.0f;
-        cameraTransform = cameraTransform.LookingAt(cameraTransform.Origin + forward.Normalized(), Vector3.Up, true);
-
-        // update XR location
-        _origin.GlobalTransform = newCameraTransform * cameraTransform.Inverse();
-    }
 
     private bool ProcessOnPhysicalMovement(double delta)
     {
@@ -115,7 +93,24 @@ public partial class PlayerCharacter : CharacterBody3D
 
     private void ProcessRotationOnInput(double delta)
     {
-        RotateY(-_input.LookState.X * (float)delta);
+        if(XrManager.Instance.IsXrInitialized) {
+            var previousInput = _input.PreviousLookState;
+            var input = _input.LookState;
+
+            // "click" style look
+            if(previousInput.X < 0.8 && input.X > 0.8) {
+                RotateY(Mathf.DegToRad(-30.0f));
+            } else if(previousInput.X > -0.8 && input.X < -0.8) {
+                RotateY(Mathf.DegToRad(30.0f));
+            }
+        } else {
+            var input = _input.LookState;
+
+            _camera.RotateX(input.Y * _lookSensitivity * (float)delta);
+            _camera.Rotation = _camera.Rotation with { X = Mathf.Clamp(_camera.Rotation.X, _tiltLowerLimit, _tiltUpperLimit) };
+
+            RotateY(-input.X * _lookSensitivity * (float)delta);
+        }
     }
 
     private void ProcessMovementOnInput(double delta)
