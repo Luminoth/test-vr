@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://c5y8tn5gtle8"]
+[gd_scene load_steps=14 format=3 uid="uid://c5y8tn5gtle8"]
 
 [ext_resource type="Script" path="res://scripts/Player/Player.cs" id="1_7lbn8"]
 [ext_resource type="PackedScene" path="res://addons/godot-xr-tools/misc/vr_common_shader_cache.tscn" id="2_xdn8l"]
@@ -8,20 +8,40 @@
 [ext_resource type="PackedScene" uid="uid://b6bk2pj8vbj28" path="res://addons/godot-xr-tools/functions/movement_turn.tscn" id="6_7hpoq"]
 [ext_resource type="PackedScene" uid="uid://diyu06cw06syv" path="res://addons/godot-xr-tools/player/player_body.tscn" id="7_dh8qa"]
 [ext_resource type="Script" path="res://scripts/Player/ControllerInput.cs" id="7_wblcy"]
+[ext_resource type="Script" path="res://scripts/Player/XrInput.cs" id="9_wnoi4"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_3ftra"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kmhg5"]
+resource_local_to_scene = true
+transparency = 1
+shading_mode = 0
+albedo_texture = SubResource("ViewportTexture_3ftra")
+
+[sub_resource type="QuadMesh" id="QuadMesh_2od5s"]
+resource_local_to_scene = true
+material = SubResource("StandardMaterial3D_kmhg5")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tcjc8"]
 
-[node name="XROrigin3D" type="XROrigin3D" node_paths=PackedStringArray("_character", "_camera", "_head", "_controllerInput")]
+[node name="XROrigin3D" type="XROrigin3D" node_paths=PackedStringArray("_character", "_camera", "_head", "_controllerInput", "_xrInput", "_fpsLabel")]
 script = ExtResource("1_7lbn8")
 _character = NodePath("PlayerBody")
 _camera = NodePath("XRCamera3D")
 _head = NodePath("PlayerBody/Model/Head")
 _controllerInput = NodePath("ControllerInput")
+_xrInput = NodePath("XRInput")
+_fpsLabel = NodePath("SubViewport/Control/CanvasLayer/VBoxContainer/Label")
 
 [node name="XRCamera3D" type="XRCamera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.85, -0.5)
 
 [node name="VRCommonShaderCache" parent="XRCamera3D" instance=ExtResource("2_xdn8l")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="XRCamera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+mesh = SubResource("QuadMesh_2od5s")
 
 [node name="LeftHand" type="XRController3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1, -1)
@@ -69,6 +89,11 @@ shape = SubResource("CapsuleShape3D_tcjc8")
 [node name="ControllerInput" type="Node" parent="."]
 script = ExtResource("7_wblcy")
 _invertVerticalLook = true
+
+[node name="XRInput" type="Node" parent="." node_paths=PackedStringArray("_leftHand", "_rightHand")]
+script = ExtResource("9_wnoi4")
+_leftHand = NodePath("../LeftHand")
+_rightHand = NodePath("../RightHand")
 
 [node name="SubViewport" type="SubViewport" parent="."]
 disable_3d = true

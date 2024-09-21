@@ -20,12 +20,16 @@ public partial class ControllerInput : Node
 
     #region Godot Lifecycle
 
-    public override void _Process(double delta)
+    public override void _Ready()
     {
         if(XrManager.Instance.IsXrInitialized) {
-            return;
+            GD.Print("Disabling ControllerInput");
+            SetProcess(false);
         }
+    }
 
+    public override void _Process(double delta)
+    {
         _moveState = Input.GetVector("move left", "move right", "move forward", "move back");
 
         _lookState = Input.GetVector("look left", "look right", "look up", "look down");
