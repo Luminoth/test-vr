@@ -1,7 +1,8 @@
-[gd_scene load_steps=14 format=3 uid="uid://c5y8tn5gtle8"]
+[gd_scene load_steps=15 format=3 uid="uid://c5y8tn5gtle8"]
 
 [ext_resource type="Script" path="res://scripts/Player/Player.cs" id="1_7lbn8"]
 [ext_resource type="PackedScene" path="res://addons/godot-xr-tools/misc/vr_common_shader_cache.tscn" id="2_xdn8l"]
+[ext_resource type="Script" path="res://scripts/UI/XrUIHelper.cs" id="3_e7e8p"]
 [ext_resource type="PackedScene" uid="uid://b4kad2kuba1yn" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/left_hand_low.tscn" id="3_urgum"]
 [ext_resource type="PackedScene" uid="uid://l2n30mpbkdyw" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/right_hand_low.tscn" id="4_efixk"]
 [ext_resource type="PackedScene" uid="uid://bl2nuu3qhlb5k" path="res://addons/godot-xr-tools/functions/movement_direct.tscn" id="4_lgjh4"]
@@ -39,9 +40,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.85, -0.5)
 
 [node name="VRCommonShaderCache" parent="XRCamera3D" instance=ExtResource("2_xdn8l")]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="XRCamera3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+[node name="HUD" type="Node3D" parent="XRCamera3D" node_paths=PackedStringArray("_xrNode", "_noXrNode")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, -1)
+script = ExtResource("3_e7e8p")
+_xrNode = NodePath("../../OpenXRCompositionLayerQuad")
+_noXrNode = NodePath("MeshInstance3D")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="XRCamera3D/HUD"]
 mesh = SubResource("QuadMesh_2od5s")
+skeleton = NodePath("../..")
 
 [node name="LeftHand" type="XRController3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1, -1)
@@ -61,7 +68,7 @@ tracker = &"right_hand"
 [node name="MovementTurn" parent="RightHand" instance=ExtResource("6_7hpoq")]
 
 [node name="OpenXRCompositionLayerQuad" type="OpenXRCompositionLayerQuad" parent="." node_paths=PackedStringArray("layer_viewport")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -1.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.85, -1.5)
 layer_viewport = NodePath("../SubViewport")
 alpha_blend = true
 
