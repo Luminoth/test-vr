@@ -71,4 +71,3 @@ mesh = SubResource("PlaneMesh_jgwmu")
 shape = SubResource("BoxShape3D_bdjvr")
 
 [node name="XROrigin3D" parent="." instance=ExtResource("1_irsne")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)

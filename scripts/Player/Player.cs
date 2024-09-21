@@ -21,6 +21,9 @@ public partial class Player : XROrigin3D
     private XrInput _xrInput;
 
     [Export]
+    private float _playerHeight = 1.8f;
+
+    [Export]
     private float _tiltLowerLimit = Mathf.DegToRad(-90.0f);
 
     [Export]
@@ -56,6 +59,10 @@ public partial class Player : XROrigin3D
     {
         if(XrManager.Instance.IsXrInitialized) {
             // TODO:
+
+            // move the origin to fix the camera at the player height
+            // minus a little bit to be at the eye position
+            GlobalPosition = GlobalPosition with { Y = _playerHeight - _camera.Position.Y - 0.1f };
         } else {
             var input = _controllerInput.LookState;
 

@@ -1,15 +1,15 @@
-[gd_scene load_steps=15 format=3 uid="uid://c5y8tn5gtle8"]
+[gd_scene load_steps=15 format=3 uid="uid://btll42qctnsyk"]
 
-[ext_resource type="Script" path="res://scripts/Player/Player.cs" id="1_7lbn8"]
-[ext_resource type="PackedScene" path="res://addons/godot-xr-tools/misc/vr_common_shader_cache.tscn" id="2_xdn8l"]
-[ext_resource type="Script" path="res://scripts/UI/XrUIHelper.cs" id="3_e7e8p"]
-[ext_resource type="PackedScene" uid="uid://b4kad2kuba1yn" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/left_hand_low.tscn" id="3_urgum"]
-[ext_resource type="PackedScene" uid="uid://l2n30mpbkdyw" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/right_hand_low.tscn" id="4_efixk"]
-[ext_resource type="PackedScene" uid="uid://bl2nuu3qhlb5k" path="res://addons/godot-xr-tools/functions/movement_direct.tscn" id="4_lgjh4"]
-[ext_resource type="PackedScene" uid="uid://b6bk2pj8vbj28" path="res://addons/godot-xr-tools/functions/movement_turn.tscn" id="6_7hpoq"]
-[ext_resource type="PackedScene" uid="uid://diyu06cw06syv" path="res://addons/godot-xr-tools/player/player_body.tscn" id="7_dh8qa"]
-[ext_resource type="Script" path="res://scripts/Player/ControllerInput.cs" id="7_wblcy"]
-[ext_resource type="Script" path="res://scripts/Player/XrInput.cs" id="9_wnoi4"]
+[ext_resource type="Script" path="res://scripts/Player/XrToolsPlayer.cs" id="1_fb5gx"]
+[ext_resource type="PackedScene" path="res://addons/godot-xr-tools/misc/vr_common_shader_cache.tscn" id="2_w8fhy"]
+[ext_resource type="Script" path="res://scripts/UI/XrUIHelper.cs" id="3_3w7un"]
+[ext_resource type="PackedScene" uid="uid://b4kad2kuba1yn" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/left_hand_low.tscn" id="4_xelny"]
+[ext_resource type="PackedScene" uid="uid://bl2nuu3qhlb5k" path="res://addons/godot-xr-tools/functions/movement_direct.tscn" id="5_sqwd5"]
+[ext_resource type="PackedScene" uid="uid://l2n30mpbkdyw" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/right_hand_low.tscn" id="6_ygmhs"]
+[ext_resource type="PackedScene" uid="uid://b6bk2pj8vbj28" path="res://addons/godot-xr-tools/functions/movement_turn.tscn" id="7_0bcjs"]
+[ext_resource type="PackedScene" uid="uid://diyu06cw06syv" path="res://addons/godot-xr-tools/player/player_body.tscn" id="8_mqvyo"]
+[ext_resource type="Script" path="res://scripts/Player/ControllerInput.cs" id="9_cx2ou"]
+[ext_resource type="Script" path="res://scripts/Player/XrInput.cs" id="10_553ne"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_3ftra"]
 viewport_path = NodePath("SubViewport")
@@ -27,7 +27,7 @@ material = SubResource("StandardMaterial3D_kmhg5")
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tcjc8"]
 
 [node name="XROrigin3D" type="XROrigin3D" node_paths=PackedStringArray("_character", "_camera", "_head", "_controllerInput", "_xrInput", "_fpsLabel")]
-script = ExtResource("1_7lbn8")
+script = ExtResource("1_fb5gx")
 _character = NodePath("PlayerBody")
 _camera = NodePath("XRCamera3D")
 _head = NodePath("PlayerBody/Model/Head")
@@ -36,13 +36,13 @@ _xrInput = NodePath("XRInput")
 _fpsLabel = NodePath("SubViewport/Control/CanvasLayer/VBoxContainer/Label")
 
 [node name="XRCamera3D" type="XRCamera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, -0.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.85, -0.5)
 
-[node name="VRCommonShaderCache" parent="XRCamera3D" instance=ExtResource("2_xdn8l")]
+[node name="VRCommonShaderCache" parent="XRCamera3D" instance=ExtResource("2_w8fhy")]
 
 [node name="HUD" type="Node3D" parent="XRCamera3D" node_paths=PackedStringArray("_xrNode", "_noXrNode")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, -1)
-script = ExtResource("3_e7e8p")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, -1)
+script = ExtResource("3_3w7un")
 _xrNode = NodePath("../../OpenXRCompositionLayerQuad")
 _noXrNode = NodePath("MeshInstance3D")
 
@@ -51,31 +51,28 @@ mesh = SubResource("QuadMesh_2od5s")
 skeleton = NodePath("../..")
 
 [node name="LeftHand" type="XRController3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1.5, -1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1, -1)
 tracker = &"left_hand"
 
-[node name="LeftHand" parent="LeftHand" instance=ExtResource("3_urgum")]
+[node name="LeftHand" parent="LeftHand" instance=ExtResource("4_xelny")]
 
-[node name="MovementDirect" parent="LeftHand" instance=ExtResource("4_lgjh4")]
+[node name="MovementDirect" parent="LeftHand" instance=ExtResource("5_sqwd5")]
 strafe = true
-enabled = false
 
 [node name="RightHand" type="XRController3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1.5, -1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1, -1)
 tracker = &"right_hand"
 
-[node name="RightHand" parent="RightHand" instance=ExtResource("4_efixk")]
+[node name="RightHand" parent="RightHand" instance=ExtResource("6_ygmhs")]
 
-[node name="MovementTurn" parent="RightHand" instance=ExtResource("6_7hpoq")]
-enabled = false
+[node name="MovementTurn" parent="RightHand" instance=ExtResource("7_0bcjs")]
 
 [node name="OpenXRCompositionLayerQuad" type="OpenXRCompositionLayerQuad" parent="." node_paths=PackedStringArray("layer_viewport")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -1.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.85, -1.5)
 layer_viewport = NodePath("../SubViewport")
 alpha_blend = true
 
-[node name="PlayerBody" parent="." instance=ExtResource("7_dh8qa")]
-enabled = false
+[node name="PlayerBody" parent="." instance=ExtResource("8_mqvyo")]
 
 [node name="Model" type="Node3D" parent="PlayerBody"]
 
@@ -97,11 +94,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_tcjc8")
 
 [node name="ControllerInput" type="Node" parent="."]
-script = ExtResource("7_wblcy")
+script = ExtResource("9_cx2ou")
 _invertVerticalLook = true
 
 [node name="XRInput" type="Node" parent="." node_paths=PackedStringArray("_leftHand", "_rightHand")]
-script = ExtResource("9_wnoi4")
+script = ExtResource("10_553ne")
 _leftHand = NodePath("../LeftHand")
 _rightHand = NodePath("../RightHand")
 
