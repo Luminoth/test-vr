@@ -2,7 +2,7 @@ using VrTest.Managers;
 
 namespace VrTest.Player;
 
-public partial class Player : XROrigin3D
+public partial class XrToolsPlayer : XROrigin3D
 {
     // NOTE: the XR tools will make this a top level node
     [Export]

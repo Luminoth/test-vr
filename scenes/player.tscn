@@ -1,6 +1,6 @@
 [gd_scene load_steps=15 format=3 uid="uid://c5y8tn5gtle8"]
 
-[ext_resource type="Script" path="res://scripts/Player/Player.cs" id="1_7lbn8"]
+[ext_resource type="Script" path="res://scripts/Player/XrToolsPlayer.cs" id="1_7lbn8"]
 [ext_resource type="PackedScene" path="res://addons/godot-xr-tools/misc/vr_common_shader_cache.tscn" id="2_xdn8l"]
 [ext_resource type="Script" path="res://scripts/UI/XrUIHelper.cs" id="3_e7e8p"]
 [ext_resource type="PackedScene" uid="uid://b4kad2kuba1yn" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/left_hand_low.tscn" id="3_urgum"]
