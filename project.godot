@@ -17,8 +17,8 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-EngineManager="*res://scripts/Managers/EngineManager.cs"
 XrManager="*res://scenes/managers/xr_manager.tscn"
+InputManager="*res://scripts/Managers/InputManager.cs"
 OculusManager="*res://scenes/managers/oculus_manager.tscn"
 XRToolsUserSettings="*res://addons/godot-xr-tools/user_settings/user_settings.gd"
 XRToolsRumbleManager="*res://addons/godot-xr-tools/rumble/rumble_manager.gd"
