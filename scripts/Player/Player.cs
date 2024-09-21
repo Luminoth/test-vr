@@ -62,6 +62,7 @@ public partial class Player : XROrigin3D
 
             // move the origin to fix the camera at the player height
             // minus a little bit to be at the eye position
+            // (assuming Local reference space here, Local Floor and Stage shouldn't do this)
             GlobalPosition = GlobalPosition with { Y = _playerHeight - _camera.Position.Y - 0.1f };
         } else {
             var input = _controllerInput.LookState;
