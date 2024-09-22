@@ -21,6 +21,9 @@ public partial class Player : XROrigin3D
     private XrInput _xrInput;
 
     [Export]
+    private Label _fpsLabel;
+
+    [Export]
     private float _playerHeight = 1.8f;
 
     [Export]
@@ -38,7 +41,12 @@ public partial class Player : XROrigin3D
     private int _lookSensitivity = 4;
 
     [Export]
-    private Label _fpsLabel;
+    private float _snapTurnDelay = 0.2f;
+
+    [Export]
+    private float _snapTurnAngle = Mathf.DegToRad(20.0f);
+
+    private float _snapTurnAccum;
 
     private double _gravity;
 
@@ -58,12 +66,22 @@ public partial class Player : XROrigin3D
     public override void _Process(double delta)
     {
         if(XrManager.Instance.IsXrInitialized) {
-            // TODO:
+            var input = _xrInput.LookState;
 
             // move the origin to fix the camera at the player height
             // minus a little bit to be at the eye position
             // (assuming Local reference space here, Local Floor and Stage shouldn't do this)
             GlobalPosition = GlobalPosition with { Y = _playerHeight - _camera.Position.Y - 0.1f };
+
+            // rotate origin to match the camera rotation
+            GlobalRotation = GlobalRotation with { Y = _camera.GlobalRotation.Y };
+
+            // snap turn step accumulator from XRTools
+            _snapTurnAccum -= Mathf.Abs(input.X) * (float)delta;
+            if(_snapTurnAccum <= 0.0f) {
+                RotateY(_snapTurnAngle);
+                _snapTurnAccum = _snapTurnDelay;
+            }
         } else {
             var input = _controllerInput.LookState;
 
@@ -71,10 +89,10 @@ public partial class Player : XROrigin3D
             _camera.Rotation = _camera.Rotation with { X = Mathf.Clamp(_camera.Rotation.X, _tiltLowerLimit, _tiltUpperLimit) };
 
             RotateY(-input.X * _lookSensitivity * (float)delta);
-
-            // rotate the character to match the origin
-            _character.Rotation = Rotation;
         }
+
+        // rotate the character to match the origin
+        _character.GlobalRotation = GlobalRotation;
 
         _fpsLabel.Text = $"FPS: {Engine.GetFramesPerSecond()}";
     }

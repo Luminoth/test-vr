@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://c5y8tn5gtle8"]
+[gd_scene load_steps=14 format=3 uid="uid://c5y8tn5gtle8"]
 
 [ext_resource type="Script" path="res://scripts/Player/Player.cs" id="1_7lbn8"]
 [ext_resource type="PackedScene" path="res://addons/godot-xr-tools/misc/vr_common_shader_cache.tscn" id="2_xdn8l"]
@@ -7,7 +7,6 @@
 [ext_resource type="PackedScene" uid="uid://l2n30mpbkdyw" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/right_hand_low.tscn" id="4_efixk"]
 [ext_resource type="PackedScene" uid="uid://bl2nuu3qhlb5k" path="res://addons/godot-xr-tools/functions/movement_direct.tscn" id="4_lgjh4"]
 [ext_resource type="PackedScene" uid="uid://b6bk2pj8vbj28" path="res://addons/godot-xr-tools/functions/movement_turn.tscn" id="6_7hpoq"]
-[ext_resource type="PackedScene" uid="uid://diyu06cw06syv" path="res://addons/godot-xr-tools/player/player_body.tscn" id="7_dh8qa"]
 [ext_resource type="Script" path="res://scripts/Player/ControllerInput.cs" id="7_wblcy"]
 [ext_resource type="Script" path="res://scripts/Player/XrInput.cs" id="9_wnoi4"]
 
@@ -28,9 +27,9 @@ material = SubResource("StandardMaterial3D_kmhg5")
 
 [node name="XROrigin3D" type="XROrigin3D" node_paths=PackedStringArray("_character", "_camera", "_head", "_controllerInput", "_xrInput", "_fpsLabel")]
 script = ExtResource("1_7lbn8")
-_character = NodePath("PlayerBody")
+_character = NodePath("CharacterBody3D")
 _camera = NodePath("XRCamera3D")
-_head = NodePath("PlayerBody/Model/Head")
+_head = NodePath("CharacterBody3D/Model/Head")
 _controllerInput = NodePath("ControllerInput")
 _xrInput = NodePath("XRInput")
 _fpsLabel = NodePath("SubViewport/Control/CanvasLayer/VBoxContainer/Label")
@@ -74,25 +73,24 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -1.5)
 layer_viewport = NodePath("../SubViewport")
 alpha_blend = true
 
-[node name="PlayerBody" parent="." instance=ExtResource("7_dh8qa")]
-enabled = false
+[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
 
-[node name="Model" type="Node3D" parent="PlayerBody"]
+[node name="Model" type="Node3D" parent="CharacterBody3D"]
 
-[node name="Head" type="CSGCombiner3D" parent="PlayerBody/Model"]
+[node name="Head" type="CSGCombiner3D" parent="CharacterBody3D/Model"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 0)
 
-[node name="Head" type="CSGSphere3D" parent="PlayerBody/Model/Head"]
+[node name="Head" type="CSGSphere3D" parent="CharacterBody3D/Model/Head"]
 
-[node name="Nose" type="CSGSphere3D" parent="PlayerBody/Model/Head"]
+[node name="Nose" type="CSGSphere3D" parent="CharacterBody3D/Model/Head"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
 radius = 0.1
 
-[node name="Body" type="CSGCylinder3D" parent="PlayerBody/Model"]
+[node name="Body" type="CSGCylinder3D" parent="CharacterBody3D/Model"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
 height = 1.25
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayerBody"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_tcjc8")
 
@@ -125,3 +123,7 @@ offset_bottom = 40.0
 [node name="Label" type="Label" parent="SubViewport/Control/CanvasLayer/VBoxContainer"]
 layout_mode = 2
 text = "Test Text"
+
+[node name="ref" type="CSGSphere3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+radius = 0.1

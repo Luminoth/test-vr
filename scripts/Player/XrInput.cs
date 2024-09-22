@@ -11,6 +11,12 @@ public partial class XrInput : Node
     private XRController3D _rightHand;
 
     [Export]
+    private float _moveDeadzone = 0.5f;
+
+    [Export]
+    private float _lookDeadzone = 0.5f;
+
+    [Export]
     private Vector2 _moveState;
 
     public Vector2 MoveState => _moveState;
@@ -19,11 +25,6 @@ public partial class XrInput : Node
     private Vector2 _lookState;
 
     public Vector2 LookState => _lookState;
-
-    //[Export]
-    private Vector2 _previousLookState;
-
-    public Vector2 PreviousLookState => _previousLookState;
 
     #region Godot Lifecycle
 
@@ -37,11 +38,13 @@ public partial class XrInput : Node
 
     public override void _Process(double delta)
     {
-        _previousLookState = _lookState;
-
         _moveState = _leftHand.GetVector2("primary");
-        _moveState.Y *= -1.0f;
+        _moveState.X = Mathf.Abs(_moveState.X) < _moveDeadzone ? 0.0f : _moveState.X;
+        _moveState.Y = Mathf.Abs(_moveState.Y) < _moveDeadzone ? 0.0f : -_moveState.Y;
+
         _lookState = _rightHand.GetVector2("primary");
+        _lookState.X = Mathf.Abs(_lookState.X) < _lookDeadzone ? 0.0f : _lookState.X;
+        _lookState.Y = Mathf.Abs(_lookState.Y) < _lookDeadzone ? 0.0f : _lookState.Y;
     }
 
     #endregion
