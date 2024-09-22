@@ -88,7 +88,7 @@ public partial class FpsMovement : Node
         // snap turn step accumulator from XRTools
         _snapTurnAccum -= Mathf.Abs(input.X) * delta;
         if(_snapTurnAccum <= 0.0f) {
-            _character.Origin.RotateY(_snapTurnAngle * -MathF.Sign(input.X));
+            _character.Player.RotateY(_snapTurnAngle * -MathF.Sign(input.X));
             _snapTurnAccum = _snapTurnDelay;
         }
     }
@@ -102,10 +102,10 @@ public partial class FpsMovement : Node
     {
         var input = _controllerInput.LookState;
 
-        _character.Camera.RotateX(input.Y * _lookSensitivity * delta);
-        _character.Camera.Rotation = _character.Camera.Rotation with { X = Mathf.Clamp(_character.Camera.Rotation.X, _tiltLowerLimit, _tiltUpperLimit) };
+        _character.Player.Camera.RotateX(input.Y * _lookSensitivity * delta);
+        _character.Player.Camera.Rotation = _character.Player.Camera.Rotation with { X = Mathf.Clamp(_character.Player.Camera.Rotation.X, _tiltLowerLimit, _tiltUpperLimit) };
 
-        _character.Origin.RotateY(-input.X * _lookSensitivity * delta);
+        _character.Player.RotateY(-input.X * _lookSensitivity * delta);
     }
 
     private void ProcessNoXrMovement(float delta)
@@ -113,10 +113,10 @@ public partial class FpsMovement : Node
         var velocity = _character.Velocity;
 
         var input = _controllerInput.MoveState;
-        var direction = _character.Origin.GlobalBasis * new Vector3(input.X, 0, input.Y);
+        var direction = _character.Player.GlobalBasis * new Vector3(input.X, 0, input.Y);
         if(direction.LengthSquared() > 0.0f) {
-            velocity.X = direction.X * _character.MoveSpeed;
-            velocity.Z = direction.Z * _character.MoveSpeed;
+            velocity.X = direction.X * _character.Player.MoveSpeed;
+            velocity.Z = direction.Z * _character.Player.MoveSpeed;
         } else {
             velocity.X = velocity.Z = 0.0f;
         }
