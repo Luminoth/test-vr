@@ -1,6 +1,6 @@
 using VrTest.Managers;
 
-namespace VrTest.Player;
+namespace VrTest.Player.Input;
 
 public partial class ControllerInput : Node
 {
@@ -30,9 +30,9 @@ public partial class ControllerInput : Node
 
     public override void _Process(double delta)
     {
-        _moveState = Input.GetVector("move left", "move right", "move forward", "move back");
+        _moveState = Godot.Input.GetVector("move left", "move right", "move forward", "move back");
 
-        _lookState = Input.GetVector("look left", "look right", "look up", "look down");
+        _lookState = Godot.Input.GetVector("look left", "look right", "look up", "look down");
         _lookState.Y *= _invertVerticalLook ? 1.0f : -1.0f;
     }
 

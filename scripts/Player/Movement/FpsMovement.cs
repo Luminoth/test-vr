@@ -1,6 +1,7 @@
 using System;
 
 using VrTest.Managers;
+using VrTest.Player.Input;
 
 namespace VrTest.Player;
 
@@ -22,7 +23,7 @@ public partial class FpsMovement : Node
     }
 
     [Export]
-    private Player _player;
+    private PlayerCharacter _character;
 
     [Export]
     private ControllerInput _controllerInput;
@@ -87,7 +88,7 @@ public partial class FpsMovement : Node
         // snap turn step accumulator from XRTools
         _snapTurnAccum -= Mathf.Abs(input.X) * delta;
         if(_snapTurnAccum <= 0.0f) {
-            _player.Origin.RotateY(_snapTurnAngle * -MathF.Sign(input.X));
+            _character.Origin.RotateY(_snapTurnAngle * -MathF.Sign(input.X));
             _snapTurnAccum = _snapTurnDelay;
         }
     }
@@ -101,21 +102,21 @@ public partial class FpsMovement : Node
     {
         var input = _controllerInput.LookState;
 
-        _player.Camera.RotateX(input.Y * _lookSensitivity * delta);
-        _player.Camera.Rotation = _player.Camera.Rotation with { X = Mathf.Clamp(_player.Camera.Rotation.X, _tiltLowerLimit, _tiltUpperLimit) };
+        _character.Camera.RotateX(input.Y * _lookSensitivity * delta);
+        _character.Camera.Rotation = _character.Camera.Rotation with { X = Mathf.Clamp(_character.Camera.Rotation.X, _tiltLowerLimit, _tiltUpperLimit) };
 
-        _player.Origin.RotateY(-input.X * _lookSensitivity * delta);
+        _character.Origin.RotateY(-input.X * _lookSensitivity * delta);
     }
 
     private void ProcessNoXrMovement(float delta)
     {
-        var velocity = _player.Velocity;
+        var velocity = _character.Velocity;
 
         var input = _controllerInput.MoveState;
-        var direction = _player.Origin.GlobalBasis * new Vector3(input.X, 0, input.Y);
+        var direction = _character.Origin.GlobalBasis * new Vector3(input.X, 0, input.Y);
         if(direction.LengthSquared() > 0.0f) {
-            velocity.X = direction.X * _player.MoveSpeed;
-            velocity.Z = direction.Z * _player.MoveSpeed;
+            velocity.X = direction.X * _character.MoveSpeed;
+            velocity.Z = direction.Z * _character.MoveSpeed;
         } else {
             velocity.X = velocity.Z = 0.0f;
         }
@@ -123,7 +124,7 @@ public partial class FpsMovement : Node
         // apply gravity
         velocity.Y -= (float)(_gravity * delta);
 
-        _player.Velocity = velocity;
-        _player.MoveAndSlide();
+        _character.Velocity = velocity;
+        _character.MoveAndSlide();
     }
 }

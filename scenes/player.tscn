@@ -1,13 +1,13 @@
 [gd_scene load_steps=13 format=3 uid="uid://c5y8tn5gtle8"]
 
-[ext_resource type="Script" path="res://scripts/Player/Player.cs" id="1_7lbn8"]
+[ext_resource type="Script" path="res://scripts/Player/PlayerCharacter.cs" id="1_7lbn8"]
 [ext_resource type="PackedScene" path="res://addons/godot-xr-tools/misc/vr_common_shader_cache.tscn" id="2_xdn8l"]
 [ext_resource type="Script" path="res://scripts/UI/XrUIHelper.cs" id="3_e7e8p"]
 [ext_resource type="PackedScene" uid="uid://b4kad2kuba1yn" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/left_hand_low.tscn" id="3_urgum"]
 [ext_resource type="PackedScene" uid="uid://l2n30mpbkdyw" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/right_hand_low.tscn" id="4_efixk"]
-[ext_resource type="Script" path="res://scripts/Player/ControllerInput.cs" id="7_wblcy"]
+[ext_resource type="Script" path="res://scripts/Player/Input/ControllerInput.cs" id="7_wblcy"]
 [ext_resource type="Script" path="res://scripts/Player/Movement/FpsMovement.cs" id="8_e5voe"]
-[ext_resource type="Script" path="res://scripts/Player/XrInput.cs" id="9_wnoi4"]
+[ext_resource type="Script" path="res://scripts/Player/Input/XrInput.cs" id="9_wnoi4"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_3ftra"]
 viewport_path = NodePath("SubViewport")
@@ -67,9 +67,9 @@ script = ExtResource("9_wnoi4")
 _leftHand = NodePath("../LeftHand")
 _rightHand = NodePath("../RightHand")
 
-[node name="FpsMovement" type="Node" parent="." node_paths=PackedStringArray("_player", "_controllerInput", "_xrInput")]
+[node name="FpsMovement" type="Node" parent="." node_paths=PackedStringArray("_character", "_controllerInput", "_xrInput")]
 script = ExtResource("8_e5voe")
-_player = NodePath("../CharacterBody3D")
+_character = NodePath("../CharacterBody3D")
 _controllerInput = NodePath("../ControllerInput")
 _xrInput = NodePath("../XRInput")
 

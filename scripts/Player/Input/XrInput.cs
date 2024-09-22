@@ -1,6 +1,6 @@
 using VrTest.Managers;
 
-namespace VrTest.Player;
+namespace VrTest.Player.Input;
 
 public partial class XrInput : Node
 {

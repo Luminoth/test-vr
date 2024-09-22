@@ -4,7 +4,7 @@ namespace VrTest.Player;
 
 // this goes on the chararacter under the origin
 // so that we can order scripts correctly
-public partial class Player : CharacterBody3D
+public partial class PlayerCharacter : CharacterBody3D
 {
     [Export]
     private XROrigin3D _origin;

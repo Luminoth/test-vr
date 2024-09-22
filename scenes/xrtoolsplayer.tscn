@@ -8,8 +8,8 @@
 [ext_resource type="PackedScene" uid="uid://l2n30mpbkdyw" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/right_hand_low.tscn" id="6_ygmhs"]
 [ext_resource type="PackedScene" uid="uid://b6bk2pj8vbj28" path="res://addons/godot-xr-tools/functions/movement_turn.tscn" id="7_0bcjs"]
 [ext_resource type="PackedScene" uid="uid://diyu06cw06syv" path="res://addons/godot-xr-tools/player/player_body.tscn" id="8_mqvyo"]
-[ext_resource type="Script" path="res://scripts/Player/ControllerInput.cs" id="9_cx2ou"]
-[ext_resource type="Script" path="res://scripts/Player/XrInput.cs" id="10_553ne"]
+[ext_resource type="Script" path="res://scripts/Player/Input/ControllerInput.cs" id="9_cx2ou"]
+[ext_resource type="Script" path="res://scripts/Player/Input/XrInput.cs" id="10_553ne"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_3ftra"]
 viewport_path = NodePath("SubViewport")

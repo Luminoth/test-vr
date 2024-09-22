@@ -1,4 +1,5 @@
 using VrTest.Managers;
+using VrTest.Player.Input;
 
 namespace VrTest.Player;
 
