@@ -5,7 +5,6 @@
 * Godot 4.3
 * https://docs.godotengine.org/en/stable/tutorials/export/exporting_for_android.html
   * OpenJDK (17+)
-    * sudo apt install openjdk-17-jdk openjdk-17-jre
   * Android SDK (35)
   * Android NDK
   * CMake
@@ -16,6 +15,7 @@
 * https://github.com/GodotVR/godot_openxr_vendors
 * Have to enable Developer Mode through the Meta Quest app
   * Make sure to allow access to files in the headset (notification may be in the notifications tab, it goes away kinda quick)
+* If not using the same signing across PCs, have to adb uninstall first
 * Have to set XR mode to OpenXR (defaults to Regular) and include the Meta OpenXR vendor plugin
 * Deploy with Remote Debug is useful to get logs in the editor
 * Small Deploy with Network Filesystem seems to crash the app when used
