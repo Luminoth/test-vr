@@ -2,23 +2,20 @@ using VrTest.Managers;
 
 namespace VrTest.Player;
 
-// NOTE: disable all of the XRTools scripts before using this!!!
 public partial class Player : XROrigin3D
 {
     [Export]
     private CharacterBody3D _character;
 
+    public CharacterBody3D Character => _character;
+
     [Export]
     private XRCamera3D _camera;
 
+    public XRCamera3D Camera => _camera;
+
     [Export]
     private Node3D _head;
-
-    [Export]
-    private ControllerInput _controllerInput;
-
-    [Export]
-    private XrInput _xrInput;
 
     [Export]
     private Label _fpsLabel;
@@ -26,37 +23,18 @@ public partial class Player : XROrigin3D
     [Export]
     private float _playerHeight = 1.8f;
 
-    [Export]
-    private float _tiltLowerLimit = Mathf.DegToRad(-90.0f);
+    public float PlayerHeight => _playerHeight;
 
-    [Export]
-    private float _tiltUpperLimit = Mathf.DegToRad(90.0f);
-
-    // TODO: this needs to be sync'd to the XR Tools movement
     [Export]
     private float _moveSpeed = 5.0f;
 
-    // TODO: move to game settings
-    [Export]
-    private int _lookSensitivity = 4;
-
-    [Export]
-    private float _snapTurnDelay = 0.2f;
-
-    [Export]
-    private float _snapTurnAngle = Mathf.DegToRad(20.0f);
-
-    private float _snapTurnAccum;
-
-    private double _gravity;
+    public float MoveSpeed => _moveSpeed;
 
     #region Godot Lifecycle
 
     public override void _Ready()
     {
-        _gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsDouble();
-
-        _character.TopLevel = true;
+        Character.TopLevel = true;
 
         // TODO: local player hide
         // remote player show
@@ -65,67 +43,30 @@ public partial class Player : XROrigin3D
 
     public override void _Process(double delta)
     {
-        if(XrManager.Instance.IsXrInitialized) {
-            // rotate origin to match the camera rotation
-            Rotation = Rotation with { Y = _camera.Rotation.Y };
-
-            var input = _xrInput.LookState;
-
-            // snap turn step accumulator from XRTools
-            _snapTurnAccum -= Mathf.Abs(input.X) * (float)delta;
-            if(_snapTurnAccum <= 0.0f) {
-                RotateY(_snapTurnAngle);
-                _snapTurnAccum = _snapTurnDelay;
-            }
-        } else {
-            var input = _controllerInput.LookState;
-
-            _camera.RotateX(input.Y * _lookSensitivity * (float)delta);
-            _camera.Rotation = _camera.Rotation with { X = Mathf.Clamp(_camera.Rotation.X, _tiltLowerLimit, _tiltUpperLimit) };
-
-            RotateY(-input.X * _lookSensitivity * (float)delta);
-        }
-
-        // rotate the character to match the origin
-        _character.GlobalRotation = GlobalRotation;
-
         _fpsLabel.Text = $"FPS: {Engine.GetFramesPerSecond()}";
     }
 
     public override void _PhysicsProcess(double delta)
     {
         if(XrManager.Instance.IsXrInitialized) {
-            // TODO: try to move the character
+            // rotate character to match the camera rotation
+            Character.GlobalRotation = Character.GlobalRotation with { Y = Camera.GlobalRotation.Y };
 
             // move the origin to match the body
             // but just a little in front to match the eyes
-            GlobalPosition = _character.GlobalPosition + (GlobalBasis * new Vector3(0.0f, 0.0f, -0.5f));
+            GlobalPosition = Character.GlobalPosition + (GlobalBasis * new Vector3(0.0f, 0.0f, -0.5f));
 
             // move the origin to fix the camera at the player height
             // minus a little bit to be at the eye position
             // (assuming Local reference space here, Local Floor and Stage shouldn't do this)
-            GlobalPosition = GlobalPosition with { Y = _playerHeight - _camera.Position.Y - 0.1f };
+            GlobalPosition = GlobalPosition with { Y = GlobalPosition.Y + PlayerHeight - Camera.Position.Y - 0.1f };
         } else {
-            var velocity = _character.Velocity;
-
-            var input = _controllerInput.MoveState;
-            var direction = GlobalBasis * new Vector3(input.X, 0, input.Y);
-            if(direction.LengthSquared() > 0.0f) {
-                velocity.X = direction.X * _moveSpeed;
-                velocity.Z = direction.Z * _moveSpeed;
-            } else {
-                velocity.X = velocity.Z = 0.0f;
-            }
-
-            // apply gravity
-            velocity.Y -= (float)(_gravity * delta);
-
-            _character.Velocity = velocity;
-            _character.MoveAndSlide();
+            // rotate the character to match the origin
+            Character.GlobalRotation = GlobalRotation;
 
             // move the origin to match the body
             // but just a little in front to match the eyes
-            GlobalPosition = _character.GlobalPosition + (GlobalBasis * new Vector3(0.0f, 0.0f, -0.5f));
+            GlobalPosition = Character.GlobalPosition + (GlobalBasis * new Vector3(0.0f, 0.0f, -0.5f));
         }
     }
 
