@@ -23,7 +23,7 @@ public partial class FpsMovement : Node
     }
 
     [Export]
-    private PlayerCharacter _character;
+    private XrPlayerCharacter _character;
 
     [Export]
     private ControllerInput _controllerInput;
