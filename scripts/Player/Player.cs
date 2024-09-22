@@ -2,12 +2,14 @@ using VrTest.Managers;
 
 namespace VrTest.Player;
 
-public partial class Player : XROrigin3D
+// this goes on the chararacter under the origin
+// so that we can order scripts correctly
+public partial class Player : CharacterBody3D
 {
     [Export]
-    private CharacterBody3D _character;
+    private XROrigin3D _origin;
 
-    public CharacterBody3D Character => _character;
+    public XROrigin3D Origin => _origin;
 
     [Export]
     private XRCamera3D _camera;
@@ -34,7 +36,7 @@ public partial class Player : XROrigin3D
 
     public override void _Ready()
     {
-        Character.TopLevel = true;
+        TopLevel = true;
 
         // TODO: local player hide
         // remote player show
@@ -50,23 +52,23 @@ public partial class Player : XROrigin3D
     {
         if(XrManager.Instance.IsXrInitialized) {
             // rotate character to match the camera rotation
-            Character.GlobalRotation = Character.GlobalRotation with { Y = Camera.GlobalRotation.Y };
+            GlobalRotation = GlobalRotation with { Y = Camera.GlobalRotation.Y };
 
             // move the origin to match the body
             // but just a little in front to match the eyes
-            GlobalPosition = Character.GlobalPosition + (GlobalBasis * new Vector3(0.0f, 0.0f, -0.5f));
+            Origin.GlobalPosition = GlobalPosition + (GlobalBasis * new Vector3(0.0f, 0.0f, -0.5f));
 
             // move the origin to fix the camera at the player height
             // minus a little bit to be at the eye position
             // (assuming Local reference space here, Local Floor and Stage shouldn't do this)
-            GlobalPosition = GlobalPosition with { Y = GlobalPosition.Y + PlayerHeight - Camera.Position.Y - 0.1f };
+            Origin.GlobalPosition = Origin.GlobalPosition with { Y = GlobalPosition.Y + PlayerHeight - Camera.Position.Y - 0.1f };
         } else {
             // rotate the character to match the origin
-            Character.GlobalRotation = GlobalRotation;
+            GlobalRotation = Origin.GlobalRotation;
 
             // move the origin to match the body
             // but just a little in front to match the eyes
-            GlobalPosition = Character.GlobalPosition + (GlobalBasis * new Vector3(0.0f, 0.0f, -0.5f));
+            Origin.GlobalPosition = GlobalPosition + (GlobalBasis * new Vector3(0.0f, 0.0f, -0.5f));
         }
     }
 

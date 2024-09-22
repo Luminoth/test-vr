@@ -24,12 +24,7 @@ material = SubResource("StandardMaterial3D_kmhg5")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tcjc8"]
 
-[node name="XROrigin3D" type="XROrigin3D" node_paths=PackedStringArray("_character", "_camera", "_head", "_fpsLabel")]
-script = ExtResource("1_7lbn8")
-_character = NodePath("CharacterBody3D")
-_camera = NodePath("XRCamera3D")
-_head = NodePath("CharacterBody3D/Model/Head")
-_fpsLabel = NodePath("SubViewport/Control/CanvasLayer/VBoxContainer/Label")
+[node name="XROrigin3D" type="XROrigin3D"]
 
 [node name="XRCamera3D" type="XRCamera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
@@ -74,12 +69,17 @@ _rightHand = NodePath("../RightHand")
 
 [node name="FpsMovement" type="Node" parent="." node_paths=PackedStringArray("_player", "_controllerInput", "_xrInput")]
 script = ExtResource("8_e5voe")
-_player = NodePath("..")
+_player = NodePath("../CharacterBody3D")
 _controllerInput = NodePath("../ControllerInput")
 _xrInput = NodePath("../XRInput")
 
-[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+[node name="CharacterBody3D" type="CharacterBody3D" parent="." node_paths=PackedStringArray("_origin", "_camera", "_head", "_fpsLabel")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
+script = ExtResource("1_7lbn8")
+_origin = NodePath("..")
+_camera = NodePath("../XRCamera3D")
+_head = NodePath("Model/Head")
+_fpsLabel = NodePath("../SubViewport/Control/CanvasLayer/VBoxContainer/Label")
 
 [node name="Model" type="Node3D" parent="CharacterBody3D"]
 

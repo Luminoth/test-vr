@@ -40,7 +40,7 @@ public partial class XrInput : Node
     {
         _moveState = _leftHand.GetVector2("primary");
         _moveState.X = Mathf.Abs(_moveState.X) < _moveDeadzone ? 0.0f : _moveState.X;
-        _moveState.Y = Mathf.Abs(_moveState.Y) < _moveDeadzone ? 0.0f : -_moveState.Y;
+        _moveState.Y = Mathf.Abs(_moveState.Y) < _moveDeadzone ? 0.0f : _moveState.Y;
 
         _lookState = _rightHand.GetVector2("primary");
         _lookState.X = Mathf.Abs(_lookState.X) < _lookDeadzone ? 0.0f : _lookState.X;

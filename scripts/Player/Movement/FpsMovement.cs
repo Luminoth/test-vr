@@ -1,9 +1,26 @@
+using System;
+
 using VrTest.Managers;
 
 namespace VrTest.Player;
 
+// movement scripts need to be above the player script
+// in tree order so that they execute first
 public partial class FpsMovement : Node
 {
+    [Export]
+    private bool _enabled = true;
+
+    public bool Enabled
+    {
+        get => _enabled;
+        set
+        {
+            SetProcess(_enabled);
+            SetPhysicsProcess(_enabled);
+        }
+    }
+
     [Export]
     private Player _player;
 
@@ -38,47 +55,75 @@ public partial class FpsMovement : Node
     public override void _Ready()
     {
         _gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsDouble();
+
+        SetProcess(Enabled);
+        SetPhysicsProcess(Enabled);
     }
 
     public override void _PhysicsProcess(double delta)
     {
         if(XrManager.Instance.IsXrInitialized) {
-            var input = _xrInput.LookState;
+            // rotation in the physics step
+            // because hands will move from this
+            ProcessXrRotation((float)delta);
 
-            // snap turn step accumulator from XRTools
-            _snapTurnAccum -= Mathf.Abs(input.X) * (float)delta;
-            if(_snapTurnAccum <= 0.0f) {
-                _player.Character.RotateY(_snapTurnAngle);
-                _snapTurnAccum = _snapTurnDelay;
-            }
-
-            // TODO: try to move the character
+            ProcessXrMovement((float)delta);
         } else {
-            var input = _controllerInput.LookState;
+            // rotation in the physics step
+            // because hands will move from this
+            ProcessNoXrRotation((float)delta);
 
-            _player.Camera.RotateX(input.Y * _lookSensitivity * (float)delta);
-            _player.Camera.Rotation = _player.Camera.Rotation with { X = Mathf.Clamp(_player.Camera.Rotation.X, _tiltLowerLimit, _tiltUpperLimit) };
-
-            _player.RotateY(-input.X * _lookSensitivity * (float)delta);
-
-            var velocity = _player.Character.Velocity;
-
-            input = _controllerInput.MoveState;
-            var direction = _player.GlobalBasis * new Vector3(input.X, 0, input.Y);
-            if(direction.LengthSquared() > 0.0f) {
-                velocity.X = direction.X * _player.MoveSpeed;
-                velocity.Z = direction.Z * _player.MoveSpeed;
-            } else {
-                velocity.X = velocity.Z = 0.0f;
-            }
-
-            // apply gravity
-            velocity.Y -= (float)(_gravity * delta);
-
-            _player.Character.Velocity = velocity;
-            _player.Character.MoveAndSlide();
+            ProcessNoXrMovement((float)delta);
         }
     }
 
     #endregion
+
+    private void ProcessXrRotation(float delta)
+    {
+        var input = _xrInput.LookState;
+
+        // rotate character with snap turn
+        // snap turn step accumulator from XRTools
+        _snapTurnAccum -= Mathf.Abs(input.X) * delta;
+        if(_snapTurnAccum <= 0.0f) {
+            _player.Origin.RotateY(_snapTurnAngle * -MathF.Sign(input.X));
+            _snapTurnAccum = _snapTurnDelay;
+        }
+    }
+
+    private void ProcessXrMovement(float delta)
+    {
+        // TODO:
+    }
+
+    private void ProcessNoXrRotation(float delta)
+    {
+        var input = _controllerInput.LookState;
+
+        _player.Camera.RotateX(input.Y * _lookSensitivity * delta);
+        _player.Camera.Rotation = _player.Camera.Rotation with { X = Mathf.Clamp(_player.Camera.Rotation.X, _tiltLowerLimit, _tiltUpperLimit) };
+
+        _player.Origin.RotateY(-input.X * _lookSensitivity * delta);
+    }
+
+    private void ProcessNoXrMovement(float delta)
+    {
+        var velocity = _player.Velocity;
+
+        var input = _controllerInput.MoveState;
+        var direction = _player.Origin.GlobalBasis * new Vector3(input.X, 0, input.Y);
+        if(direction.LengthSquared() > 0.0f) {
+            velocity.X = direction.X * _player.MoveSpeed;
+            velocity.Z = direction.Z * _player.MoveSpeed;
+        } else {
+            velocity.X = velocity.Z = 0.0f;
+        }
+
+        // apply gravity
+        velocity.Y -= (float)(_gravity * delta);
+
+        _player.Velocity = velocity;
+        _player.MoveAndSlide();
+    }
 }
