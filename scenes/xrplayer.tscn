@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://c5y8tn5gtle8"]
+[gd_scene load_steps=15 format=3 uid="uid://c5y8tn5gtle8"]
 
 [ext_resource type="Script" path="res://scripts/Player/XrPlayerCharacter.cs" id="1_7lbn8"]
 [ext_resource type="Script" path="res://scripts/Player/XrPlayer.cs" id="1_tt7sn"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://scripts/Player/Input/ControllerInput.cs" id="7_wblcy"]
 [ext_resource type="Script" path="res://scripts/Player/Movement/FpsMovement.cs" id="8_e5voe"]
 [ext_resource type="Script" path="res://scripts/Player/Input/XrInput.cs" id="9_wnoi4"]
+[ext_resource type="PackedScene" uid="uid://cfgf4bc05tc6j" path="res://scenes/player_model.tscn" id="10_2l3qw"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_3ftra"]
 viewport_path = NodePath("SubViewport")
@@ -83,28 +84,11 @@ script = ExtResource("1_7lbn8")
 _player = NodePath("..")
 _head = NodePath("Model/Head")
 
-[node name="Model" type="Node3D" parent="CharacterBody3D"]
-
-[node name="Head" type="CSGCombiner3D" parent="CharacterBody3D/Model"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 0)
-
-[node name="Head" type="CSGSphere3D" parent="CharacterBody3D/Model/Head"]
-
-[node name="Nose" type="CSGSphere3D" parent="CharacterBody3D/Model/Head"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
-radius = 0.1
-
-[node name="Body" type="CSGCylinder3D" parent="CharacterBody3D/Model"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
-height = 1.25
+[node name="Model" parent="CharacterBody3D" instance=ExtResource("10_2l3qw")]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_tcjc8")
-
-[node name="ref" type="CSGSphere3D" parent="CharacterBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -2.5)
-radius = 0.1
 
 [node name="SubViewport" type="SubViewport" parent="."]
 disable_3d = true
@@ -126,3 +110,5 @@ offset_bottom = 40.0
 [node name="Label" type="Label" parent="SubViewport/Control/CanvasLayer/VBoxContainer"]
 layout_mode = 2
 text = "Test Text"
+
+[editable path="CharacterBody3D/Model"]

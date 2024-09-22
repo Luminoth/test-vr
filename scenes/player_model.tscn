@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://cfgf4bc05tc6j"]
+
+[node name="Model" type="Node3D"]
+
+[node name="Head" type="CSGCombiner3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 0)
+
+[node name="Head" type="CSGSphere3D" parent="Head"]
+
+[node name="Nose" type="CSGSphere3D" parent="Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
+radius = 0.1
+
+[node name="Body" type="CSGCylinder3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.65, 0)
+height = 1.25
