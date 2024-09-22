@@ -1,12 +1,10 @@
-[gd_scene load_steps=14 format=3 uid="uid://c5y8tn5gtle8"]
+[gd_scene load_steps=12 format=3 uid="uid://c5y8tn5gtle8"]
 
 [ext_resource type="Script" path="res://scripts/Player/Player.cs" id="1_7lbn8"]
 [ext_resource type="PackedScene" path="res://addons/godot-xr-tools/misc/vr_common_shader_cache.tscn" id="2_xdn8l"]
 [ext_resource type="Script" path="res://scripts/UI/XrUIHelper.cs" id="3_e7e8p"]
 [ext_resource type="PackedScene" uid="uid://b4kad2kuba1yn" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/left_hand_low.tscn" id="3_urgum"]
 [ext_resource type="PackedScene" uid="uid://l2n30mpbkdyw" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/right_hand_low.tscn" id="4_efixk"]
-[ext_resource type="PackedScene" uid="uid://bl2nuu3qhlb5k" path="res://addons/godot-xr-tools/functions/movement_direct.tscn" id="4_lgjh4"]
-[ext_resource type="PackedScene" uid="uid://b6bk2pj8vbj28" path="res://addons/godot-xr-tools/functions/movement_turn.tscn" id="6_7hpoq"]
 [ext_resource type="Script" path="res://scripts/Player/ControllerInput.cs" id="7_wblcy"]
 [ext_resource type="Script" path="res://scripts/Player/XrInput.cs" id="9_wnoi4"]
 
@@ -35,7 +33,7 @@ _xrInput = NodePath("XRInput")
 _fpsLabel = NodePath("SubViewport/Control/CanvasLayer/VBoxContainer/Label")
 
 [node name="XRCamera3D" type="XRCamera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, -0.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
 
 [node name="VRCommonShaderCache" parent="XRCamera3D" instance=ExtResource("2_xdn8l")]
 
@@ -50,23 +48,16 @@ mesh = SubResource("QuadMesh_2od5s")
 skeleton = NodePath("../..")
 
 [node name="LeftHand" type="XRController3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1.5, -1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1.5, -0.5)
 tracker = &"left_hand"
 
 [node name="LeftHand" parent="LeftHand" instance=ExtResource("3_urgum")]
 
-[node name="MovementDirect" parent="LeftHand" instance=ExtResource("4_lgjh4")]
-strafe = true
-enabled = false
-
 [node name="RightHand" type="XRController3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1.5, -1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1.5, -0.5)
 tracker = &"right_hand"
 
 [node name="RightHand" parent="RightHand" instance=ExtResource("4_efixk")]
-
-[node name="MovementTurn" parent="RightHand" instance=ExtResource("6_7hpoq")]
-enabled = false
 
 [node name="OpenXRCompositionLayerQuad" type="OpenXRCompositionLayerQuad" parent="." node_paths=PackedStringArray("layer_viewport")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -1.5)
@@ -74,6 +65,7 @@ layer_viewport = NodePath("../SubViewport")
 alpha_blend = true
 
 [node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
 
 [node name="Model" type="Node3D" parent="CharacterBody3D"]
 
@@ -125,5 +117,5 @@ layout_mode = 2
 text = "Test Text"
 
 [node name="ref" type="CSGSphere3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -2)
 radius = 0.1

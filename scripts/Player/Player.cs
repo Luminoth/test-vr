@@ -66,15 +66,10 @@ public partial class Player : XROrigin3D
     public override void _Process(double delta)
     {
         if(XrManager.Instance.IsXrInitialized) {
-            var input = _xrInput.LookState;
-
-            // move the origin to fix the camera at the player height
-            // minus a little bit to be at the eye position
-            // (assuming Local reference space here, Local Floor and Stage shouldn't do this)
-            GlobalPosition = GlobalPosition with { Y = _playerHeight - _camera.Position.Y - 0.1f };
-
             // rotate origin to match the camera rotation
-            GlobalRotation = GlobalRotation with { Y = _camera.GlobalRotation.Y };
+            Rotation = Rotation with { Y = _camera.Rotation.Y };
+
+            var input = _xrInput.LookState;
 
             // snap turn step accumulator from XRTools
             _snapTurnAccum -= Mathf.Abs(input.X) * (float)delta;
@@ -100,7 +95,16 @@ public partial class Player : XROrigin3D
     public override void _PhysicsProcess(double delta)
     {
         if(XrManager.Instance.IsXrInitialized) {
-            // TODO:
+            // TODO: try to move the character
+
+            // move the origin to match the body
+            // but just a little in front to match the eyes
+            GlobalPosition = _character.GlobalPosition + (GlobalBasis * new Vector3(0.0f, 0.0f, -0.5f));
+
+            // move the origin to fix the camera at the player height
+            // minus a little bit to be at the eye position
+            // (assuming Local reference space here, Local Floor and Stage shouldn't do this)
+            GlobalPosition = GlobalPosition with { Y = _playerHeight - _camera.Position.Y - 0.1f };
         } else {
             var velocity = _character.Velocity;
 
@@ -120,7 +124,8 @@ public partial class Player : XROrigin3D
             _character.MoveAndSlide();
 
             // move the origin to match the body
-            GlobalPosition = _character.GlobalPosition;
+            // but just a little in front to match the eyes
+            GlobalPosition = _character.GlobalPosition + (GlobalBasis * new Vector3(0.0f, 0.0f, -0.5f));
         }
     }
 
