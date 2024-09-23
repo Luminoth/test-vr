@@ -84,7 +84,7 @@ public partial class FpsMovement : Node
     {
         var velocity = _character.Velocity;
 
-        var direction = _character.Player.GlobalBasis * new Vector3(input.X, 0, input.Y);
+        var direction = _character.GlobalBasis * new Vector3(input.X, 0, input.Y);
         if(direction.LengthSquared() > 0.0f) {
             velocity.X = direction.X * _character.Player.MoveSpeed;
             velocity.Z = direction.Z * _character.Player.MoveSpeed;
@@ -129,7 +129,7 @@ public partial class FpsMovement : Node
 
     private void ApplyXrMovement(float delta)
     {
-        ApplyPhysicalMovement(delta);
+        //ApplyPhysicalMovement(delta);
         ApplyInputMovement(_xrInput.MoveState, delta);
     }
 
