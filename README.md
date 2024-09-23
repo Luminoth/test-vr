@@ -31,7 +31,5 @@
 
 ## TODO
 
-* Player is 1.0 off the ground right now because the XR tools I think setup their own collider ? Idk
-* https://docs.godotengine.org/en/stable/tutorials/xr/a_better_xr_start_script.html
 * https://docs.godotengine.org/en/stable/tutorials/xr/xr_next_steps.html
 * https://github.com/godotengine/godot-demo-projects/tree/master/viewport/gui_in_3d

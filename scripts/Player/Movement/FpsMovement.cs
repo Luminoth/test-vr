@@ -66,21 +66,44 @@ public partial class FpsMovement : Node
         if(XrManager.Instance.IsXrInitialized) {
             // rotation in the physics step
             // because hands will move from this
-            ProcessXrRotation((float)delta);
+            ApplyXrRotation((float)delta);
 
-            ProcessXrMovement((float)delta);
+            ApplyXrMovement((float)delta);
         } else {
             // rotation in the physics step
             // because hands will move from this
-            ProcessNoXrRotation((float)delta);
+            ApplyNoXrRotation((float)delta);
 
-            ProcessNoXrMovement((float)delta);
+            ApplyNoXrMovement((float)delta);
         }
     }
 
     #endregion
 
-    private void ProcessXrRotation(float delta)
+    private void ApplyInputMovement(Vector2 input, float delta)
+    {
+        var velocity = _character.Velocity;
+
+        var direction = _character.Player.GlobalBasis * new Vector3(input.X, 0, input.Y);
+        if(direction.LengthSquared() > 0.0f) {
+            velocity.X = direction.X * _character.Player.MoveSpeed;
+            velocity.Z = direction.Z * _character.Player.MoveSpeed;
+        } else {
+            velocity.X = velocity.Z = 0.0f;
+        }
+
+        // apply gravity
+        velocity.Y = Mathf.Clamp(
+            velocity.Y - (float)(_gravity * _character.Player.GravityModifier * delta),
+            -_character.Player.TermainalVelocity,
+            _character.Player.TermainalVelocity
+        );
+
+        _character.Velocity = velocity;
+        _character.MoveAndSlide();
+    }
+
+    private void ApplyXrRotation(float delta)
     {
         var input = _xrInput.LookState;
 
@@ -93,12 +116,24 @@ public partial class FpsMovement : Node
         }
     }
 
-    private void ProcessXrMovement(float delta)
+    private void ApplyPhysicalMovement(float delta)
     {
-        // TODO:
+        // try and move the character to match the camera, ignoring the Y axis
+        var desiredPosition = _character.Player.Camera.GlobalPosition with { Y = _character.GlobalPosition.Y };
+        var currentVelocity = _character.Velocity;
+        _character.Velocity = (desiredPosition - _character.GlobalPosition) / delta;
+        _character.MoveAndSlide();
+        _character.Velocity = currentVelocity;
+
     }
 
-    private void ProcessNoXrRotation(float delta)
+    private void ApplyXrMovement(float delta)
+    {
+        ApplyPhysicalMovement(delta);
+        ApplyInputMovement(_xrInput.MoveState, delta);
+    }
+
+    private void ApplyNoXrRotation(float delta)
     {
         var input = _controllerInput.LookState;
 
@@ -108,23 +143,8 @@ public partial class FpsMovement : Node
         _character.Player.RotateY(-input.X * _lookSensitivity * delta);
     }
 
-    private void ProcessNoXrMovement(float delta)
+    private void ApplyNoXrMovement(float delta)
     {
-        var velocity = _character.Velocity;
-
-        var input = _controllerInput.MoveState;
-        var direction = _character.Player.GlobalBasis * new Vector3(input.X, 0, input.Y);
-        if(direction.LengthSquared() > 0.0f) {
-            velocity.X = direction.X * _character.Player.MoveSpeed;
-            velocity.Z = direction.Z * _character.Player.MoveSpeed;
-        } else {
-            velocity.X = velocity.Z = 0.0f;
-        }
-
-        // apply gravity
-        velocity.Y -= (float)(_gravity * delta);
-
-        _character.Velocity = velocity;
-        _character.MoveAndSlide();
+        ApplyInputMovement(_controllerInput.MoveState, delta);
     }
 }
