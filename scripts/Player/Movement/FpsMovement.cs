@@ -84,6 +84,13 @@ public partial class FpsMovement : Node
     {
         var velocity = _character.Velocity;
 
+        // apply gravity
+        velocity.Y = Mathf.Clamp(
+            velocity.Y - (float)(_gravity * _character.Player.GravityModifier * delta),
+            -_character.Player.TermainalVelocity,
+            _character.Player.TermainalVelocity
+        );
+
         var direction = _character.GlobalBasis * new Vector3(input.X, 0, input.Y);
         if(direction.LengthSquared() > 0.0f) {
             velocity.X = direction.X * _character.Player.MoveSpeed;
@@ -91,13 +98,6 @@ public partial class FpsMovement : Node
         } else {
             velocity.X = velocity.Z = 0.0f;
         }
-
-        // apply gravity
-        velocity.Y = Mathf.Clamp(
-            velocity.Y - (float)(_gravity * _character.Player.GravityModifier * delta),
-            -_character.Player.TermainalVelocity,
-            _character.Player.TermainalVelocity
-        );
 
         _character.Velocity = velocity;
         _character.MoveAndSlide();
@@ -119,17 +119,22 @@ public partial class FpsMovement : Node
     private void ApplyPhysicalMovement(float delta)
     {
         // try and move the character to match the camera, ignoring the Y axis
-        var desiredPosition = _character.Player.Camera.GlobalPosition with { Y = _character.GlobalPosition.Y };
-        var currentVelocity = _character.Velocity;
-        _character.Velocity = (desiredPosition - _character.GlobalPosition) / delta;
-        _character.MoveAndSlide();
-        _character.Velocity = currentVelocity;
+        var desiredPosition = _character.Player.Camera.GlobalPosition with { Y = _character.GlobalPosition.Y }
+            + (_character.GlobalBasis * new Vector3(0.0f, 0.0f, _character.Player.EyeForwardOffset));
+        var distanceSquared = (desiredPosition - _character.GlobalPosition).LengthSquared();
+        if(distanceSquared > 0.1f) {
+            GD.Print($"moving character from {_character.GlobalPosition} to {desiredPosition}: {distanceSquared}");
+            var currentVelocity = _character.Velocity;
+            _character.Velocity = (desiredPosition - _character.GlobalPosition) / delta;
+            _character.MoveAndSlide();
+            _character.Velocity = currentVelocity;
+        }
 
     }
 
     private void ApplyXrMovement(float delta)
     {
-        //ApplyPhysicalMovement(delta);
+        ApplyPhysicalMovement(delta);
         ApplyInputMovement(_xrInput.MoveState, delta);
     }
 

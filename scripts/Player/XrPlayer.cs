@@ -16,6 +16,16 @@ public partial class XrPlayer : XROrigin3D
     public float Height => _playerHeight;
 
     [Export]
+    private float _eyeForwardOffset = 0.5f;
+
+    public float EyeForwardOffset => _eyeForwardOffset;
+
+    [Export]
+    private float _eyeHeightOffset = 0.1f;
+
+    public float EyeHeightOffset => _eyeHeightOffset;
+
+    [Export]
     private float _moveSpeed = 5.0f;
 
     public float MoveSpeed => _moveSpeed;

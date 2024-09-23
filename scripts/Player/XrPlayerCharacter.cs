@@ -31,19 +31,19 @@ public partial class XrPlayerCharacter : CharacterBody3D
 
             // move the origin to match the body
             // but just a little in front to match the eyes
-            Player.GlobalPosition = GlobalPosition + (GlobalBasis * new Vector3(0.0f, 0.0f, -0.5f));
+            Player.GlobalPosition = GlobalPosition + (GlobalBasis * new Vector3(0.0f, 0.0f, -Player.EyeForwardOffset));
 
             // move the origin to fix the camera at the player height
             // minus a little bit to be at the eye position
             // (assuming Local reference space here, Local Floor and Stage shouldn't do this)
-            Player.GlobalPosition = Player.GlobalPosition with { Y = GlobalPosition.Y + Player.Height - Player.Camera.Position.Y - 0.1f };
+            Player.GlobalPosition = Player.GlobalPosition with { Y = GlobalPosition.Y + Player.Height - Player.Camera.Position.Y - Player.EyeHeightOffset };
         } else {
             // rotate the character to match the origin
             GlobalRotation = Player.GlobalRotation;
 
             // move the origin to match the body
             // but just a little in front to match the eyes
-            Player.GlobalPosition = GlobalPosition + (GlobalBasis * new Vector3(0.0f, 0.0f, -0.5f));
+            Player.GlobalPosition = GlobalPosition + (GlobalBasis * new Vector3(0.0f, 0.0f, -Player.EyeForwardOffset));
         }
     }
 
