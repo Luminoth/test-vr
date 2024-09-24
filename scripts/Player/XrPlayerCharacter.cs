@@ -26,13 +26,15 @@ public partial class XrPlayerCharacter : CharacterBody3D
     public override void _PhysicsProcess(double delta)
     {
         if(XrManager.Instance.IsXrInitialized) {
-            // rotate character to match the camera rotation
-            //GlobalRotation = GlobalRotation with { Y = Player.Camera.GlobalRotation.Y };
-
             // move the origin so the camera is on the body
             // but just a little in front to match the eyes
             //var eyeOffset = GlobalBasis * new Vector3(0.0f, 0.0f, -Player.EyeForwardOffset);
-            //Player.GlobalPosition = GlobalPosition /*- Player.Camera.Position*/ + eyeOffset;
+            //Player.GlobalPosition = GlobalPosition - Player.Camera.Position + eyeOffset;
+
+            // offset the character so the camera is at the eye
+            // (this is moving the character, but maybe it should move the origin?)
+            var eyeOffset = GlobalBasis * new Vector3(0.0f, 0.0f, -Player.EyeForwardOffset);
+            GlobalPosition -= eyeOffset;
 
             // move the origin to fix the camera at the player height
             // minus a little bit to be at the eye position

@@ -101,6 +101,8 @@ public partial class FpsMovement : Node
         _character.MoveAndSlide();
     }
 
+    #region XR
+
     private void ApplyXrPhysicalRotation()
     {
         // match the character Y rotation to the camera
@@ -125,6 +127,7 @@ public partial class FpsMovement : Node
     private void ApplyXrRotation(float delta)
     {
         ApplyXrPhysicalRotation();
+        // TODO:
         //ApplyXrInputRotation(delta);
     }
 
@@ -150,15 +153,14 @@ public partial class FpsMovement : Node
         var currentPosition = _character.GlobalPosition;
         ApplyInputMovement(_xrInput.MoveState, delta);
 
-        // move the room to match on the X/Z plane
+        // move the origin to match the character on the X/Z plane
         var distance = _character.GlobalPosition with { Y = 0.0f } - currentPosition with { Y = 0.0f };
         _character.Player.GlobalPosition += distance;
-
-        // offset so the camera is at the eye
-        // (this is moving the character, but maybe it should move the origin?)
-        var eyeOffset = _character.GlobalBasis * new Vector3(0.0f, 0.0f, -_character.Player.EyeForwardOffset);
-        _character.GlobalPosition -= eyeOffset;
     }
+
+    #endregion
+
+    #region No XR
 
     private void ApplyNoXrRotation(float delta)
     {
@@ -174,4 +176,6 @@ public partial class FpsMovement : Node
     {
         ApplyInputMovement(_controllerInput.MoveState, delta);
     }
+
+    #endregion
 }
