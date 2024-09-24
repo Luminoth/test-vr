@@ -1,5 +1,3 @@
-using System;
-
 using VrTest.Managers;
 using VrTest.Player.Input;
 
@@ -111,7 +109,7 @@ public partial class FpsMovement : Node
         // snap turn step accumulator from XRTools
         _snapTurnAccum -= Mathf.Abs(input.X) * delta;
         if(_snapTurnAccum <= 0.0f) {
-            _character.Player.RotateY(_snapTurnAngle * -MathF.Sign(input.X));
+            _character.Player.RotateY(_snapTurnAngle * -Mathf.Sign(input.X));
             _snapTurnAccum = _snapTurnDelay;
         }
     }
