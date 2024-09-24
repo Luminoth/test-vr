@@ -130,29 +130,17 @@ public partial class FpsMovement : Node
 
     private void ApplyXrPhysicalMovement(float delta)
     {
-        /*var cameraBasis = _character.Player.Camera.GlobalBasis;
-        cameraBasis.X = Vector3.Right;
-        cameraBasis.Y = Vector3.Up;
+        // attempt to move the character to be under the camera on the X/Z plane
+        var currentPosition = _character.GlobalPosition with { Y = 0.0f };
+        var desiredPosition = _character.Player.Camera.GlobalPosition with { Y = 0.0f };
+        var currentVelocity = _character.Velocity;
+        _character.Velocity = (desiredPosition - currentPosition) / delta;
+        _character.MoveAndSlide();
+        _character.Velocity = currentVelocity;
 
-        var eyeOffset = cameraBasis * new Vector3(0.0f, 0.0f, _character.Player.EyeForwardOffset);
-        GD.Print($"eye offset: {eyeOffset}");
-        if(eyeOffset.Y != 0.0f) {
-            GD.PushWarning($"invalid eye offset: {eyeOffset}");
-        }
-
-        // try and move the character to match the camera, ignoring the Y axis
-        var desiredPosition = _character.Player.Camera.GlobalPosition with { Y = _character.GlobalPosition.Y } + eyeOffset;
-        var distanceSquared = (desiredPosition - _character.GlobalPosition).LengthSquared();
-        GD.Print($"from {_character.GlobalPosition} to {desiredPosition}: {distanceSquared}");
-        if(distanceSquared > 0.1f) {
-            var currentVelocity = _character.Velocity;
-            _character.Velocity = (desiredPosition - _character.GlobalPosition) / delta;
-            _character.MoveAndSlide();
-            _character.Velocity = currentVelocity;
-        }*/
-
-        // move the character to be under the camera on the X/Z plane
-        _character.GlobalPosition = _character.Player.Camera.GlobalPosition with { Y = _character.GlobalPosition.Y };
+        // move the origin back if we didn't make it
+        var remaining = desiredPosition - _character.GlobalPosition with { Y = 0.0f };
+        _character.Player.GlobalPosition -= remaining;
     }
 
     private void ApplyXrMovement(float delta)
