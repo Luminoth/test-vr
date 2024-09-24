@@ -26,13 +26,9 @@ public partial class XrPlayerCharacter : CharacterBody3D
     public override void _PhysicsProcess(double delta)
     {
         if(XrManager.Instance.IsXrInitialized) {
-            // move the origin so the camera is on the body
-            // but just a little in front to match the eyes
-            //var eyeOffset = GlobalBasis * new Vector3(0.0f, 0.0f, -Player.EyeForwardOffset);
-            //Player.GlobalPosition = GlobalPosition - Player.Camera.Position + eyeOffset;
-
             // offset the character so the camera is at the eye
-            // (this is moving the character, but maybe it should move the origin?)
+            // maybe this could move the origin instead
+            // but this actually keeps the camera "in bounds" so is probably correct
             var eyeOffset = GlobalBasis * new Vector3(0.0f, 0.0f, -Player.EyeForwardOffset);
             GlobalPosition -= eyeOffset;
 
@@ -51,4 +47,18 @@ public partial class XrPlayerCharacter : CharacterBody3D
     }
 
     #endregion
+
+    // from XRToools, rotates the origin around the camera
+    public void RotatePlayer(float angle)
+    {
+        var t1 = Transform3D.Identity;
+        var t2 = Transform3D.Identity;
+        var rot = Transform3D.Identity;
+
+        t1.Origin = -Player.Camera.Position;
+        t2.Origin = Player.Camera.Position;
+        rot = rot.Rotated(Vector3.Down, angle);
+
+        Player.Transform = (Player.Transform * t2 * rot * t1).Orthonormalized();
+    }
 }

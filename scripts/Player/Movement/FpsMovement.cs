@@ -3,7 +3,7 @@ using VrTest.Player.Input;
 
 namespace VrTest.Player;
 
-// movement scripts need to be above the player script
+// movement scripts need to be above the player character script
 // in tree order so that they execute first
 public partial class FpsMovement : Node
 {
@@ -113,13 +113,10 @@ public partial class FpsMovement : Node
     {
         var input = _xrInput.LookState;
 
-        // rotate origin with snap turn
-        // snap turn step accumulator from XRTools
-        // TODO: this isn't working, I think because the camera
-        // is rotating around the origin with this
+        // from XRTools, rotate origin with snap turn
         _snapTurnAccum -= Mathf.Abs(input.X) * delta;
         if(_snapTurnAccum <= 0.0f) {
-            _character.Player.RotateY(_snapTurnAngle * -Mathf.Sign(input.X));
+            _character.RotatePlayer(_snapTurnAngle * Mathf.Sign(input.X));
             _snapTurnAccum = _snapTurnDelay;
         }
     }
@@ -127,8 +124,7 @@ public partial class FpsMovement : Node
     private void ApplyXrRotation(float delta)
     {
         ApplyXrPhysicalRotation();
-        // TODO:
-        //ApplyXrInputRotation(delta);
+        ApplyXrInputRotation(delta);
     }
 
     private void ApplyXrPhysicalMovement(float delta)
@@ -141,7 +137,7 @@ public partial class FpsMovement : Node
         _character.MoveAndSlide();
         _character.Velocity = currentVelocity;
 
-        // move the origin back if we didn't make it
+        // move the origin back to match if we didn't make it
         var remaining = desiredPosition - _character.GlobalPosition with { Y = 0.0f };
         _character.Player.GlobalPosition -= remaining;
     }
@@ -153,7 +149,7 @@ public partial class FpsMovement : Node
         var currentPosition = _character.GlobalPosition;
         ApplyInputMovement(_xrInput.MoveState, delta);
 
-        // move the origin to match the character on the X/Z plane
+        // move the origin to match the character movement on the X/Z plane
         var distance = _character.GlobalPosition with { Y = 0.0f } - currentPosition with { Y = 0.0f };
         _character.Player.GlobalPosition += distance;
     }
