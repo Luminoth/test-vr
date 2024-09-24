@@ -105,8 +105,10 @@ public partial class FpsMovement : Node
     {
         var input = _xrInput.LookState;
 
-        // rotate character with snap turn
+        // rotate origin with snap turn
         // snap turn step accumulator from XRTools
+        // TODO: this isn't working, I think because the camera
+        // is rotating around the origin with this
         _snapTurnAccum -= Mathf.Abs(input.X) * delta;
         if(_snapTurnAccum <= 0.0f) {
             _character.Player.RotateY(_snapTurnAngle * -Mathf.Sign(input.X));
@@ -116,12 +118,21 @@ public partial class FpsMovement : Node
 
     private void ApplyPhysicalMovement(float delta)
     {
+        var cameraBasis = _character.Player.Camera.GlobalBasis;
+        cameraBasis.X = Vector3.Right;
+        cameraBasis.Y = Vector3.Up;
+
+        var eyeOffset = cameraBasis * new Vector3(0.0f, 0.0f, _character.Player.EyeForwardOffset);
+        GD.Print($"eye offset: {eyeOffset}");
+        if(eyeOffset.Y != 0.0f) {
+            GD.PushWarning($"invalid eye offset: {eyeOffset}");
+        }
+
         // try and move the character to match the camera, ignoring the Y axis
-        var desiredPosition = _character.Player.Camera.GlobalPosition with { Y = _character.GlobalPosition.Y }
-            + (_character.GlobalBasis * new Vector3(0.0f, 0.0f, _character.Player.EyeForwardOffset));
+        var desiredPosition = _character.Player.Camera.GlobalPosition with { Y = _character.GlobalPosition.Y } + eyeOffset;
         var distanceSquared = (desiredPosition - _character.GlobalPosition).LengthSquared();
+        GD.Print($"from {_character.GlobalPosition} to {desiredPosition}: {distanceSquared}");
         if(distanceSquared > 0.1f) {
-            GD.Print($"moving character from {_character.GlobalPosition} to {desiredPosition}: {distanceSquared}");
             var currentVelocity = _character.Velocity;
             _character.Velocity = (desiredPosition - _character.GlobalPosition) / delta;
             _character.MoveAndSlide();
