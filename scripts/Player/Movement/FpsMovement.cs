@@ -101,7 +101,13 @@ public partial class FpsMovement : Node
         _character.MoveAndSlide();
     }
 
-    private void ApplyXrRotation(float delta)
+    private void ApplyXrPhysicalRotation()
+    {
+        // match the character Y rotation to the camera
+        _character.GlobalRotation = _character.GlobalRotation with { Y = _character.Player.Camera.GlobalRotation.Y };
+    }
+
+    private void ApplyXrInputRotation(float delta)
     {
         var input = _xrInput.LookState;
 
@@ -116,9 +122,15 @@ public partial class FpsMovement : Node
         }
     }
 
-    private void ApplyPhysicalMovement(float delta)
+    private void ApplyXrRotation(float delta)
     {
-        var cameraBasis = _character.Player.Camera.GlobalBasis;
+        ApplyXrPhysicalRotation();
+        //ApplyXrInputRotation(delta);
+    }
+
+    private void ApplyXrPhysicalMovement(float delta)
+    {
+        /*var cameraBasis = _character.Player.Camera.GlobalBasis;
         cameraBasis.X = Vector3.Right;
         cameraBasis.Y = Vector3.Up;
 
@@ -137,14 +149,27 @@ public partial class FpsMovement : Node
             _character.Velocity = (desiredPosition - _character.GlobalPosition) / delta;
             _character.MoveAndSlide();
             _character.Velocity = currentVelocity;
-        }
+        }*/
 
+        // move the character to be under the camera on the X/Z plane
+        _character.GlobalPosition = _character.Player.Camera.GlobalPosition with { Y = _character.GlobalPosition.Y };
     }
 
     private void ApplyXrMovement(float delta)
     {
-        ApplyPhysicalMovement(delta);
+        ApplyXrPhysicalMovement(delta);
+
+        var currentPosition = _character.GlobalPosition;
         ApplyInputMovement(_xrInput.MoveState, delta);
+
+        // move the room to match on the X/Z plane
+        var distance = _character.GlobalPosition with { Y = 0.0f } - currentPosition with { Y = 0.0f };
+        _character.Player.GlobalPosition += distance;
+
+        // offset so the camera is at the eye
+        // (this is moving the character, but maybe it should move the origin?)
+        var eyeOffset = _character.GlobalBasis * new Vector3(0.0f, 0.0f, -_character.Player.EyeForwardOffset);
+        _character.GlobalPosition -= eyeOffset;
     }
 
     private void ApplyNoXrRotation(float delta)
