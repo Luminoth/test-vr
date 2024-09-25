@@ -149,4 +149,7 @@ layout_mode = 2
 layout_mode = 2
 text = "FPS: N/A"
 
+[connection signal="body_entered" from="LeftHand/Area3D" to="CharacterBody3D" method="_on_area_3d_body_entered"]
+[connection signal="body_entered" from="RightHand/Area3D" to="CharacterBody3D" method="_on_area_3d_body_entered"]
+
 [editable path="CharacterBody3D/Model"]
