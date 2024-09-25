@@ -1,19 +1,30 @@
-[gd_scene load_steps=7 format=3 uid="uid://drb8tbpmlpe5j"]
+[gd_scene load_steps=11 format=3 uid="uid://drb8tbpmlpe5j"]
 
 [ext_resource type="PackedScene" uid="uid://c5y8tn5gtle8" path="res://scenes/xrplayer.tscn" id="1_irsne"]
 [ext_resource type="PackedScene" uid="uid://bhux5cc60eoc1" path="res://scenes/enemy.tscn" id="2_txd32"]
 
 [sub_resource type="Environment" id="Environment_u4jql"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_65kly"]
-albedo_color = Color(2.76752e-06, 0.410493, 0, 1)
-
 [sub_resource type="PlaneMesh" id="PlaneMesh_jgwmu"]
-material = SubResource("StandardMaterial3D_65kly")
 size = Vector2(100, 100)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kwy4w"]
+albedo_color = Color(1.31156e-06, 0.404555, 0, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_bdjvr"]
 size = Vector3(100, 1, 100)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fn37j"]
+albedo_color = Color(2.16588e-06, 0, 0.659763, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ya40p"]
+albedo_color = Color(0, 0, 0.658824, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ptfs0"]
+albedo_color = Color(0, 0, 0.658824, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yyghb"]
+albedo_color = Color(0, 0, 0.658824, 1)
 
 [node name="Node3D" type="Node3D"]
 
@@ -23,51 +34,63 @@ environment = SubResource("Environment_u4jql")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
 transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 10, 0)
 
-[node name="Enemy" parent="." instance=ExtResource("2_txd32")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+[node name="World" type="Node3D" parent="."]
 
-[node name="Floor" type="CSGMesh3D" parent="."]
+[node name="Floor" type="CSGMesh3D" parent="World"]
 mesh = SubResource("PlaneMesh_jgwmu")
+material = SubResource("StandardMaterial3D_kwy4w")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Floor"]
+[node name="StaticBody3D" type="StaticBody3D" parent="World/Floor"]
+collision_mask = 28
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Floor/StaticBody3D"]
 shape = SubResource("BoxShape3D_bdjvr")
 
-[node name="Wall" type="CSGMesh3D" parent="."]
+[node name="Wall" type="CSGMesh3D" parent="World"]
 transform = Transform3D(-1, -8.74228e-08, 3.82137e-15, 0, -4.37114e-08, -1, 8.74228e-08, -1, 4.37114e-08, 0, 50, 50)
 mesh = SubResource("PlaneMesh_jgwmu")
+material = SubResource("StandardMaterial3D_fn37j")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Wall"]
+[node name="StaticBody3D" type="StaticBody3D" parent="World/Wall"]
+collision_mask = 28
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Wall/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Wall/StaticBody3D"]
 shape = SubResource("BoxShape3D_bdjvr")
 
-[node name="Wall2" type="CSGMesh3D" parent="."]
+[node name="Wall2" type="CSGMesh3D" parent="World"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 50, -50)
 mesh = SubResource("PlaneMesh_jgwmu")
+material = SubResource("StandardMaterial3D_ya40p")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Wall2"]
+[node name="StaticBody3D" type="StaticBody3D" parent="World/Wall2"]
+collision_mask = 28
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Wall2/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Wall2/StaticBody3D"]
 shape = SubResource("BoxShape3D_bdjvr")
 
-[node name="Wall3" type="CSGMesh3D" parent="."]
+[node name="Wall3" type="CSGMesh3D" parent="World"]
 transform = Transform3D(1.19249e-08, -1, 4.37114e-08, 0, -4.37114e-08, -1, 1, 1.19249e-08, -5.21253e-16, 50, 50, 0)
 mesh = SubResource("PlaneMesh_jgwmu")
+material = SubResource("StandardMaterial3D_ptfs0")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Wall3"]
+[node name="StaticBody3D" type="StaticBody3D" parent="World/Wall3"]
+collision_mask = 28
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Wall3/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Wall3/StaticBody3D"]
 shape = SubResource("BoxShape3D_bdjvr")
 
-[node name="Wall4" type="CSGMesh3D" parent="."]
+[node name="Wall4" type="CSGMesh3D" parent="World"]
 transform = Transform3D(1.19249e-08, 1, -4.37114e-08, 0, -4.37114e-08, -1, -1, 1.19249e-08, -5.21253e-16, -50, 50, 0)
 mesh = SubResource("PlaneMesh_jgwmu")
+material = SubResource("StandardMaterial3D_yyghb")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Wall4"]
+[node name="StaticBody3D" type="StaticBody3D" parent="World/Wall4"]
+collision_mask = 28
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Wall4/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Wall4/StaticBody3D"]
 shape = SubResource("BoxShape3D_bdjvr")
+
+[node name="Enemy" parent="." instance=ExtResource("2_txd32")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
 
 [node name="XROrigin3D" parent="." instance=ExtResource("1_irsne")]

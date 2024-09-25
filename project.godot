@@ -74,6 +74,15 @@ enabled=PackedStringArray("res://addons/godot-xr-tools/plugin.cfg", "res://addon
 ]
 }
 
+[layer_names]
+
+3d_physics/layer_1="Static World"
+3d_physics/layer_2="Dynamic World"
+3d_physics/layer_3="Player Hand"
+3d_physics/layer_4="Player Body"
+3d_physics/layer_5="Enemy"
+3d_physics/layer_6="UI Objects"
+
 [rendering]
 
 renderer/rendering_method="mobile"

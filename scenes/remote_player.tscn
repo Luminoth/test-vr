@@ -8,6 +8,8 @@
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tcjc8"]
 
 [node name="CharacterBody3D" type="CharacterBody3D"]
+collision_layer = 8
+collision_mask = 19
 script = ExtResource("1_epjm6")
 
 [node name="Model" parent="." instance=ExtResource("2_4s0qs")]

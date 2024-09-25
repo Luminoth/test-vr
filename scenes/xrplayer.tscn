@@ -86,6 +86,8 @@ _character = NodePath("../CharacterBody3D")
 
 [node name="CharacterBody3D" type="CharacterBody3D" parent="." node_paths=PackedStringArray("_player", "_head")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
+collision_layer = 8
+collision_mask = 19
 script = ExtResource("1_7lbn8")
 _player = NodePath("..")
 _head = NodePath("Model/Head")

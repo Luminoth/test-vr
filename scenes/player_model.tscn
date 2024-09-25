@@ -1,4 +1,13 @@
-[gd_scene format=3 uid="uid://cfgf4bc05tc6j"]
+[gd_scene load_steps=4 format=3 uid="uid://cfgf4bc05tc6j"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3uak0"]
+albedo_color = Color(0.313726, 0, 0.313726, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p8rmn"]
+albedo_color = Color(0.912408, 0.000674216, 0.912401, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m8ry4"]
+albedo_color = Color(0.277682, 0.356505, 0.146542, 1)
 
 [node name="Model" type="Node3D"]
 
@@ -6,11 +15,14 @@
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 0)
 
 [node name="Head" type="CSGSphere3D" parent="Head"]
+material = SubResource("StandardMaterial3D_3uak0")
 
 [node name="Nose" type="CSGSphere3D" parent="Head"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
 radius = 0.1
+material = SubResource("StandardMaterial3D_p8rmn")
 
 [node name="Body" type="CSGCylinder3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.65, 0)
 height = 1.25
+material = SubResource("StandardMaterial3D_m8ry4")
