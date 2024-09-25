@@ -14,6 +14,8 @@ public partial class XrPlayerCharacter : CharacterBody3D
     [Export]
     private Node3D _head;
 
+    private float EyeHeight => Player.Height - Player.EyeHeightOffset;
+
     #region Godot Lifecycle
 
     public override void _Ready()
@@ -21,6 +23,8 @@ public partial class XrPlayerCharacter : CharacterBody3D
         TopLevel = true;
 
         _head.Hide();
+
+        GD.Print($"Player eye height: {EyeHeight}");
     }
 
     public override void _PhysicsProcess(double delta)
@@ -35,7 +39,7 @@ public partial class XrPlayerCharacter : CharacterBody3D
             // move the origin to fix the camera at the player height
             // minus a little bit to be at the eye position
             // (assuming Local reference space here, Local Floor and Stage shouldn't do this)
-            Player.GlobalPosition = Player.GlobalPosition with { Y = GlobalPosition.Y + Player.Height - Player.Camera.Position.Y - Player.EyeHeightOffset };
+            Player.GlobalPosition = Player.GlobalPosition with { Y = GlobalPosition.Y + EyeHeight - Player.Camera.Position.Y };
         } else {
             // rotate the character to match the origin
             GlobalRotation = Player.GlobalRotation;

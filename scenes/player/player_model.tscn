@@ -12,9 +12,10 @@ albedo_color = Color(0.277682, 0.356505, 0.146542, 1)
 [node name="Model" type="Node3D"]
 
 [node name="Head" type="CSGCombiner3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
 
 [node name="Head" type="CSGSphere3D" parent="Head"]
+radius = 0.4
 material = SubResource("StandardMaterial3D_3uak0")
 
 [node name="Nose" type="CSGSphere3D" parent="Head"]
@@ -23,6 +24,6 @@ radius = 0.1
 material = SubResource("StandardMaterial3D_p8rmn")
 
 [node name="Body" type="CSGCylinder3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.65, 0)
-height = 1.25
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)
+height = 0.25
 material = SubResource("StandardMaterial3D_m8ry4")

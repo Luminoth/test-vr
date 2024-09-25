@@ -1,9 +1,10 @@
-[gd_scene load_steps=13 format=3 uid="uid://drb8tbpmlpe5j"]
+[gd_scene load_steps=14 format=3 uid="uid://drb8tbpmlpe5j"]
 
 [ext_resource type="PackedScene" uid="uid://clujaf3u776a3" path="res://addons/godot-xr-tools/objects/viewport_2d_in_3d.tscn" id="1_g4sxh"]
 [ext_resource type="PackedScene" uid="uid://c5y8tn5gtle8" path="res://scenes/player/xrplayer.tscn" id="1_irsne"]
 [ext_resource type="PackedScene" uid="uid://bhux5cc60eoc1" path="res://scenes/enemies/enemy.tscn" id="2_txd32"]
 [ext_resource type="PackedScene" uid="uid://cdwgjf1nxoimi" path="res://scenes/ui/test_ui.tscn" id="4_adj22"]
+[ext_resource type="PackedScene" uid="uid://cm8am4g6aw0me" path="res://scenes/player/remote_player.tscn" id="5_slauv"]
 
 [sub_resource type="Environment" id="Environment_u4jql"]
 
@@ -46,6 +47,7 @@ material = SubResource("StandardMaterial3D_kwy4w")
 collision_mask = 28
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="World/Floor/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("BoxShape3D_bdjvr")
 
 [node name="Wall" type="CSGMesh3D" parent="World"]
@@ -57,6 +59,7 @@ material = SubResource("StandardMaterial3D_fn37j")
 collision_mask = 28
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="World/Wall/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("BoxShape3D_bdjvr")
 
 [node name="Wall2" type="CSGMesh3D" parent="World"]
@@ -68,6 +71,7 @@ material = SubResource("StandardMaterial3D_ya40p")
 collision_mask = 28
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="World/Wall2/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("BoxShape3D_bdjvr")
 
 [node name="Wall3" type="CSGMesh3D" parent="World"]
@@ -79,6 +83,7 @@ material = SubResource("StandardMaterial3D_ptfs0")
 collision_mask = 28
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="World/Wall3/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("BoxShape3D_bdjvr")
 
 [node name="Wall4" type="CSGMesh3D" parent="World"]
@@ -90,6 +95,7 @@ material = SubResource("StandardMaterial3D_yyghb")
 collision_mask = 28
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="World/Wall4/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("BoxShape3D_bdjvr")
 
 [node name="Viewport2Din3D" parent="World" instance=ExtResource("1_g4sxh")]
@@ -113,3 +119,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
 [node name="Players" type="Node3D" parent="."]
 
 [node name="XROrigin3D" parent="Players" instance=ExtResource("1_irsne")]
+
+[node name="Remote Player" parent="Players" instance=ExtResource("5_slauv")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 2, 0, -2)
+
+[node name="Remote Player 2" parent="Players" instance=ExtResource("5_slauv")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2, 0, -2)

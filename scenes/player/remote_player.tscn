@@ -6,20 +6,21 @@
 [ext_resource type="PackedScene" uid="uid://l2n30mpbkdyw" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/right_hand_low.tscn" id="5_opkwt"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tcjc8"]
+height = 1.0
 
-[node name="CharacterBody3D" type="CharacterBody3D"]
+[node name="Remote Player" type="CharacterBody3D"]
 collision_layer = 8
 collision_mask = 19
 script = ExtResource("1_epjm6")
 
+[node name="RightHand" parent="." instance=ExtResource("5_opkwt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.3, -1)
+
+[node name="LeftHand" parent="." instance=ExtResource("4_x16jq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.3, -1)
+
 [node name="Model" parent="." instance=ExtResource("2_4s0qs")]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("CapsuleShape3D_tcjc8")
-
-[node name="LeftHand" parent="." instance=ExtResource("4_x16jq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1.5, -1)
-
-[node name="RightHand" parent="." instance=ExtResource("5_opkwt")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1.5, -1)

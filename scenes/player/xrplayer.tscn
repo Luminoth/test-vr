@@ -31,14 +31,16 @@ material = SubResource("StandardMaterial3D_kmhg5")
 radius = 0.25
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tcjc8"]
+height = 1.0
 
-[node name="XROrigin3D" type="XROrigin3D" node_paths=PackedStringArray("_camera", "_fpsLabel")]
+[node name="XROrigin3D" type="XROrigin3D" node_paths=PackedStringArray("_camera", "_collider", "_fpsLabel")]
 script = ExtResource("1_tt7sn")
 _camera = NodePath("XRCamera3D")
+_collider = NodePath("CharacterBody3D/CollisionShape3D")
 _fpsLabel = NodePath("SubViewport/CanvasLayer/MarginContainer/VBoxContainer/FPS")
 
 [node name="XRCamera3D" type="XRCamera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 
 [node name="VRCommonShaderCache" parent="XRCamera3D" instance=ExtResource("2_xdn8l")]
 
@@ -53,7 +55,7 @@ mesh = SubResource("QuadMesh_2od5s")
 skeleton = NodePath("../..")
 
 [node name="LeftHand" type="XRController3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1.5, -0.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.3, -0.5)
 tracker = &"left_hand"
 
 [node name="LeftHand" parent="LeftHand" instance=ExtResource("3_urgum")]
@@ -68,7 +70,7 @@ shape = SubResource("SphereShape3D_h42qg")
 [node name="FunctionPointer" parent="LeftHand" instance=ExtResource("5_bixdp")]
 
 [node name="RightHand" type="XRController3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1.5, -0.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.3, -0.5)
 tracker = &"right_hand"
 
 [node name="RightHand" parent="RightHand" instance=ExtResource("4_efixk")]
@@ -126,7 +128,7 @@ _head = NodePath("Model/Head")
 [node name="Model" parent="CharacterBody3D" instance=ExtResource("10_2l3qw")]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("CapsuleShape3D_tcjc8")
 
 [node name="SubViewport" type="SubViewport" parent="."]

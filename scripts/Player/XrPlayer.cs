@@ -8,12 +8,14 @@ public partial class XrPlayer : XROrigin3D
     public XRCamera3D Camera => _camera;
 
     [Export]
-    private Label _fpsLabel;
+    private CollisionShape3D _collider;
+
+    public float Height => ((CapsuleShape3D)_collider.Shape).Height;
+
+    public float Radius => ((CapsuleShape3D)_collider.Shape).Radius;
 
     [Export]
-    private float _playerHeight = 1.8f;
-
-    public float Height => _playerHeight;
+    private Label _fpsLabel;
 
     [Export]
     private float _eyeForwardOffset = 0.5f;
@@ -41,6 +43,11 @@ public partial class XrPlayer : XROrigin3D
     public float TermainalVelocity => _terminalVelocity;
 
     #region Godot Lifecycle
+
+    public override void _Ready()
+    {
+        GD.Print($"Player height: {Height}");
+    }
 
     public override void _Process(double delta)
     {
