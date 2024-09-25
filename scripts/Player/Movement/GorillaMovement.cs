@@ -14,6 +14,8 @@ public partial class GorillaMovement : Node
         get => _enabled;
         set
         {
+            _enabled = XrManager.Instance.IsXrInitialized && value;
+
             SetProcess(_enabled);
             SetPhysicsProcess(_enabled);
         }
@@ -30,16 +32,12 @@ public partial class GorillaMovement : Node
     {
         _gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsDouble();
 
-        SetProcess(Enabled);
-        SetPhysicsProcess(Enabled);
+        SetProcess(XrManager.Instance.IsXrInitialized && Enabled);
+        SetPhysicsProcess(XrManager.Instance.IsXrInitialized && Enabled);
     }
 
     public override void _PhysicsProcess(double delta)
     {
-        if(!XrManager.Instance.IsXrInitialized) {
-            return;
-        }
-
         // rotation in the physics step
         // because hands will move from this
         ApplyRotation((float)delta);

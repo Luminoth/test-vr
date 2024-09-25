@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://c5y8tn5gtle8"]
+[gd_scene load_steps=17 format=3 uid="uid://c5y8tn5gtle8"]
 
 [ext_resource type="Script" path="res://scripts/Player/XrPlayerCharacter.cs" id="1_7lbn8"]
 [ext_resource type="Script" path="res://scripts/Player/XrPlayer.cs" id="1_tt7sn"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://l2n30mpbkdyw" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/right_hand_low.tscn" id="4_efixk"]
 [ext_resource type="Script" path="res://scripts/Player/Input/ControllerInput.cs" id="7_wblcy"]
 [ext_resource type="Script" path="res://scripts/Player/Movement/FpsMovement.cs" id="8_e5voe"]
+[ext_resource type="Script" path="res://scripts/Player/Movement/ControllerMovement.cs" id="8_rlvdg"]
 [ext_resource type="Script" path="res://scripts/Player/Movement/GorillaMovement.cs" id="9_krts3"]
 [ext_resource type="Script" path="res://scripts/Player/Input/XrInput.cs" id="9_wnoi4"]
 [ext_resource type="PackedScene" uid="uid://cfgf4bc05tc6j" path="res://scenes/player_model.tscn" id="10_2l3qw"]
@@ -64,25 +65,33 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -1.5)
 layer_viewport = NodePath("../SubViewport")
 alpha_blend = true
 
-[node name="ControllerInput" type="Node" parent="."]
+[node name="Input" type="Node" parent="."]
+
+[node name="ControllerInput" type="Node" parent="Input"]
 script = ExtResource("7_wblcy")
 _invertVerticalLook = true
 
-[node name="XRInput" type="Node" parent="." node_paths=PackedStringArray("_leftHand", "_rightHand")]
+[node name="XRInput" type="Node" parent="Input" node_paths=PackedStringArray("_leftHand", "_rightHand")]
 script = ExtResource("9_wnoi4")
-_leftHand = NodePath("../LeftHand")
-_rightHand = NodePath("../RightHand")
+_leftHand = NodePath("../../LeftHand")
+_rightHand = NodePath("../../RightHand")
 
-[node name="FpsMovement" type="Node" parent="." node_paths=PackedStringArray("_character", "_controllerInput", "_xrInput")]
+[node name="Movement" type="Node" parent="."]
+
+[node name="ControllerMovement" type="Node" parent="Movement" node_paths=PackedStringArray("_character", "_input")]
+script = ExtResource("8_rlvdg")
+_character = NodePath("../../CharacterBody3D")
+_input = NodePath("../../Input/ControllerInput")
+
+[node name="FpsMovement" type="Node" parent="Movement" node_paths=PackedStringArray("_character", "_input")]
 script = ExtResource("8_e5voe")
 _enabled = false
-_character = NodePath("../CharacterBody3D")
-_controllerInput = NodePath("../ControllerInput")
-_xrInput = NodePath("../XRInput")
+_character = NodePath("../../CharacterBody3D")
+_input = NodePath("../../Input/XRInput")
 
-[node name="GorillaMovement" type="Node" parent="." node_paths=PackedStringArray("_character")]
+[node name="GorillaMovement" type="Node" parent="Movement" node_paths=PackedStringArray("_character")]
 script = ExtResource("9_krts3")
-_character = NodePath("../CharacterBody3D")
+_character = NodePath("../../CharacterBody3D")
 
 [node name="CharacterBody3D" type="CharacterBody3D" parent="." node_paths=PackedStringArray("_player", "_head")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)

@@ -15,6 +15,8 @@ public partial class FpsMovement : Node
         get => _enabled;
         set
         {
+            _enabled = XrManager.Instance.IsXrInitialized && value;
+
             SetProcess(_enabled);
             SetPhysicsProcess(_enabled);
         }
@@ -24,20 +26,7 @@ public partial class FpsMovement : Node
     private XrPlayerCharacter _character;
 
     [Export]
-    private ControllerInput _controllerInput;
-
-    [Export]
-    private XrInput _xrInput;
-
-    [Export]
-    private float _tiltLowerLimit = Mathf.DegToRad(-90.0f);
-
-    [Export]
-    private float _tiltUpperLimit = Mathf.DegToRad(90.0f);
-
-    // TODO: move to game settings
-    [Export]
-    private int _lookSensitivity = 4;
+    private XrInput _input;
 
     [Export]
     private float _snapTurnDelay = 0.2f;
@@ -55,28 +44,59 @@ public partial class FpsMovement : Node
     {
         _gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsDouble();
 
-        SetProcess(Enabled);
-        SetPhysicsProcess(Enabled);
+        SetProcess(XrManager.Instance.IsXrInitialized && Enabled);
+        SetPhysicsProcess(XrManager.Instance.IsXrInitialized && Enabled);
     }
 
     public override void _PhysicsProcess(double delta)
     {
-        if(XrManager.Instance.IsXrInitialized) {
-            // rotation in the physics step
-            // because hands will move from this
-            ApplyXrRotation((float)delta);
+        // rotation in the physics step
+        // because hands will move from this
+        ApplyRotation((float)delta);
 
-            ApplyXrMovement((float)delta);
-        } else {
-            // rotation in the physics step
-            // because hands will move from this
-            ApplyNoXrRotation((float)delta);
-
-            ApplyNoXrMovement((float)delta);
-        }
+        ApplyMovement((float)delta);
     }
 
     #endregion
+
+    private void ApplyPhysicalRotation()
+    {
+        // match the character Y rotation to the camera
+        _character.GlobalRotation = _character.GlobalRotation with { Y = _character.Player.Camera.GlobalRotation.Y };
+    }
+
+    private void ApplyInputRotation(float delta)
+    {
+        var input = _input.LookState;
+
+        // from XRTools, rotate origin with snap turn
+        _snapTurnAccum -= Mathf.Abs(input.X) * delta;
+        if(_snapTurnAccum <= 0.0f) {
+            _character.RotatePlayer(_snapTurnAngle * Mathf.Sign(input.X));
+            _snapTurnAccum = _snapTurnDelay;
+        }
+    }
+
+    private void ApplyRotation(float delta)
+    {
+        ApplyPhysicalRotation();
+        ApplyInputRotation(delta);
+    }
+
+    private void ApplyPhysicalMovement(float delta)
+    {
+        // attempt to move the character to be under the camera on the X/Z plane
+        var currentPosition = _character.GlobalPosition with { Y = 0.0f };
+        var desiredPosition = _character.Player.Camera.GlobalPosition with { Y = 0.0f };
+        var currentVelocity = _character.Velocity;
+        _character.Velocity = (desiredPosition - currentPosition) / delta;
+        _character.MoveAndSlide();
+        _character.Velocity = currentVelocity;
+
+        // move the origin back to match if we didn't make it
+        var remaining = desiredPosition - _character.GlobalPosition with { Y = 0.0f };
+        _character.Player.GlobalPosition -= remaining;
+    }
 
     private void ApplyInputMovement(Vector2 input, float delta)
     {
@@ -101,77 +121,15 @@ public partial class FpsMovement : Node
         _character.MoveAndSlide();
     }
 
-    #region XR
-
-    private void ApplyXrPhysicalRotation()
+    private void ApplyMovement(float delta)
     {
-        // match the character Y rotation to the camera
-        _character.GlobalRotation = _character.GlobalRotation with { Y = _character.Player.Camera.GlobalRotation.Y };
-    }
-
-    private void ApplyXrInputRotation(float delta)
-    {
-        var input = _xrInput.LookState;
-
-        // from XRTools, rotate origin with snap turn
-        _snapTurnAccum -= Mathf.Abs(input.X) * delta;
-        if(_snapTurnAccum <= 0.0f) {
-            _character.RotatePlayer(_snapTurnAngle * Mathf.Sign(input.X));
-            _snapTurnAccum = _snapTurnDelay;
-        }
-    }
-
-    private void ApplyXrRotation(float delta)
-    {
-        ApplyXrPhysicalRotation();
-        ApplyXrInputRotation(delta);
-    }
-
-    private void ApplyXrPhysicalMovement(float delta)
-    {
-        // attempt to move the character to be under the camera on the X/Z plane
-        var currentPosition = _character.GlobalPosition with { Y = 0.0f };
-        var desiredPosition = _character.Player.Camera.GlobalPosition with { Y = 0.0f };
-        var currentVelocity = _character.Velocity;
-        _character.Velocity = (desiredPosition - currentPosition) / delta;
-        _character.MoveAndSlide();
-        _character.Velocity = currentVelocity;
-
-        // move the origin back to match if we didn't make it
-        var remaining = desiredPosition - _character.GlobalPosition with { Y = 0.0f };
-        _character.Player.GlobalPosition -= remaining;
-    }
-
-    private void ApplyXrMovement(float delta)
-    {
-        ApplyXrPhysicalMovement(delta);
+        ApplyPhysicalMovement(delta);
 
         var currentPosition = _character.GlobalPosition;
-        ApplyInputMovement(_xrInput.MoveState, delta);
+        ApplyInputMovement(_input.MoveState, delta);
 
         // move the origin to match the character movement on the X/Z plane
         var distance = _character.GlobalPosition with { Y = 0.0f } - currentPosition with { Y = 0.0f };
         _character.Player.GlobalPosition += distance;
     }
-
-    #endregion
-
-    #region No XR
-
-    private void ApplyNoXrRotation(float delta)
-    {
-        var input = _controllerInput.LookState;
-
-        _character.Player.Camera.RotateX(input.Y * _lookSensitivity * delta);
-        _character.Player.Camera.Rotation = _character.Player.Camera.Rotation with { X = Mathf.Clamp(_character.Player.Camera.Rotation.X, _tiltLowerLimit, _tiltUpperLimit) };
-
-        _character.Player.RotateY(-input.X * _lookSensitivity * delta);
-    }
-
-    private void ApplyNoXrMovement(float delta)
-    {
-        ApplyInputMovement(_controllerInput.MoveState, delta);
-    }
-
-    #endregion
 }
