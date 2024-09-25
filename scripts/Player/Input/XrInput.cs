@@ -52,4 +52,11 @@ public partial class XrInput : Node
     }
 
     #endregion
+
+    // TODO: this sucks because we don't want to poll for this
+    public bool IsJumpPressed()
+    {
+        // TODO: why tf is there not a "just pressed" for this?
+        return _rightHand.IsButtonPressed("ax_button");
+    }
 }

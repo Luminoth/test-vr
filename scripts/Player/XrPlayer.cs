@@ -50,7 +50,7 @@ public partial class XrPlayer : XROrigin3D
     public float MoveSpeed => _moveSpeed;
 
     [Export]
-    private float _jumpSpeed = 100.0f;
+    private float _jumpSpeed = 5.0f;
 
     public float JumpSpeed => _jumpSpeed;
 
@@ -60,7 +60,7 @@ public partial class XrPlayer : XROrigin3D
     public float GravityModifier => _gravityModifier;
 
     [Export]
-    private float _terminalVelocity = 5.0f;
+    private float _terminalVelocity = 100.0f;
 
     public float TermainalVelocity => _terminalVelocity;
 

@@ -50,7 +50,10 @@ public partial class FpsMovement : Node
 
     public override void _PhysicsProcess(double delta)
     {
-        // TODO: handle jumping
+        // TODO: this sucks because we don't want to poll for this
+        if(_input.IsJumpPressed()) {
+            _character.Jump();
+        }
 
         // rotation in the physics step
         // because hands will move from this

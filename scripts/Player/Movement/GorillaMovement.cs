@@ -53,7 +53,7 @@ public partial class GorillaMovement : Node
         _character.GlobalRotation = _character.GlobalRotation with { Y = _character.Player.Camera.GlobalRotation.Y };
     }
 
-    private void ApplyMovement(float delta)
+    private void ApplyPhysicalMovement(float delta)
     {
         // attempt to move the character to be under the camera on the X/Z plane
         var currentPosition = _character.GlobalPosition with { Y = 0.0f };
@@ -66,5 +66,28 @@ public partial class GorillaMovement : Node
         // move the origin back to match if we didn't make it
         var remaining = desiredPosition - _character.GlobalPosition with { Y = 0.0f };
         _character.Player.GlobalPosition -= remaining;
+    }
+
+    private void ApplyMovement(float delta)
+    {
+        ApplyPhysicalMovement(delta);
+
+        var currentPosition = _character.GlobalPosition;
+
+        var velocity = _character.Velocity;
+
+        // apply gravity
+        velocity.Y = Mathf.Clamp(
+            velocity.Y - (float)(_gravity * _character.Player.GravityModifier * delta),
+            -_character.Player.TermainalVelocity,
+            _character.Player.TermainalVelocity
+        );
+
+        _character.Velocity = velocity;
+        _character.MoveAndSlide();
+
+        // move the origin to match the character movement on the X/Z plane
+        var distance = _character.GlobalPosition with { Y = 0.0f } - currentPosition with { Y = 0.0f };
+        _character.Player.GlobalPosition += distance;
     }
 }

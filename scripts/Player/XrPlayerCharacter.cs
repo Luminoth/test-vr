@@ -59,8 +59,7 @@ public partial class XrPlayerCharacter : CharacterBody3D
 
     public void JumpWithVelocity(Vector3 velocity)
     {
-        Velocity += velocity * Player.JumpSpeed;
-        GD.Print($"jump updated velocity: {Velocity}");
+        Velocity += velocity;
     }
 
     // from XRToools, rotates the origin around the camera

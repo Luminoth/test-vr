@@ -119,12 +119,12 @@ _input = NodePath("../../Input/ControllerInput")
 
 [node name="FpsMovement" type="Node" parent="Movement" node_paths=PackedStringArray("_character", "_input")]
 script = ExtResource("8_e5voe")
+_enabled = false
 _character = NodePath("../../CharacterBody3D")
 _input = NodePath("../../Input/XRInput")
 
 [node name="GorillaMovement" type="Node" parent="Movement" node_paths=PackedStringArray("_character")]
 script = ExtResource("9_krts3")
-_enabled = false
 _character = NodePath("../../CharacterBody3D")
 
 [node name="CharacterBody3D" type="CharacterBody3D" parent="." node_paths=PackedStringArray("_player", "_head")]
