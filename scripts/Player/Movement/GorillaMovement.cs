@@ -1,6 +1,6 @@
 using VrTest.Managers;
 
-namespace VrTest.Player;
+namespace VrTest.Player.Movement;
 
 // movement scripts need to be above the player character script
 // in tree order so that they execute first

@@ -5,10 +5,14 @@ namespace VrTest.Player.Input;
 public partial class XrInput : Node
 {
     [Export]
-    private XRController3D _leftHand;
+    private PlayerHand _leftHand;
+
+    public PlayerHand LeftHand => _leftHand;
 
     [Export]
-    private XRController3D _rightHand;
+    private PlayerHand _rightHand;
+
+    public PlayerHand RightHand => _rightHand;
 
     [Export]
     private float _moveDeadzone = 0.5f;

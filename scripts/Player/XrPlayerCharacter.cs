@@ -52,6 +52,17 @@ public partial class XrPlayerCharacter : CharacterBody3D
 
     #endregion
 
+    public void Jump()
+    {
+        Velocity += Vector3.Up * Player.JumpSpeed;
+    }
+
+    public void JumpWithVelocity(Vector3 velocity)
+    {
+        Velocity += velocity * Player.JumpSpeed;
+        GD.Print($"jump updated velocity: {Velocity}");
+    }
+
     // from XRToools, rotates the origin around the camera
     public void RotatePlayer(float angle)
     {
@@ -65,15 +76,4 @@ public partial class XrPlayerCharacter : CharacterBody3D
 
         Player.Transform = (Player.Transform * t2 * rot * t1).Orthonormalized();
     }
-
-    #region Signal Handlers
-
-    private void _on_area_3d_body_entered(Node3D body)
-    {
-        // TODO: this issue here is that we don't know the normal to the collision
-        // so we might actually have to do this with casts
-        GD.Print($"hand collision: {body.GetParent().Name}");
-    }
-
-    #endregion
 }

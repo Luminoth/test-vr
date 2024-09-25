@@ -37,4 +37,10 @@ public partial class ControllerInput : Node
     }
 
     #endregion
+
+    // TODO: this sucks because we don't want to poll for this
+    public bool IsJumpPressed()
+    {
+        return Godot.Input.IsActionJustPressed("jump");
+    }
 }

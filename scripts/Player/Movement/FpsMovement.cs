@@ -1,7 +1,7 @@
 using VrTest.Managers;
 using VrTest.Player.Input;
 
-namespace VrTest.Player;
+namespace VrTest.Player.Movement;
 
 // movement scripts need to be above the player character script
 // in tree order so that they execute first
@@ -50,6 +50,8 @@ public partial class FpsMovement : Node
 
     public override void _PhysicsProcess(double delta)
     {
+        // TODO: handle jumping
+
         // rotation in the physics step
         // because hands will move from this
         ApplyRotation((float)delta);

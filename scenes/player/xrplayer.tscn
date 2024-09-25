@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://c5y8tn5gtle8"]
+[gd_scene load_steps=20 format=3 uid="uid://c5y8tn5gtle8"]
 
 [ext_resource type="Script" path="res://scripts/Player/XrPlayerCharacter.cs" id="1_7lbn8"]
 [ext_resource type="Script" path="res://scripts/Player/XrPlayer.cs" id="1_tt7sn"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://scripts/UI/XrUIHelper.cs" id="3_e7e8p"]
 [ext_resource type="PackedScene" uid="uid://b4kad2kuba1yn" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/left_hand_low.tscn" id="3_urgum"]
 [ext_resource type="PackedScene" uid="uid://l2n30mpbkdyw" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/right_hand_low.tscn" id="4_efixk"]
+[ext_resource type="Script" path="res://scripts/Player/PlayerHand.cs" id="4_tfqmg"]
 [ext_resource type="PackedScene" uid="uid://cqhw276realc" path="res://addons/godot-xr-tools/functions/function_pointer.tscn" id="5_bixdp"]
 [ext_resource type="Script" path="res://scripts/Player/Input/ControllerInput.cs" id="7_wblcy"]
 [ext_resource type="Script" path="res://scripts/Player/Movement/FpsMovement.cs" id="8_e5voe"]
@@ -33,11 +34,16 @@ radius = 0.25
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tcjc8"]
 height = 1.0
 
-[node name="XROrigin3D" type="XROrigin3D" node_paths=PackedStringArray("_camera", "_collider", "_fpsLabel")]
+[node name="XROrigin3D" type="XROrigin3D" node_paths=PackedStringArray("_camera", "_character", "_xrInput", "_collider", "_fpsLabel", "_velocityLabel", "_leftHandVelocityLabel", "_rightHandVelocityLabel")]
 script = ExtResource("1_tt7sn")
 _camera = NodePath("XRCamera3D")
+_character = NodePath("CharacterBody3D")
+_xrInput = NodePath("Input/XRInput")
 _collider = NodePath("CharacterBody3D/CollisionShape3D")
 _fpsLabel = NodePath("SubViewport/CanvasLayer/MarginContainer/VBoxContainer/FPS")
+_velocityLabel = NodePath("SubViewport/CanvasLayer/MarginContainer/VBoxContainer/Velocity")
+_leftHandVelocityLabel = NodePath("SubViewport/CanvasLayer/MarginContainer/VBoxContainer/LeftHandVelocity")
+_rightHandVelocityLabel = NodePath("SubViewport/CanvasLayer/MarginContainer/VBoxContainer/RightHandVelocity")
 
 [node name="XRCamera3D" type="XRCamera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
@@ -54,9 +60,11 @@ _noXrNode = NodePath("MeshInstance3D")
 mesh = SubResource("QuadMesh_2od5s")
 skeleton = NodePath("../..")
 
-[node name="LeftHand" type="XRController3D" parent="."]
+[node name="LeftHand" type="XRController3D" parent="." node_paths=PackedStringArray("_character")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.3, -0.5)
 tracker = &"left_hand"
+script = ExtResource("4_tfqmg")
+_character = NodePath("../CharacterBody3D")
 
 [node name="LeftHand" parent="LeftHand" instance=ExtResource("3_urgum")]
 
@@ -69,9 +77,11 @@ shape = SubResource("SphereShape3D_h42qg")
 
 [node name="FunctionPointer" parent="LeftHand" instance=ExtResource("5_bixdp")]
 
-[node name="RightHand" type="XRController3D" parent="."]
+[node name="RightHand" type="XRController3D" parent="." node_paths=PackedStringArray("_character")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.3, -0.5)
 tracker = &"right_hand"
+script = ExtResource("4_tfqmg")
+_character = NodePath("../CharacterBody3D")
 
 [node name="RightHand" parent="RightHand" instance=ExtResource("4_efixk")]
 
@@ -109,12 +119,12 @@ _input = NodePath("../../Input/ControllerInput")
 
 [node name="FpsMovement" type="Node" parent="Movement" node_paths=PackedStringArray("_character", "_input")]
 script = ExtResource("8_e5voe")
-_enabled = false
 _character = NodePath("../../CharacterBody3D")
 _input = NodePath("../../Input/XRInput")
 
 [node name="GorillaMovement" type="Node" parent="Movement" node_paths=PackedStringArray("_character")]
 script = ExtResource("9_krts3")
+_enabled = false
 _character = NodePath("../../CharacterBody3D")
 
 [node name="CharacterBody3D" type="CharacterBody3D" parent="." node_paths=PackedStringArray("_player", "_head")]
@@ -149,7 +159,19 @@ layout_mode = 2
 layout_mode = 2
 text = "FPS: N/A"
 
-[connection signal="body_entered" from="LeftHand/Area3D" to="CharacterBody3D" method="_on_area_3d_body_entered"]
-[connection signal="body_entered" from="RightHand/Area3D" to="CharacterBody3D" method="_on_area_3d_body_entered"]
+[node name="Velocity" type="Label" parent="SubViewport/CanvasLayer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Velocity: N/A"
+
+[node name="LeftHandVelocity" type="Label" parent="SubViewport/CanvasLayer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Left Hand Velocity: N/A"
+
+[node name="RightHandVelocity" type="Label" parent="SubViewport/CanvasLayer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Right Hand Velocity: N/A"
+
+[connection signal="body_entered" from="LeftHand/Area3D" to="LeftHand" method="_on_area_3d_body_entered"]
+[connection signal="body_entered" from="RightHand/Area3D" to="RightHand" method="_on_area_3d_body_entered"]
 
 [editable path="CharacterBody3D/Model"]
