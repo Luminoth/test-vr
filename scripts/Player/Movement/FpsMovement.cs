@@ -114,12 +114,14 @@ public partial class FpsMovement : Node
             _character.Player.TermainalVelocity
         );
 
-        var direction = _character.GlobalBasis * new Vector3(input.X, 0, input.Y);
-        if(direction.LengthSquared() > 0.0f) {
-            velocity.X = direction.X * _character.Player.MoveSpeed;
-            velocity.Z = direction.Z * _character.Player.MoveSpeed;
-        } else {
-            velocity.X = velocity.Z = 0.0f;
+        if(_character.IsGrounded || _character.Player.AllowAirControl) {
+            var direction = _character.GlobalBasis * new Vector3(input.X, 0, input.Y);
+            if(direction.LengthSquared() > 0.0f) {
+                velocity.X = direction.X * _character.Player.MoveSpeed;
+                velocity.Z = direction.Z * _character.Player.MoveSpeed;
+            } else {
+                velocity.X = velocity.Z = 0.0f;
+            }
         }
 
         _character.Velocity = velocity;

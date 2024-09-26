@@ -26,6 +26,9 @@ public partial class XrPlayer : XROrigin3D
     private Label _fpsLabel;
 
     [Export]
+    private Label _isGroundedLabel;
+
+    [Export]
     private Label _velocityLabel;
 
     [Export]
@@ -55,6 +58,11 @@ public partial class XrPlayer : XROrigin3D
     public float JumpSpeed => _jumpSpeed;
 
     [Export]
+    private bool _allowAirControl;
+
+    public bool AllowAirControl => _allowAirControl;
+
+    [Export]
     private float _gravityModifier = 1.0f;
 
     public float GravityModifier => _gravityModifier;
@@ -74,6 +82,7 @@ public partial class XrPlayer : XROrigin3D
     public override void _Process(double delta)
     {
         _fpsLabel.Text = $"FPS: {Engine.GetFramesPerSecond()}";
+        _isGroundedLabel.Text = $"IsGrounded: {_character.IsGrounded}";
         _velocityLabel.Text = $"Velocity: {_character.Velocity}";
         _leftHandVelocityLabel.Text = $"Left Hand Velocity: {_xrInput.LeftHand.Velocity}";
         _rightHandVelocityLabel.Text = $"Right Hand Velocity: {_xrInput.RightHand.Velocity}";

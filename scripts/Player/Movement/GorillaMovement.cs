@@ -83,6 +83,11 @@ public partial class GorillaMovement : Node
             _character.Player.TermainalVelocity
         );
 
+        // prevent sliding on the ground when we land
+        if(_character.IsGrounded) {
+            velocity.X = velocity.Z = 0.0f;
+        }
+
         _character.Velocity = velocity;
         _character.MoveAndSlide();
 

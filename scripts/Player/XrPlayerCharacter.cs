@@ -14,7 +14,15 @@ public partial class XrPlayerCharacter : CharacterBody3D
     [Export]
     private Node3D _head;
 
+    [Export]
+    private Area3D _feet;
+
     private float EyeHeight => Player.Height - Player.EyeHeightOffset;
+
+    [Export]
+    private bool _isGrounded;
+
+    public bool IsGrounded => _isGrounded;
 
     #region Godot Lifecycle
 
@@ -48,18 +56,31 @@ public partial class XrPlayerCharacter : CharacterBody3D
             // but just a little in front to match the eyes
             Player.GlobalPosition = GlobalPosition + (GlobalBasis * new Vector3(0.0f, 0.0f, -Player.EyeForwardOffset));
         }
+
+        _isGrounded = _feet.HasOverlappingBodies() && Velocity.Y <= 0.0f;
     }
 
     #endregion
 
     public void Jump()
     {
+        if(!IsGrounded) {
+            return;
+        }
+
         Velocity += Vector3.Up * Player.JumpSpeed;
     }
 
     public void JumpWithVelocity(Vector3 velocity)
     {
+        if(!IsGrounded) {
+            return;
+        }
+
         Velocity += velocity;
+        if(Velocity.Y > Player.JumpSpeed) {
+            Velocity = Velocity with { Y = Player.JumpSpeed };
+        }
     }
 
     // from XRToools, rotates the origin around the camera
