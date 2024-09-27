@@ -24,13 +24,13 @@ public partial class GorillaMovement : Node
     [Export]
     private XrPlayerCharacter _character;
 
-    private double _gravity;
+    private float _gravity;
 
     #region Godot Lifecycle
 
     public override void _Ready()
     {
-        _gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsDouble();
+        _gravity = (float)ProjectSettings.GetSetting("physics/3d/default_gravity").AsDouble();
 
         SetProcess(XrManager.Instance.IsXrInitialized && Enabled);
         SetPhysicsProcess(XrManager.Instance.IsXrInitialized && Enabled);
@@ -74,14 +74,9 @@ public partial class GorillaMovement : Node
 
         var currentPosition = _character.GlobalPosition;
 
-        var velocity = _character.Velocity;
+        _character.ApplyGravity(_gravity, delta);
 
-        // apply gravity
-        velocity.Y = Mathf.Clamp(
-            velocity.Y - (float)(_gravity * _character.Player.GravityModifier * delta),
-            -_character.Player.TermainalVelocity,
-            _character.Player.TermainalVelocity
-        );
+        var velocity = _character.Velocity;
 
         // prevent sliding on the ground when we land
         if(_character.IsGrounded) {

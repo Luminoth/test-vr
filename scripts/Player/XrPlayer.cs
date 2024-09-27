@@ -63,7 +63,7 @@ public partial class XrPlayer : XROrigin3D
     public bool AllowAirControl => _allowAirControl;
 
     [Export]
-    private float _gravityModifier = 1.0f;
+    private float _gravityModifier = 2.0f;
 
     public float GravityModifier => _gravityModifier;
 

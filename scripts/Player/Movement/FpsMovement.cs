@@ -36,13 +36,13 @@ public partial class FpsMovement : Node
 
     private float _snapTurnAccum;
 
-    private double _gravity;
+    private float _gravity;
 
     #region Godot Lifecycle
 
     public override void _Ready()
     {
-        _gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsDouble();
+        _gravity = (float)ProjectSettings.GetSetting("physics/3d/default_gravity").AsDouble();
 
         SetProcess(XrManager.Instance.IsXrInitialized && Enabled);
         SetPhysicsProcess(XrManager.Instance.IsXrInitialized && Enabled);
@@ -105,14 +105,9 @@ public partial class FpsMovement : Node
 
     private void ApplyInputMovement(Vector2 input, float delta)
     {
-        var velocity = _character.Velocity;
+        _character.ApplyGravity(_gravity, delta);
 
-        // apply gravity
-        velocity.Y = Mathf.Clamp(
-            velocity.Y - (float)(_gravity * _character.Player.GravityModifier * delta),
-            -_character.Player.TermainalVelocity,
-            _character.Player.TermainalVelocity
-        );
+        var velocity = _character.Velocity;
 
         if(_character.IsGrounded || _character.Player.AllowAirControl) {
             var direction = _character.GlobalBasis * new Vector3(input.X, 0, input.Y);

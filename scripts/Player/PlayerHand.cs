@@ -18,6 +18,11 @@ public partial class PlayerHand : XRController3D
 
     #region Godot Lifecycle
 
+    public override void _Ready()
+    {
+        _previousPosition = GlobalPosition;
+    }
+
     public override void _PhysicsProcess(double delta)
     {
         _velocity = (GlobalPosition - _previousPosition) / (float)delta;

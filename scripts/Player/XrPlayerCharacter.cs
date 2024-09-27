@@ -62,13 +62,25 @@ public partial class XrPlayerCharacter : CharacterBody3D
 
     #endregion
 
+    public void ApplyGravity(float gravity, float delta)
+    {
+        Velocity = Velocity with {
+            Y = Mathf.Clamp(
+                Velocity.Y - (float)(gravity * Player.GravityModifier * delta),
+                -Player.TermainalVelocity,
+                Player.TermainalVelocity
+            )
+        };
+    }
+
     public void Jump()
     {
         if(!IsGrounded) {
             return;
         }
 
-        Velocity += Vector3.Up * Player.JumpSpeed;
+        var velocity = Vector3.Up * Player.JumpSpeed;
+        Velocity += velocity;
     }
 
     public void JumpWithVelocity(Vector3 velocity)
@@ -77,10 +89,11 @@ public partial class XrPlayerCharacter : CharacterBody3D
             return;
         }
 
-        Velocity += velocity;
-        if(Velocity.Y > Player.JumpSpeed) {
-            Velocity = Velocity with { Y = Player.JumpSpeed };
-        }
+        // clamp the velocity we add
+        var verticalVelocity = new Vector3(0.0f, Mathf.Clamp(velocity.Y, 0.0f, Player.JumpSpeed), 0.0f);
+        var horizontalVelocity = new Vector3(velocity.X, 0.0f, velocity.Z).LimitLength(Player.MoveSpeed);
+
+        Velocity += verticalVelocity + horizontalVelocity;
     }
 
     // from XRToools, rotates the origin around the camera
