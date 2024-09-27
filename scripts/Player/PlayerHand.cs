@@ -37,10 +37,8 @@ public partial class PlayerHand : XRController3D
     private void _on_area_3d_body_entered(Node3D body)
     {
         if(body.GetParent() is Enemy enemy) {
-            GD.Print($"{Name} collision with enemy {enemy.Name} at {_velocity}");
+            // TODO:
         } else {
-            GD.Print($"{Name} collision with {body.GetParent().Name} at {_velocity}");
-
             _character.JumpWithVelocity(-_velocity);
         }
     }

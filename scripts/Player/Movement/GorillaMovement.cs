@@ -79,7 +79,7 @@ public partial class GorillaMovement : Node
         var velocity = _character.Velocity;
 
         // prevent sliding on the ground when we land
-        if(_character.IsGrounded) {
+        if(_character.IsOnFloor()) {
             velocity.X = velocity.Z = 0.0f;
         }
 

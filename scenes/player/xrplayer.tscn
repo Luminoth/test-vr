@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://c5y8tn5gtle8"]
+[gd_scene load_steps=20 format=3 uid="uid://c5y8tn5gtle8"]
 
 [ext_resource type="Script" path="res://scripts/Player/XrPlayerCharacter.cs" id="1_7lbn8"]
 [ext_resource type="Script" path="res://scripts/Player/XrPlayer.cs" id="1_tt7sn"]
@@ -34,17 +34,14 @@ radius = 0.25
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tcjc8"]
 height = 1.0
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_2h53y"]
-size = Vector3(0.75, 0.1, 0.75)
-
-[node name="XROrigin3D" type="XROrigin3D" node_paths=PackedStringArray("_camera", "_character", "_xrInput", "_collider", "_fpsLabel", "_isGroundedLabel", "_velocityLabel", "_leftHandVelocityLabel", "_rightHandVelocityLabel")]
+[node name="XROrigin3D" type="XROrigin3D" node_paths=PackedStringArray("_camera", "_character", "_xrInput", "_collider", "_fpsLabel", "_isOnFloorLabel", "_velocityLabel", "_leftHandVelocityLabel", "_rightHandVelocityLabel")]
 script = ExtResource("1_tt7sn")
 _camera = NodePath("XRCamera3D")
 _character = NodePath("CharacterBody3D")
 _xrInput = NodePath("Input/XRInput")
 _collider = NodePath("CharacterBody3D/CollisionShape3D")
 _fpsLabel = NodePath("SubViewport/CanvasLayer/MarginContainer/VBoxContainer/FPS")
-_isGroundedLabel = NodePath("SubViewport/CanvasLayer/MarginContainer/VBoxContainer/IsGrounded")
+_isOnFloorLabel = NodePath("SubViewport/CanvasLayer/MarginContainer/VBoxContainer/IsOnFloor")
 _velocityLabel = NodePath("SubViewport/CanvasLayer/MarginContainer/VBoxContainer/Velocity")
 _leftHandVelocityLabel = NodePath("SubViewport/CanvasLayer/MarginContainer/VBoxContainer/LeftHandVelocity")
 _rightHandVelocityLabel = NodePath("SubViewport/CanvasLayer/MarginContainer/VBoxContainer/RightHandVelocity")
@@ -131,26 +128,19 @@ _input = NodePath("../../Input/XRInput")
 script = ExtResource("9_krts3")
 _character = NodePath("../../CharacterBody3D")
 
-[node name="CharacterBody3D" type="CharacterBody3D" parent="." node_paths=PackedStringArray("_player", "_head", "_feet")]
+[node name="CharacterBody3D" type="CharacterBody3D" parent="." node_paths=PackedStringArray("_player", "_head")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
 collision_layer = 8
 collision_mask = 19
 script = ExtResource("1_7lbn8")
 _player = NodePath("..")
 _head = NodePath("Model/Head")
-_feet = NodePath("Feet")
 
 [node name="Model" parent="CharacterBody3D" instance=ExtResource("10_2l3qw")]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("CapsuleShape3D_tcjc8")
-
-[node name="Feet" type="Area3D" parent="CharacterBody3D"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D/Feet"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, 0)
-shape = SubResource("BoxShape3D_2h53y")
 
 [node name="SubViewport" type="SubViewport" parent="."]
 disable_3d = true
@@ -170,7 +160,7 @@ layout_mode = 2
 layout_mode = 2
 text = "FPS: N/A"
 
-[node name="IsGrounded" type="Label" parent="SubViewport/CanvasLayer/MarginContainer/VBoxContainer"]
+[node name="IsOnFloor" type="Label" parent="SubViewport/CanvasLayer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "IsGrounded: N/A"
 

@@ -26,7 +26,7 @@ public partial class XrPlayer : XROrigin3D
     private Label _fpsLabel;
 
     [Export]
-    private Label _isGroundedLabel;
+    private Label _isOnFloorLabel;
 
     [Export]
     private Label _velocityLabel;
@@ -82,7 +82,7 @@ public partial class XrPlayer : XROrigin3D
     public override void _Process(double delta)
     {
         _fpsLabel.Text = $"FPS: {Engine.GetFramesPerSecond()}";
-        _isGroundedLabel.Text = $"IsGrounded: {_character.IsGrounded}";
+        _isOnFloorLabel.Text = $"IsOnFloor: {_character.IsOnFloor()}";
         _velocityLabel.Text = $"Velocity: {_character.Velocity}";
         _leftHandVelocityLabel.Text = $"Left Hand Velocity: {_xrInput.LeftHand.Velocity}";
         _rightHandVelocityLabel.Text = $"Right Hand Velocity: {_xrInput.RightHand.Velocity}";
