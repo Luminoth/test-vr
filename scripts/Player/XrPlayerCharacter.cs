@@ -86,7 +86,7 @@ public partial class XrPlayerCharacter : CharacterBody3D
         Velocity += verticalVelocity + horizontalVelocity;
     }
 
-    // from XRToools, rotates the origin around the camera
+    // from XRTools, rotates the origin around the camera
     public void RotatePlayer(float angle)
     {
         var t1 = Transform3D.Identity;

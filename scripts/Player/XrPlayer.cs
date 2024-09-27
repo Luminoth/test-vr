@@ -1,5 +1,3 @@
-using VrTest.Player.Input;
-
 namespace VrTest.Player;
 
 public partial class XrPlayer : XROrigin3D
@@ -10,32 +8,11 @@ public partial class XrPlayer : XROrigin3D
     public XRCamera3D Camera => _camera;
 
     [Export]
-    private XrPlayerCharacter _character;
-
-    [Export]
-    private XrInput _xrInput;
-
-    [Export]
     private CollisionShape3D _collider;
 
     public float Height => ((CapsuleShape3D)_collider.Shape).Height;
 
     public float Radius => ((CapsuleShape3D)_collider.Shape).Radius;
-
-    [Export]
-    private Label _fpsLabel;
-
-    [Export]
-    private Label _isOnFloorLabel;
-
-    [Export]
-    private Label _velocityLabel;
-
-    [Export]
-    private Label _leftHandVelocityLabel;
-
-    [Export]
-    private Label _rightHandVelocityLabel;
 
     [Export]
     private float _eyeForwardOffset = 0.5f;
@@ -77,15 +54,6 @@ public partial class XrPlayer : XROrigin3D
     public override void _Ready()
     {
         GD.Print($"Player height: {Height}");
-    }
-
-    public override void _Process(double delta)
-    {
-        _fpsLabel.Text = $"FPS: {Engine.GetFramesPerSecond()}";
-        _isOnFloorLabel.Text = $"IsOnFloor: {_character.IsOnFloor()}";
-        _velocityLabel.Text = $"Velocity: {_character.Velocity}";
-        _leftHandVelocityLabel.Text = $"Left Hand Velocity: {_xrInput.LeftHand.Velocity}";
-        _rightHandVelocityLabel.Text = $"Right Hand Velocity: {_xrInput.RightHand.Velocity}";
     }
 
     #endregion
