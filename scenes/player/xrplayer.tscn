@@ -29,7 +29,7 @@ albedo_texture = SubResource("ViewportTexture_3ftra")
 resource_local_to_scene = true
 material = SubResource("StandardMaterial3D_kmhg5")
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_h42qg"]
+[sub_resource type="SphereShape3D" id="SphereShape3D_nx7lx"]
 radius = 0.25
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tcjc8"]
@@ -55,39 +55,41 @@ _noXrNode = NodePath("MeshInstance3D")
 mesh = SubResource("QuadMesh_2od5s")
 skeleton = NodePath("../..")
 
-[node name="LeftHand" type="XRController3D" parent="." node_paths=PackedStringArray("_character")]
+[node name="LeftHand" type="XRController3D" parent="." node_paths=PackedStringArray("_character", "_handBody")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.3, -0.5)
 tracker = &"left_hand"
 script = ExtResource("4_tfqmg")
 _character = NodePath("../CharacterBody3D")
+_handBody = NodePath("AnimatableBody3D")
 
 [node name="LeftHand" parent="LeftHand" instance=ExtResource("3_urgum")]
 
-[node name="Area3D" type="Area3D" parent="LeftHand"]
+[node name="FunctionPointer" parent="LeftHand" instance=ExtResource("5_bixdp")]
+
+[node name="AnimatableBody3D" type="AnimatableBody3D" parent="LeftHand"]
 collision_layer = 4
 collision_mask = 51
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="LeftHand/Area3D"]
-shape = SubResource("SphereShape3D_h42qg")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LeftHand/AnimatableBody3D"]
+shape = SubResource("SphereShape3D_nx7lx")
 
-[node name="FunctionPointer" parent="LeftHand" instance=ExtResource("5_bixdp")]
-
-[node name="RightHand" type="XRController3D" parent="." node_paths=PackedStringArray("_character")]
+[node name="RightHand" type="XRController3D" parent="." node_paths=PackedStringArray("_character", "_handBody")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.3, -0.5)
 tracker = &"right_hand"
 script = ExtResource("4_tfqmg")
 _character = NodePath("../CharacterBody3D")
+_handBody = NodePath("AnimatableBody3D")
 
 [node name="RightHand" parent="RightHand" instance=ExtResource("4_efixk")]
 
-[node name="Area3D" type="Area3D" parent="RightHand"]
+[node name="FunctionPointer" parent="RightHand" instance=ExtResource("5_bixdp")]
+
+[node name="AnimatableBody3D" type="AnimatableBody3D" parent="RightHand"]
 collision_layer = 4
 collision_mask = 51
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RightHand/Area3D"]
-shape = SubResource("SphereShape3D_h42qg")
-
-[node name="FunctionPointer" parent="RightHand" instance=ExtResource("5_bixdp")]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RightHand/AnimatableBody3D"]
+shape = SubResource("SphereShape3D_nx7lx")
 
 [node name="OpenXRCompositionLayerQuad" type="OpenXRCompositionLayerQuad" parent="." node_paths=PackedStringArray("layer_viewport")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -1.5)
@@ -144,8 +146,5 @@ render_target_update_mode = 4
 [node name="HUD" parent="SubViewport" node_paths=PackedStringArray("_character", "_xrInput") instance=ExtResource("15_r0b4g")]
 _character = NodePath("../../CharacterBody3D")
 _xrInput = NodePath("../../Input/XRInput")
-
-[connection signal="body_entered" from="LeftHand/Area3D" to="LeftHand" method="_on_area_3d_body_entered"]
-[connection signal="body_entered" from="RightHand/Area3D" to="RightHand" method="_on_area_3d_body_entered"]
 
 [editable path="CharacterBody3D/Model"]

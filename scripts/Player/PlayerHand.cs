@@ -9,10 +9,13 @@ public partial class PlayerHand : XRController3D
     [Export]
     private XrPlayerCharacter _character;
 
+    // https://forum.godotengine.org/t/rigid-bodies-as-hands/67646
     [Export]
+    AnimatableBody3D _handBody;
+
     private Vector3 _velocity;
 
-    public Vector3 Velocity => _velocity;
+    public Vector3 LastVelocity => _velocity;
 
     private Vector3 _previousPosition;
 
@@ -21,25 +24,27 @@ public partial class PlayerHand : XRController3D
     public override void _Ready()
     {
         _previousPosition = GlobalPosition;
+
+        _handBody.SyncToPhysics = false;
+        _handBody.TopLevel = true;
+        _handBody.GlobalPosition = GlobalPosition;
     }
 
     public override void _PhysicsProcess(double delta)
     {
         _velocity = (GlobalPosition - _previousPosition) / (float)delta;
-
         _previousPosition = GlobalPosition;
-    }
 
-    #endregion
-
-    #region Signal Handlers
-
-    private void _on_area_3d_body_entered(Node3D body)
-    {
-        if(body.GetParent() is Enemy enemy) {
-            // TODO:
-        } else {
-            _character.JumpWithVelocity(-_velocity);
+        // try and move our virtual hands
+        // https://docs.godotengine.org/en/stable/tutorials/physics/using_character_body_2d.html
+        var handDistance = GlobalPosition - _handBody.GlobalPosition;
+        var collision = _handBody.MoveAndCollide(handDistance);
+        if(collision != null && collision.GetCollider() is Node3D body) {
+            if(body.GetParent() is Enemy enemy) {
+                // TODO:
+            } else {
+                _character.JumpWithVelocity(-_velocity);
+            }
         }
     }
 
