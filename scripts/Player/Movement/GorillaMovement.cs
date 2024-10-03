@@ -37,8 +37,8 @@ public partial class GorillaMovement : Movement
 
     private void HandleHandCollision(PlayerHand hand, Node3D body)
     {
-        if(body.GetParent() is Enemy enemy) {
-            // TODO:
+        if(body is Enemy enemy) {
+            enemy.Shove(hand.Velocity);
         } else {
             Character.JumpWithVelocity(-hand.Velocity - Character.Velocity);
         }
