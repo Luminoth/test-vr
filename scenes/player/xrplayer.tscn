@@ -109,16 +109,16 @@ _rightHand = NodePath("../../RightHand")
 
 [node name="Movement" type="Node" parent="."]
 
-[node name="ControllerMovement" type="Node" parent="Movement" node_paths=PackedStringArray("_character", "_input")]
+[node name="ControllerMovement" type="Node" parent="Movement" node_paths=PackedStringArray("_input", "_character")]
 script = ExtResource("8_rlvdg")
-_character = NodePath("../../CharacterBody3D")
 _input = NodePath("../../Input/ControllerInput")
+_character = NodePath("../../CharacterBody3D")
 
-[node name="FpsMovement" type="Node" parent="Movement" node_paths=PackedStringArray("_character", "_input")]
+[node name="FpsMovement" type="Node" parent="Movement" node_paths=PackedStringArray("_input", "_character")]
 script = ExtResource("8_e5voe")
+_input = NodePath("../../Input/XRInput")
 _enabled = false
 _character = NodePath("../../CharacterBody3D")
-_input = NodePath("../../Input/XRInput")
 
 [node name="GorillaMovement" type="Node" parent="Movement" node_paths=PackedStringArray("_character")]
 script = ExtResource("9_krts3")

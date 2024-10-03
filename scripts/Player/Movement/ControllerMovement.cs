@@ -1,29 +1,12 @@
-using VrTest.Managers;
 using VrTest.Player.Input;
 
 namespace VrTest.Player.Movement;
 
 // movement scripts need to be above the player character script
 // in tree order so that they execute first
-public partial class ControllerMovement : Node
+public partial class ControllerMovement : Movement
 {
-    [Export]
-    private bool _enabled = true;
-
-    public bool Enabled
-    {
-        get => _enabled;
-        set
-        {
-            _enabled = !XrManager.Instance.IsXrInitialized && value;
-
-            SetProcess(_enabled);
-            SetPhysicsProcess(_enabled);
-        }
-    }
-
-    [Export]
-    private XrPlayerCharacter _character;
+    protected override bool IsXrMovement => false;
 
     [Export]
     private ControllerInput _input;
@@ -38,62 +21,48 @@ public partial class ControllerMovement : Node
     [Export]
     private int _lookSensitivity = 4;
 
-    private float _gravity;
-
     #region Godot Lifecycle
-
-    public override void _Ready()
-    {
-        _gravity = (float)ProjectSettings.GetSetting("physics/3d/default_gravity").AsDouble();
-
-        SetProcess(!XrManager.Instance.IsXrInitialized && Enabled);
-        SetPhysicsProcess(!XrManager.Instance.IsXrInitialized && Enabled);
-    }
 
     public override void _PhysicsProcess(double delta)
     {
         // TODO: this sucks because we don't want to poll for this
         if(_input.IsJumpPressed()) {
-            _character.Jump();
+            Character.Jump();
         }
 
-        // rotation in the physics step
-        // because hands will move from this
-        ApplyRotation((float)delta);
-
-        ApplyMovement((float)delta);
+        base._PhysicsProcess(delta);
     }
 
     #endregion
 
-    private void ApplyRotation(float delta)
+    protected override void ApplyRotation(float delta)
     {
         var input = _input.LookState;
 
-        _character.Player.Camera.RotateX(input.Y * _lookSensitivity * delta);
-        _character.Player.Camera.Rotation = _character.Player.Camera.Rotation with { X = Mathf.Clamp(_character.Player.Camera.Rotation.X, _tiltLowerLimit, _tiltUpperLimit) };
+        Character.Player.Camera.RotateX(input.Y * _lookSensitivity * delta);
+        Character.Player.Camera.Rotation = Character.Player.Camera.Rotation with { X = Mathf.Clamp(Character.Player.Camera.Rotation.X, _tiltLowerLimit, _tiltUpperLimit) };
 
-        _character.Player.RotateY(-input.X * _lookSensitivity * delta);
+        Character.Player.RotateY(-input.X * _lookSensitivity * delta);
     }
 
-    private void ApplyMovement(float delta)
+    protected override void ApplyMovement(float delta)
     {
-        _character.ApplyGravity(_gravity, delta);
+        Character.ApplyGravity(Gravity, delta);
 
-        var velocity = _character.Velocity;
+        var velocity = Character.Velocity;
 
-        if(_character.IsOnFloor() || _character.Player.AllowAirControl) {
+        if(Character.IsOnFloor() || Character.Player.AllowAirControl) {
             var input = _input.MoveState;
-            var direction = _character.GlobalBasis * new Vector3(input.X, 0, input.Y);
+            var direction = Character.GlobalBasis * new Vector3(input.X, 0, input.Y);
             if(direction.LengthSquared() > 0.0f) {
-                velocity.X = direction.X * _character.Player.MoveSpeed;
-                velocity.Z = direction.Z * _character.Player.MoveSpeed;
+                velocity.X = direction.X * Character.Player.MoveSpeed;
+                velocity.Z = direction.Z * Character.Player.MoveSpeed;
             } else {
                 velocity.X = velocity.Z = 0.0f;
             }
         }
 
-        _character.Velocity = velocity;
-        _character.MoveAndSlide();
+        Character.Velocity = velocity;
+        Character.MoveAndSlide();
     }
 }
