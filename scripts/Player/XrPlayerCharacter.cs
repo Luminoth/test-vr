@@ -81,6 +81,8 @@ public partial class XrPlayerCharacter : CharacterBody3D
 
         // clamp the velocity we add
         var verticalVelocity = new Vector3(0.0f, Mathf.Clamp(velocity.Y, 0.0f, Player.JumpSpeed), 0.0f);
+
+        // NOTE: controller movement will reset this to match actual input
         var horizontalVelocity = new Vector3(velocity.X, 0.0f, velocity.Z).LimitLength(Player.MoveSpeed);
 
         Velocity += verticalVelocity + horizontalVelocity;
