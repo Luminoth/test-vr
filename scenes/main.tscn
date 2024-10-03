@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://drb8tbpmlpe5j"]
+[gd_scene load_steps=20 format=3 uid="uid://drb8tbpmlpe5j"]
 
 [ext_resource type="PackedScene" uid="uid://clujaf3u776a3" path="res://addons/godot-xr-tools/objects/viewport_2d_in_3d.tscn" id="1_g4sxh"]
 [ext_resource type="PackedScene" uid="uid://c5y8tn5gtle8" path="res://scenes/player/xrplayer.tscn" id="1_irsne"]
@@ -9,25 +9,43 @@
 [sub_resource type="Environment" id="Environment_u4jql"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_jgwmu"]
-size = Vector2(100, 100)
+size = Vector2(50, 50)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kwy4w"]
-albedo_color = Color(1.31156e-06, 0.404555, 0, 1)
+albedo_color = Color(0.392157, 0.294118, 0.0980392, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_bdjvr"]
 size = Vector3(100, 1, 100)
 
+[sub_resource type="PlaneMesh" id="PlaneMesh_8ib1u"]
+size = Vector2(50, 50)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u0xi5"]
+albedo_color = Color(0.199104, 0.611212, 0.890694, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_a6u3y"]
+size = Vector2(50, 50)
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fn37j"]
-albedo_color = Color(2.16588e-06, 0, 0.659763, 1)
+albedo_color = Color(0.784314, 0.784314, 0.980392, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_1psei"]
+size = Vector2(50, 50)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ya40p"]
-albedo_color = Color(0, 0, 0.658824, 1)
+albedo_color = Color(0.784314, 0.784314, 0.980392, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_y38cl"]
+size = Vector2(50, 50)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ptfs0"]
-albedo_color = Color(0, 0, 0.658824, 1)
+albedo_color = Color(0.784314, 0.784314, 0.980392, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_15khw"]
+size = Vector2(50, 50)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yyghb"]
-albedo_color = Color(0, 0, 0.658824, 1)
+albedo_color = Color(0.784314, 0.784314, 0.980392, 1)
 
 [node name="Node3D" type="Node3D"]
 
@@ -50,9 +68,21 @@ collision_mask = 28
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("BoxShape3D_bdjvr")
 
+[node name="Ceiling" type="CSGMesh3D" parent="World"]
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 50, 0)
+mesh = SubResource("PlaneMesh_8ib1u")
+material = SubResource("StandardMaterial3D_u0xi5")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="World/Ceiling"]
+collision_mask = 28
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Ceiling/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("BoxShape3D_bdjvr")
+
 [node name="Wall" type="CSGMesh3D" parent="World"]
-transform = Transform3D(-1, -8.74228e-08, 3.82137e-15, 0, -4.37114e-08, -1, 8.74228e-08, -1, 4.37114e-08, 0, 50, 50)
-mesh = SubResource("PlaneMesh_jgwmu")
+transform = Transform3D(-1, -8.74228e-08, 3.82137e-15, 0, -4.37114e-08, -1, 8.74228e-08, -1, 4.37114e-08, 0, 25, 25)
+mesh = SubResource("PlaneMesh_a6u3y")
 material = SubResource("StandardMaterial3D_fn37j")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="World/Wall"]
@@ -63,8 +93,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("BoxShape3D_bdjvr")
 
 [node name="Wall2" type="CSGMesh3D" parent="World"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 50, -50)
-mesh = SubResource("PlaneMesh_jgwmu")
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 25, -25)
+mesh = SubResource("PlaneMesh_1psei")
 material = SubResource("StandardMaterial3D_ya40p")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="World/Wall2"]
@@ -75,8 +105,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("BoxShape3D_bdjvr")
 
 [node name="Wall3" type="CSGMesh3D" parent="World"]
-transform = Transform3D(1.19249e-08, -1, 4.37114e-08, 0, -4.37114e-08, -1, 1, 1.19249e-08, -5.21253e-16, 50, 50, 0)
-mesh = SubResource("PlaneMesh_jgwmu")
+transform = Transform3D(1.19249e-08, -1, 4.37114e-08, 0, -4.37114e-08, -1, 1, 1.19249e-08, -5.21253e-16, 25, 25, 0)
+mesh = SubResource("PlaneMesh_y38cl")
 material = SubResource("StandardMaterial3D_ptfs0")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="World/Wall3"]
@@ -87,8 +117,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("BoxShape3D_bdjvr")
 
 [node name="Wall4" type="CSGMesh3D" parent="World"]
-transform = Transform3D(1.19249e-08, 1, -4.37114e-08, 0, -4.37114e-08, -1, -1, 1.19249e-08, -5.21253e-16, -50, 50, 0)
-mesh = SubResource("PlaneMesh_jgwmu")
+transform = Transform3D(1.19249e-08, 1, -4.37114e-08, 0, -4.37114e-08, -1, -1, 1.19249e-08, -5.21253e-16, -25, 25, 0)
+mesh = SubResource("PlaneMesh_15khw")
 material = SubResource("StandardMaterial3D_yyghb")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="World/Wall4"]
