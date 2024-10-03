@@ -37,10 +37,13 @@ public partial class GorillaMovement : Movement
 
     private void HandleHandCollision(PlayerHand hand, Node3D body)
     {
+        // remove character movement from the hand velocity
+        var collisionVelocity = hand.Velocity - Character.Velocity;
+
         if(body is Enemy enemy) {
-            enemy.Shove(hand.Velocity);
+            enemy.Shove(collisionVelocity);
         } else {
-            Character.JumpWithVelocity(-hand.Velocity - Character.Velocity);
+            Character.JumpWithVelocity(-collisionVelocity);
         }
     }
 
