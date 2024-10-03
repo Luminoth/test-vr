@@ -73,13 +73,12 @@ public partial class GorillaMovement : Node
         ApplyPhysicalMovement(delta);
 
         var currentPosition = _character.GlobalPosition;
-        var isOnFloor = _character.IsOnFloor();
 
         _character.ApplyGravity(_gravity, delta);
-        _character.MoveAndSlide();
+        var didCollide = _character.MoveAndSlide();
 
-        // prevent sliding on the ground when we land
-        if(_character.IsOnFloor() && !isOnFloor) {
+        // prevent sliding on the ground
+        if(_character.IsOnFloor() && didCollide) {
             _character.Velocity = _character.Velocity with { X = 0.0f, Z = 0.0f };
         }
 
