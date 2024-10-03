@@ -1,3 +1,6 @@
+using VrTest.NPCs;
+using VrTest.Player.Input;
+
 namespace VrTest.Player.Movement;
 
 // movement scripts need to be above the player character script
@@ -5,6 +8,9 @@ namespace VrTest.Player.Movement;
 public partial class GorillaMovement : Movement
 {
     protected override bool IsXrMovement => true;
+
+    [Export]
+    private XrInput _input;
 
     protected override void ApplyRotation(float delta)
     {
@@ -28,4 +34,27 @@ public partial class GorillaMovement : Movement
 
         UpdateOrigin(currentPosition);
     }
+
+    private void HandleHandCollision(PlayerHand hand, Node3D body)
+    {
+        if(body.GetParent() is Enemy enemy) {
+            // TODO:
+        } else {
+            Character.JumpWithVelocity(-hand.Velocity - Character.Velocity);
+        }
+    }
+
+    #region Signal Handlers
+
+    private void _on_left_hand_collision(Node3D body)
+    {
+        HandleHandCollision(_input.LeftHand, body);
+    }
+
+    private void _on_right_hand_collision(Node3D body)
+    {
+        HandleHandCollision(_input.RightHand, body);
+    }
+
+    #endregion
 }

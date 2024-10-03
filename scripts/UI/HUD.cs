@@ -21,7 +21,13 @@ public partial class HUD : Control
     private Label _velocityLabel;
 
     [Export]
+    private Label _leftHandPositionLabel;
+
+    [Export]
     private Label _leftHandVelocityLabel;
+
+    [Export]
+    private Label _rightHandPositionLabel;
 
     [Export]
     private Label _rightHandVelocityLabel;
@@ -34,8 +40,10 @@ public partial class HUD : Control
 
         _isOnFloorLabel.Text = $"IsOnFloor: {_character.IsOnFloor()}";
         _velocityLabel.Text = $"Velocity: {_character.Velocity}";
-        _leftHandVelocityLabel.Text = $"Left Hand Velocity: {_xrInput.LeftHand.LastVelocity}";
-        _rightHandVelocityLabel.Text = $"Right Hand Velocity: {_xrInput.RightHand.LastVelocity}";
+        _leftHandPositionLabel.Text = $"Left Hand Position: {_xrInput.LeftHand.GlobalPosition}";
+        _leftHandVelocityLabel.Text = $"Left Hand Velocity: {_xrInput.LeftHand.Velocity}";
+        _rightHandPositionLabel.Text = $"Right Hand Position: {_xrInput.RightHand.GlobalPosition}";
+        _rightHandVelocityLabel.Text = $"Right Hand Velocity: {_xrInput.RightHand.Velocity}";
     }
 
     #endregion

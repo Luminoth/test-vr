@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/UI/HUD.cs" id="1_tvrke"]
 
-[node name="HUD" type="Control" node_paths=PackedStringArray("_fpsLabel", "_isOnFloorLabel", "_velocityLabel", "_leftHandVelocityLabel", "_rightHandVelocityLabel")]
+[node name="HUD" type="Control" node_paths=PackedStringArray("_fpsLabel", "_isOnFloorLabel", "_velocityLabel", "_leftHandPositionLabel", "_leftHandVelocityLabel", "_rightHandPositionLabel", "_rightHandVelocityLabel")]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
@@ -11,7 +11,9 @@ script = ExtResource("1_tvrke")
 _fpsLabel = NodePath("CanvasLayer/MarginContainer/VBoxContainer/FPS")
 _isOnFloorLabel = NodePath("CanvasLayer/MarginContainer/VBoxContainer/IsOnFloor")
 _velocityLabel = NodePath("CanvasLayer/MarginContainer/VBoxContainer/Velocity")
+_leftHandPositionLabel = NodePath("CanvasLayer/MarginContainer/VBoxContainer/LeftHandPosition")
 _leftHandVelocityLabel = NodePath("CanvasLayer/MarginContainer/VBoxContainer/LeftHandVelocity")
+_rightHandPositionLabel = NodePath("CanvasLayer/MarginContainer/VBoxContainer/RightHandPosition")
 _rightHandVelocityLabel = NodePath("CanvasLayer/MarginContainer/VBoxContainer/RightHandVelocity")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
@@ -27,6 +29,9 @@ layout_mode = 2
 layout_mode = 2
 text = "FPS: N/A"
 
+[node name="HSeparator" type="HSeparator" parent="CanvasLayer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
 [node name="IsOnFloor" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "IsGrounded: N/A"
@@ -35,9 +40,23 @@ text = "IsGrounded: N/A"
 layout_mode = 2
 text = "Velocity: N/A"
 
+[node name="HSeparator2" type="HSeparator" parent="CanvasLayer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="LeftHandPosition" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Left Hand Position: N/A"
+
 [node name="LeftHandVelocity" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Left Hand Velocity: N/A"
+
+[node name="HSeparator3" type="HSeparator" parent="CanvasLayer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="RightHandPosition" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Right Hand Position: N/A"
 
 [node name="RightHandVelocity" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer"]
 layout_mode = 2

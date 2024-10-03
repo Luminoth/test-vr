@@ -1,11 +1,12 @@
-using VrTest.NPCs;
-
 namespace VrTest.Player;
 
 // this goes on the chararacter under the origin
 // so that we can order scripts correctly
 public partial class PlayerHand : XRController3D
 {
+    [Signal]
+    public delegate void collisionEventHandler(Node3D body);
+
     [Export]
     private XrPlayerCharacter _character;
 
@@ -15,7 +16,7 @@ public partial class PlayerHand : XRController3D
 
     private Vector3 _velocity;
 
-    public Vector3 LastVelocity => _velocity;
+    public Vector3 Velocity => _velocity;
 
     private Vector3 _previousPosition;
 
@@ -32,6 +33,7 @@ public partial class PlayerHand : XRController3D
 
     public override void _PhysicsProcess(double delta)
     {
+        // update velocity tracking
         _velocity = (GlobalPosition - _previousPosition) / (float)delta;
         _previousPosition = GlobalPosition;
 
@@ -40,11 +42,8 @@ public partial class PlayerHand : XRController3D
         var handDistance = GlobalPosition - _handBody.GlobalPosition;
         var collision = _handBody.MoveAndCollide(handDistance);
         if(collision != null && collision.GetCollider() is Node3D body) {
-            if(body.GetParent() is Enemy enemy) {
-                // TODO:
-            } else {
-                _character.JumpWithVelocity(-_velocity);
-            }
+            EmitSignal(SignalName.collision, body);
+            _velocity = Vector3.Zero;
         }
     }
 
