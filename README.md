@@ -33,3 +33,6 @@
 
 * https://docs.godotengine.org/en/stable/tutorials/xr/xr_next_steps.html
 * https://github.com/godotengine/godot-demo-projects/tree/master/viewport/gui_in_3d
+* Multiplayer
+  * https://forum.godotengine.org/t/multiplayer-xr-players-that-join-follow-player-ones-position/68593
+  * Probably easiest thing is to move the character out of the XR piece entirely and have the XR piece just update the one character, which can then be sync'd across the network
