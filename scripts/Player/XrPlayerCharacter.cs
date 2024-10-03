@@ -12,7 +12,7 @@ public partial class XrPlayerCharacter : CharacterBody3D
     public XrPlayer Player => _player;
 
     [Export]
-    private Node3D _head;
+    private PlayerModel _model;
 
     private float EyeHeight => Player.Height - Player.EyeHeightOffset;
 
@@ -22,7 +22,7 @@ public partial class XrPlayerCharacter : CharacterBody3D
     {
         TopLevel = true;
 
-        _head.Hide();
+        _model.ShowHead(false);
 
         GD.Print($"Player eye height: {EyeHeight}");
     }
