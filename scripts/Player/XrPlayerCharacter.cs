@@ -57,8 +57,8 @@ public partial class XrPlayerCharacter : CharacterBody3D
         Velocity = Velocity with {
             Y = Mathf.Clamp(
                 Velocity.Y - (float)(gravity * Player.GravityModifier * delta),
-                -Player.TermainalVelocity,
-                Player.TermainalVelocity
+                -Player.TerminalSpeed,
+                Player.TerminalSpeed
             )
         };
     }

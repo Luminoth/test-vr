@@ -14,9 +14,9 @@ public partial class PlayerHand : XRController3D
     [Export]
     AnimatableBody3D _handBody;
 
-    private Vector3 _velocity;
+    private Vector3 _trackedVelocity;
 
-    public Vector3 Velocity => _velocity;
+    public Vector3 TrackedVelocity => _trackedVelocity;
 
     private Vector3 _previousPosition;
 
@@ -34,7 +34,7 @@ public partial class PlayerHand : XRController3D
     public override void _PhysicsProcess(double delta)
     {
         // update velocity tracking
-        _velocity = (GlobalPosition - _previousPosition) / (float)delta;
+        _trackedVelocity = (GlobalPosition - _previousPosition) / (float)delta;
         _previousPosition = GlobalPosition;
 
         // try and move our virtual hands
@@ -43,7 +43,7 @@ public partial class PlayerHand : XRController3D
         var collision = _handBody.MoveAndCollide(handDistance);
         if(collision != null && collision.GetCollider() is Node3D body) {
             EmitSignal(SignalName.collision, body);
-            _velocity = Vector3.Zero;
+            _trackedVelocity = Vector3.Zero;
         }
     }
 

@@ -45,9 +45,9 @@ public partial class XrPlayer : XROrigin3D
     public float GravityModifier => _gravityModifier;
 
     [Export]
-    private float _terminalVelocity = 100.0f;
+    private float _terminalSpeed = 100.0f;
 
-    public float TermainalVelocity => _terminalVelocity;
+    public float TerminalSpeed => _terminalSpeed;
 
     #region Godot Lifecycle
 

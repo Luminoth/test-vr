@@ -40,10 +40,12 @@ public partial class HUD : Control
 
         _isOnFloorLabel.Text = $"IsOnFloor: {_character.IsOnFloor()}";
         _velocityLabel.Text = $"Velocity: {_character.Velocity}";
+
         _leftHandPositionLabel.Text = $"Left Hand Position: {_xrInput.LeftHand.GlobalPosition}";
-        _leftHandVelocityLabel.Text = $"Left Hand Velocity: {_xrInput.LeftHand.Velocity}";
+        _leftHandVelocityLabel.Text = $"Left Hand Velocity: {_xrInput.LeftHand.TrackedVelocity}";
+
         _rightHandPositionLabel.Text = $"Right Hand Position: {_xrInput.RightHand.GlobalPosition}";
-        _rightHandVelocityLabel.Text = $"Right Hand Velocity: {_xrInput.RightHand.Velocity}";
+        _rightHandVelocityLabel.Text = $"Right Hand Velocity: {_xrInput.RightHand.TrackedVelocity}";
     }
 
     #endregion

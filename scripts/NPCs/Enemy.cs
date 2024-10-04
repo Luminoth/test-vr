@@ -18,12 +18,12 @@ public partial class Enemy : CharacterBody3D
     public float GravityModifier => _gravityModifier;
 
     [Export]
-    private float _terminalVelocity = 100.0f;
+    private float _terminalSpeed = 100.0f;
 
-    public float TermainalVelocity => _terminalVelocity;
+    public float TerminalSpeed => _terminalSpeed;
 
     [Export]
-    private float _maxShoveVelocity = 8.0f;
+    private float _maxShoveSpeed = 6.0f;
 
     private float _gravity;
 
@@ -42,8 +42,8 @@ public partial class Enemy : CharacterBody3D
         velocity = velocity with {
             Y = Mathf.Clamp(
                 Velocity.Y - (float)(_gravity * GravityModifier * delta),
-                -TermainalVelocity,
-                TermainalVelocity
+                -TerminalSpeed,
+                TerminalSpeed
             )
         };
 
@@ -60,7 +60,7 @@ public partial class Enemy : CharacterBody3D
 
     public void Shove(Vector3 velocity)
     {
-        velocity = velocity.LimitLength(_maxShoveVelocity);
+        velocity = velocity.LimitLength(_maxShoveSpeed);
 
         Velocity += velocity;
     }
