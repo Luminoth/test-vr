@@ -133,7 +133,8 @@ script = ExtResource("1_7lbn8")
 _player = NodePath("..")
 _model = NodePath("Model")
 
-[node name="Model" parent="CharacterBody3D" instance=ExtResource("10_2l3qw")]
+[node name="Model" parent="CharacterBody3D" node_paths=PackedStringArray("_input") instance=ExtResource("10_2l3qw")]
+_input = NodePath("../../Input/XRInput")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
