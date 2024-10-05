@@ -2,7 +2,7 @@ using VrTest.Managers;
 
 namespace VrTest.Player.Input;
 
-public partial class XrInput : Node
+public partial class XrInput : Input
 {
     [Export]
     private PlayerHand _leftHand;
@@ -15,20 +15,26 @@ public partial class XrInput : Node
     public PlayerHand RightHand => _rightHand;
 
     [Export]
-    private float _moveDeadzone = 0.5f;
-
-    [Export]
-    private float _lookDeadzone = 0.5f;
-
-    [Export]
     private Vector2 _moveState;
 
-    public Vector2 MoveState => _moveState;
+    public override Vector2 MoveState => _moveState;
 
     [Export]
     private Vector2 _lookState;
 
-    public Vector2 LookState => _lookState;
+    public override Vector2 LookState => _lookState;
+
+    // TODO: move to game settings
+    [Export]
+    private float _moveDeadzone = 0.1f;
+
+    // TODO: move to game settings
+    [Export]
+    private float _lookDeadzone = 0.1f;
+
+    // TODO: move to game settings
+    [Export]
+    private bool _invertVerticalLook;
 
     #region Godot Lifecycle
 
@@ -37,7 +43,14 @@ public partial class XrInput : Node
         if(!XrManager.Instance.IsXrInitialized) {
             GD.Print("Disabling XrInput");
             SetProcess(false);
+        } else {
+            _rightHand.ButtonPressed += RightHandButtonPressedEventHandler;
         }
+    }
+
+    public override void _ExitTree()
+    {
+        _rightHand.ButtonPressed -= RightHandButtonPressedEventHandler;
     }
 
     public override void _Process(double delta)
@@ -49,14 +62,38 @@ public partial class XrInput : Node
         _lookState = _rightHand.GetVector2("primary");
         _lookState.X = Mathf.Abs(_lookState.X) < _lookDeadzone ? 0.0f : _lookState.X;
         _lookState.Y = Mathf.Abs(_lookState.Y) < _lookDeadzone ? 0.0f : _lookState.Y;
+        _lookState.Y *= _invertVerticalLook ? 1.0f : -1.0f;
     }
 
     #endregion
 
-    // TODO: this sucks because we don't want to poll for this
-    public bool IsJumpPressed()
+    public override bool IsJumpHeld()
     {
-        // TODO: why tf is there not a "just pressed" for this?
         return _rightHand.IsButtonPressed("ax_button");
     }
+
+    #region Event Handlers
+
+    private void RightHandButtonPressedEventHandler(string name)
+    {
+        switch(name) {
+        case "ax_button":
+            OnJumpPressed();
+            break;
+        case "by_button":
+            OnCancelPressed();
+            break;
+        }
+    }
+
+    private void RightHandButtonReleasedEventHandler(string name)
+    {
+        switch(name) {
+        case "ax_button":
+            OnJumpReleased();
+            break;
+        }
+    }
+
+    #endregion
 }

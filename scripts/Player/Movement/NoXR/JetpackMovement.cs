@@ -13,9 +13,12 @@ public partial class JetpackMovement : Movement
 
     public FpsMovement FpsMovement { private get; set; }
 
+    [Export]
+    private float _verticalSpeed = 5.0f;
+
     // TODO: move to game settings
     [Export]
-    private bool _jetpackHoldInput = true;
+    private bool _jetpackHoldInput = false;
 
     #region Godot Lifecycle
 
@@ -25,24 +28,22 @@ public partial class JetpackMovement : Movement
             GD.Print("Jetpack movement missing FpsMovement, disabling");
             IsEnabled = false;
         }
+
+        _input.JumpReleased += JumpReleasedEventHandler;
+        _input.CancelPressed += CancelPressedEventHandler;
     }
 
-    public override void _Process(double delta)
+    public override void _ExitTree()
     {
-        // TODO: this sucks because we don't want to poll for this
-        if(_input.IsJumpReleased()) {
-            GD.Print("Switching to FPS movement");
-            IsEnabled = false;
-            FpsMovement.IsEnabled = true;
-        }
+        _input.JumpReleased -= JumpReleasedEventHandler;
+        _input.CancelPressed -= CancelPressedEventHandler;
     }
 
     public override void _PhysicsProcess(double delta)
     {
         if(Character.IsOnFloor()) {
             GD.Print("Grounded, switching to FPS movement");
-            IsEnabled = false;
-            FpsMovement.IsEnabled = true;
+            DisableJetpack();
         }
 
         base._PhysicsProcess(delta);
@@ -64,22 +65,47 @@ public partial class JetpackMovement : Movement
 
     protected override void ApplyMovement(float delta)
     {
-        Character.ApplyGravity(Gravity, delta);
-
         var velocity = Character.Velocity;
 
-        if(Character.IsOnFloor() || Character.Player.AllowAirControl) {
-            var input = _input.MoveState;
-            var direction = Character.GlobalBasis * new Vector3(input.X, 0, input.Y);
-            if(direction.LengthSquared() > 0.0f) {
-                velocity.X = direction.X * Character.Player.MoveSpeed;
-                velocity.Z = direction.Z * Character.Player.MoveSpeed;
-            } else {
-                velocity.X = velocity.Z = 0.0f;
-            }
+        // apply thrust
+        velocity.Y = _input.IsJumpHeld() ? _verticalSpeed : 0.0f;
+
+        var input = _input.MoveState;
+        var direction = Character.GlobalBasis * new Vector3(input.X, 0, input.Y);
+        if(direction.LengthSquared() > 0.0f) {
+            velocity.X = direction.X * Character.Player.MoveSpeed;
+            velocity.Z = direction.Z * Character.Player.MoveSpeed;
+        } else {
+            velocity.X = velocity.Z = 0.0f;
         }
 
         Character.Velocity = velocity;
         Character.MoveAndSlide();
     }
+
+    private void DisableJetpack()
+    {
+        IsEnabled = false;
+        FpsMovement.IsEnabled = true;
+    }
+
+    #region Event Handlers
+
+    private void JumpReleasedEventHandler(object sender, System.EventArgs e)
+    {
+        if(IsEnabled && _jetpackHoldInput) {
+            GD.Print("Switching to FPS movement");
+            DisableJetpack();
+        }
+    }
+
+    private void CancelPressedEventHandler(object sender, System.EventArgs e)
+    {
+        if(IsEnabled && !_jetpackHoldInput) {
+            GD.Print("Switching to FPS movement");
+            DisableJetpack();
+        }
+    }
+
+    #endregion
 }

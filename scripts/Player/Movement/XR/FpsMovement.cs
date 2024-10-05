@@ -21,14 +21,16 @@ public partial class FpsMovement : Movement
 
     #region Godot Lifecycle
 
-    public override void _PhysicsProcess(double delta)
+    public override void _Ready()
     {
-        // TODO: this sucks because we don't want to poll for this
-        if(_input.IsJumpPressed()) {
-            Character.Jump();
-        }
+        base._Ready();
 
-        base._PhysicsProcess(delta);
+        _input.JumpPressed += JumpPressedEventHandler;
+    }
+
+    public override void _ExitTree()
+    {
+        _input.JumpPressed -= JumpPressedEventHandler;
     }
 
     #endregion
@@ -81,4 +83,17 @@ public partial class FpsMovement : Movement
 
         UpdateOrigin(currentPosition);
     }
+
+    #region Event Handlers
+
+    private void JumpPressedEventHandler(object sender, System.EventArgs e)
+    {
+        if(IsEnabled) {
+            if(Character.IsOnFloor()) {
+                Character.Jump();
+            }
+        }
+    }
+
+    #endregion
 }

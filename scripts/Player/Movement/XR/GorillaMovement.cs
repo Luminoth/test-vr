@@ -42,6 +42,9 @@ public partial class GorillaMovement : Movement
         var collisionVelocity = hand.TrackedVelocity - Character.Velocity;
 
         if(body is Enemy enemy) {
+            // TODO: this doesn't belong in the movement
+            // it should be part of the character
+            // (so we can slap stuff without this movement)
             enemy.Shove(collisionVelocity);
         } else {
             Character.JumpWithVelocity(-collisionVelocity);
@@ -52,12 +55,16 @@ public partial class GorillaMovement : Movement
 
     private void _on_left_hand_collision(Node3D body)
     {
-        HandleHandCollision(_input.LeftHand, body);
+        if(IsEnabled) {
+            HandleHandCollision(_input.LeftHand, body);
+        }
     }
 
     private void _on_right_hand_collision(Node3D body)
     {
-        HandleHandCollision(_input.RightHand, body);
+        if(IsEnabled) {
+            HandleHandCollision(_input.RightHand, body);
+        }
     }
 
     #endregion

@@ -45,22 +45,13 @@ public partial class FpsMovement : Movement
             _jetpackMovement.FpsMovement = this;
             _jetpackMovement.IsEnabled = false;
         }
+
+        _input.JumpPressed += JumpPressedEventHandler;
     }
 
-    public override void _PhysicsProcess(double delta)
+    public override void _ExitTree()
     {
-        // TODO: this sucks because we don't want to poll for this
-        if(_input.IsJumpPressed()) {
-            if(Character.IsOnFloor()) {
-                Character.Jump();
-            } else if(_jetpackMovement != null) {
-                GD.Print("Switching to Jetpack movement");
-                IsEnabled = false;
-                _jetpackMovement.IsEnabled = true;
-            }
-        }
-
-        base._PhysicsProcess(delta);
+        _input.JumpPressed -= JumpPressedEventHandler;
     }
 
     #endregion
@@ -97,4 +88,21 @@ public partial class FpsMovement : Movement
         Character.Velocity = velocity;
         Character.MoveAndSlide();
     }
+
+    #region Event Handlers
+
+    private void JumpPressedEventHandler(object sender, System.EventArgs e)
+    {
+        if(IsEnabled) {
+            if(Character.IsOnFloor()) {
+                Character.Jump();
+            } else if(_jetpackMovement != null) {
+                GD.Print("Switching to Jetpack movement");
+                IsEnabled = false;
+                _jetpackMovement.IsEnabled = true;
+            }
+        }
+    }
+
+    #endregion
 }
