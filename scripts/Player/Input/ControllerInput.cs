@@ -43,4 +43,10 @@ public partial class ControllerInput : Node
     {
         return Godot.Input.IsActionJustPressed("jump");
     }
+
+    // TODO: this sucks because we don't want to poll for this
+    public bool IsJumpReleased()
+    {
+        return Godot.Input.IsActionJustReleased("jump");
+    }
 }
