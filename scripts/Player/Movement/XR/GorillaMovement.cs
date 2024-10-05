@@ -1,10 +1,11 @@
 using VrTest.NPCs;
 using VrTest.Player.Input;
 
-namespace VrTest.Player.Movement;
+namespace VrTest.Player.Movement.XR;
 
 // movement scripts need to be above the player character script
 // in tree order so that they execute first
+// TODO: this still needs a lot of work and I'm not entirely sure where
 public partial class GorillaMovement : Movement
 {
     protected override bool IsXrMovement => true;

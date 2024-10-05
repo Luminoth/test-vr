@@ -1,10 +1,10 @@
 using VrTest.Player.Input;
 
-namespace VrTest.Player.Movement;
+namespace VrTest.Player.Movement.NoXR;
 
 // movement scripts need to be above the player character script
 // in tree order so that they execute first
-public partial class ControllerMovement : Movement
+public partial class FpsMovement : Movement
 {
     protected override bool IsXrMovement => false;
 
