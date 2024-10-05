@@ -1,15 +1,15 @@
 using VrTest.Player.Input;
 
-namespace VrTest.Player.Movement.NoXR;
+namespace VrTest.Player.Movement.XR;
 
 // movement scripts need to be above the player character script
 // in tree order so that they execute first
 public partial class JetpackMovement : Movement
 {
-    protected override bool IsXrMovement => false;
+    protected override bool IsXrMovement => true;
 
     [Export]
-    private ControllerInput _input;
+    private XrInput _input;
 
     public FpsMovement FpsMovement { private get; set; }
 
@@ -56,14 +56,13 @@ public partial class JetpackMovement : Movement
         FpsMovement.ApplyRotation(delta);
     }
 
-    protected override void ApplyMovement(float delta)
+    private void ApplyInputMovement(Vector2 input, float delta)
     {
         var velocity = Character.Velocity;
 
         // apply thrust
         velocity.Y = _input.IsJumpHeld() ? _verticalSpeed : 0.0f;
 
-        var input = _input.MoveState;
         var direction = Character.GlobalBasis * new Vector3(input.X, 0, input.Y);
         if(direction.LengthSquared() > 0.0f) {
             velocity.X = direction.X * Character.Player.MoveSpeed;
@@ -74,6 +73,17 @@ public partial class JetpackMovement : Movement
 
         Character.Velocity = velocity;
         Character.MoveAndSlide();
+    }
+
+    protected override void ApplyMovement(float delta)
+    {
+        ApplyPhysicalMovement(delta);
+
+        var currentPosition = Character.GlobalPosition;
+
+        ApplyInputMovement(_input.MoveState, delta);
+
+        UpdateOrigin(currentPosition);
     }
 
     private void DisableJetpack()

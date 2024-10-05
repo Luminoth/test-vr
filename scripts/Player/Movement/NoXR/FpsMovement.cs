@@ -56,7 +56,7 @@ public partial class FpsMovement : Movement
 
     #endregion
 
-    protected override void ApplyRotation(float delta)
+    public override void ApplyRotation(float delta)
     {
         var input = _input.LookState;
 

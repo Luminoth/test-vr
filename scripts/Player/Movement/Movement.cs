@@ -55,7 +55,7 @@ public abstract partial class Movement : Node
 
     #endregion
 
-    protected abstract void ApplyRotation(float delta);
+    public abstract void ApplyRotation(float delta);
 
     protected abstract void ApplyMovement(float delta);
 

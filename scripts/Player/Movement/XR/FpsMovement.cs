@@ -11,6 +11,11 @@ public partial class FpsMovement : Movement
     [Export]
     private XrInput _input;
 
+    // TODO: maybe this is a set of movements
+    // that we can decide which to hand off to?
+    [Export]
+    private JetpackMovement _jetpackMovement;
+
     [Export]
     private float _snapTurnDelay = 0.2f;
 
@@ -24,6 +29,14 @@ public partial class FpsMovement : Movement
     public override void _Ready()
     {
         base._Ready();
+
+        // TODO: this sort of assumes we don't start
+        // in jetpack mode and that's probably not always correct
+        if(_jetpackMovement != null) {
+            GD.Print("Disabling Jetpack movement");
+            _jetpackMovement.FpsMovement = this;
+            _jetpackMovement.IsEnabled = false;
+        }
 
         _input.JumpPressed += JumpPressedEventHandler;
     }
@@ -47,7 +60,7 @@ public partial class FpsMovement : Movement
         }
     }
 
-    protected override void ApplyRotation(float delta)
+    public override void ApplyRotation(float delta)
     {
         ApplyPhysicalRotation();
         ApplyInputRotation(delta);
@@ -91,6 +104,10 @@ public partial class FpsMovement : Movement
         if(IsEnabled) {
             if(Character.IsOnFloor()) {
                 Character.Jump();
+            } else if(_jetpackMovement != null) {
+                GD.Print("Switching to Jetpack movement");
+                IsEnabled = false;
+                _jetpackMovement.IsEnabled = true;
             }
         }
     }

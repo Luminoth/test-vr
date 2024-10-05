@@ -13,7 +13,7 @@ public partial class GorillaMovement : Movement
     [Export]
     private XrInput _input;
 
-    protected override void ApplyRotation(float delta)
+    public override void ApplyRotation(float delta)
     {
         ApplyPhysicalRotation();
     }
