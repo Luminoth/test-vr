@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://cunad52eqlcfm"]
+
+[ext_resource type="Script" path="res://scripts/Player/XrPlayer.cs" id="1_tt7sn"]
+
+[node name="XROrigin3D" type="XROrigin3D" node_paths=PackedStringArray("_camera", "_leftHand", "_rightHand")]
+script = ExtResource("1_tt7sn")
+_camera = NodePath("XRCamera3D")
+_leftHand = NodePath("LeftHand")
+_rightHand = NodePath("RightHand")
+
+[node name="XRCamera3D" type="XRCamera3D" parent="."]
+
+[node name="LeftHand" type="XRController3D" parent="."]
+tracker = &"left_hand"
+
+[node name="RightHand" type="XRController3D" parent="."]
+tracker = &"right_hand"
