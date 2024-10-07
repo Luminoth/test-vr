@@ -7,9 +7,9 @@ namespace VrTest.Player;
 public partial class XrPlayerCharacter : CharacterBody3D
 {
     [Export]
-    private XrPlayer _player;
+    private Player _player;
 
-    public XrPlayer Player => _player;
+    public Player Player => _player;
 
     [Export]
     private PlayerModel _model;

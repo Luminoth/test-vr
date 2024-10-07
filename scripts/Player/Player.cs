@@ -1,6 +1,6 @@
 namespace VrTest.Player;
 
-public partial class XrPlayer : XROrigin3D
+public partial class Player : XROrigin3D
 {
     [Export]
     private XRCamera3D _camera;
