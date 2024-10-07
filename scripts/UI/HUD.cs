@@ -6,7 +6,7 @@ namespace VrTest.UI;
 public partial class HUD : Control
 {
     [Export]
-    private XrPlayerCharacter _character;
+    private PlayerCharacter _character;
 
     [Export]
     private XrInput _xrInput;

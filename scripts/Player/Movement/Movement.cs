@@ -26,9 +26,9 @@ public abstract partial class Movement : Node
     private bool IsXrEnabled => IsXrMovement == XrManager.Instance.IsXrInitialized;
 
     [Export]
-    private XrPlayerCharacter _character;
+    private PlayerCharacter _character;
 
-    protected XrPlayerCharacter Character => _character;
+    protected PlayerCharacter Character => _character;
 
     private float _gravity;
 

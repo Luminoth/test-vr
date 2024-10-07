@@ -8,7 +8,7 @@ public partial class PlayerHand : XRController3D
     public delegate void collisionEventHandler(Node3D body);
 
     [Export]
-    private XrPlayerCharacter _character;
+    private PlayerCharacter _character;
 
     // https://forum.godotengine.org/t/rigid-bodies-as-hands/67646
     [Export]
