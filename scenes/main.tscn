@@ -1,7 +1,7 @@
 [gd_scene load_steps=20 format=3 uid="uid://drb8tbpmlpe5j"]
 
 [ext_resource type="PackedScene" uid="uid://clujaf3u776a3" path="res://addons/godot-xr-tools/objects/viewport_2d_in_3d.tscn" id="1_g4sxh"]
-[ext_resource type="PackedScene" uid="uid://c5y8tn5gtle8" path="res://scenes/player/player.tscn" id="1_irsne"]
+[ext_resource type="PackedScene" uid="uid://c5y8tn5gtle8" path="res://scenes/player/old_player.tscn" id="1_irsne"]
 [ext_resource type="PackedScene" uid="uid://bhux5cc60eoc1" path="res://scenes/enemies/enemy.tscn" id="2_txd32"]
 [ext_resource type="PackedScene" uid="uid://cdwgjf1nxoimi" path="res://scenes/ui/test_ui.tscn" id="4_adj22"]
 [ext_resource type="PackedScene" uid="uid://cm8am4g6aw0me" path="res://scenes/player/remote_player.tscn" id="5_slauv"]
