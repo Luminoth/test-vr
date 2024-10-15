@@ -8,6 +8,8 @@
   * Android SDK (35)
   * Android NDK
   * CMake
+  * JetBrains Annotations
+    * dotnet add package JetBrains.Annotations
 
 ## Running locally on Quest
 
