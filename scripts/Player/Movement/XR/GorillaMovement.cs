@@ -1,5 +1,4 @@
 using VrTest.NPCs;
-using VrTest.Player.Input;
 
 namespace VrTest.Player.Movement.XR;
 
@@ -10,8 +9,23 @@ public partial class GorillaMovement : Movement
 {
     protected override bool IsXrMovement => true;
 
-    [Export]
-    private XrInput _input;
+    #region Godot Lifecycle
+
+    public override void _Ready()
+    {
+        base._Ready();
+
+        Character.Model.LeftHand.collision += _on_left_hand_collision;
+        Character.Model.RightHand.collision += _on_right_hand_collision;
+    }
+
+    public override void _ExitTree()
+    {
+        Character.Model.LeftHand.collision -= _on_left_hand_collision;
+        Character.Model.RightHand.collision -= _on_right_hand_collision;
+    }
+
+    #endregion
 
     public override void ApplyRotation(float delta)
     {
@@ -53,17 +67,17 @@ public partial class GorillaMovement : Movement
 
     #region Signal Handlers
 
-    private void _on_left_hand_collision(Node3D body)
+    private void _on_left_hand_collision(PlayerHand hand, Node3D body)
     {
         if(IsEnabled) {
-            HandleHandCollision(_input.LeftHand, body);
+            HandleHandCollision(hand, body);
         }
     }
 
-    private void _on_right_hand_collision(Node3D body)
+    private void _on_right_hand_collision(PlayerHand hand, Node3D body)
     {
         if(IsEnabled) {
-            HandleHandCollision(_input.RightHand, body);
+            HandleHandCollision(hand, body);
         }
     }
 

@@ -1,0 +1,103 @@
+[gd_scene load_steps=16 format=3 uid="uid://5ujtf7xyqix5"]
+
+[ext_resource type="Script" path="res://scripts/Player/PlayerCharacter.cs" id="1_7lbn8"]
+[ext_resource type="Script" path="res://scripts/Player/Input/ControllerInput.cs" id="7_wblcy"]
+[ext_resource type="Script" path="res://scripts/Player/Input/XrInput.cs" id="9_wnoi4"]
+[ext_resource type="PackedScene" uid="uid://cfgf4bc05tc6j" path="res://scenes/player/model.tscn" id="10_2l3qw"]
+[ext_resource type="Script" path="res://scripts/Player/Movement/NoXR/FpsMovement.cs" id="10_5tu38"]
+[ext_resource type="Script" path="res://scripts/UI/XrUIHelper.cs" id="10_iysn4"]
+[ext_resource type="Script" path="res://scripts/Player/Movement/XR/FpsMovement.cs" id="10_w6st6"]
+[ext_resource type="Script" path="res://scripts/Player/Movement/XR/GorillaMovement.cs" id="11_4yf3q"]
+[ext_resource type="Script" path="res://scripts/Player/Movement/NoXR/JetpackMovement.cs" id="11_ds1hv"]
+[ext_resource type="Script" path="res://scripts/Player/Movement/XR/JetpackMovement.cs" id="14_8o1oi"]
+[ext_resource type="PackedScene" uid="uid://cggk75a1a2pe6" path="res://scenes/ui/hud.tscn" id="15_r0b4g"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_rjoqo"]
+height = 1.0
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_tou8i"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_c6pqu"]
+resource_local_to_scene = true
+transparency = 1
+shading_mode = 0
+albedo_texture = SubResource("ViewportTexture_tou8i")
+
+[sub_resource type="QuadMesh" id="QuadMesh_o1yvr"]
+resource_local_to_scene = true
+material = SubResource("StandardMaterial3D_c6pqu")
+
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("_model", "_hud", "_collider")]
+collision_layer = 8
+collision_mask = 19
+script = ExtResource("1_7lbn8")
+_model = NodePath("Model")
+_hud = NodePath("Xr HUD")
+_collider = NodePath("CollisionShape3D")
+
+[node name="Model" parent="." instance=ExtResource("10_2l3qw")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("CapsuleShape3D_rjoqo")
+
+[node name="Input" type="Node" parent="."]
+
+[node name="ControllerInput" type="Node" parent="Input"]
+script = ExtResource("7_wblcy")
+_invertVerticalLook = true
+
+[node name="XRInput" type="Node" parent="Input"]
+script = ExtResource("9_wnoi4")
+
+[node name="Movement" type="Node" parent="."]
+
+[node name="NoXR" type="Node" parent="Movement"]
+
+[node name="FpsMovement" type="Node" parent="Movement/NoXR" node_paths=PackedStringArray("_input", "_jetpackMovement", "_character")]
+script = ExtResource("10_5tu38")
+_input = NodePath("../../../Input/ControllerInput")
+_jetpackMovement = NodePath("../JetpackMovement")
+_character = NodePath("../../..")
+
+[node name="JetpackMovement" type="Node" parent="Movement/NoXR" node_paths=PackedStringArray("_input", "_character")]
+script = ExtResource("11_ds1hv")
+_input = NodePath("../../../Input/ControllerInput")
+_character = NodePath("../../..")
+
+[node name="XR" type="Node" parent="Movement"]
+
+[node name="FpsMovement" type="Node" parent="Movement/XR" node_paths=PackedStringArray("_input", "_jetpackMovement", "_character")]
+script = ExtResource("10_w6st6")
+_input = NodePath("../../../Input/XRInput")
+_jetpackMovement = NodePath("../JetpackMovement")
+_character = NodePath("../../..")
+
+[node name="GorillaMovement" type="Node" parent="Movement/XR" node_paths=PackedStringArray("_character")]
+script = ExtResource("11_4yf3q")
+_enabled = false
+_character = NodePath("../../..")
+
+[node name="JetpackMovement" type="Node" parent="Movement/XR" node_paths=PackedStringArray("_input", "_character")]
+script = ExtResource("14_8o1oi")
+_input = NodePath("../../../Input/XRInput")
+_character = NodePath("../../..")
+
+[node name="Xr HUD" type="Node3D" parent="." node_paths=PackedStringArray("_noXrUI")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, -1.5)
+script = ExtResource("10_iysn4")
+_noXrUI = NodePath("MeshInstance3D")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Xr HUD"]
+mesh = SubResource("QuadMesh_o1yvr")
+skeleton = NodePath("../..")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+disable_3d = true
+transparent_bg = true
+render_target_update_mode = 4
+
+[node name="HUD" parent="SubViewport" node_paths=PackedStringArray("_character", "_xrInput") instance=ExtResource("15_r0b4g")]
+_character = NodePath("../..")
+_xrInput = NodePath("../../Input/XRInput")

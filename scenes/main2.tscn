@@ -1,0 +1,153 @@
+[gd_scene load_steps=20 format=3 uid="uid://t4rjyk234pls"]
+
+[ext_resource type="PackedScene" uid="uid://clujaf3u776a3" path="res://addons/godot-xr-tools/objects/viewport_2d_in_3d.tscn" id="1_ba5bj"]
+[ext_resource type="PackedScene" uid="uid://cdwgjf1nxoimi" path="res://scenes/ui/test_ui.tscn" id="2_rwpf6"]
+[ext_resource type="PackedScene" uid="uid://bhux5cc60eoc1" path="res://scenes/enemies/enemy.tscn" id="3_3d3k0"]
+[ext_resource type="PackedScene" uid="uid://5ujtf7xyqix5" path="res://scenes/player/player.tscn" id="4_4j2cr"]
+[ext_resource type="PackedScene" uid="uid://cunad52eqlcfm" path="res://scenes/player/xrplayer.tscn" id="4_6hqhy"]
+
+[sub_resource type="Environment" id="Environment_u4jql"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_jgwmu"]
+size = Vector2(50, 50)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kwy4w"]
+albedo_color = Color(0.392157, 0.294118, 0.0980392, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bdjvr"]
+size = Vector3(50, 1, 50)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_8ib1u"]
+size = Vector2(50, 50)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u0xi5"]
+albedo_color = Color(0.199104, 0.611212, 0.890694, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_a6u3y"]
+size = Vector2(50, 50)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fn37j"]
+albedo_color = Color(0.784314, 0.784314, 0.980392, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_1psei"]
+size = Vector2(50, 50)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ya40p"]
+albedo_color = Color(0.784314, 0.784314, 0.980392, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_y38cl"]
+size = Vector2(50, 50)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ptfs0"]
+albedo_color = Color(0.784314, 0.784314, 0.980392, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_15khw"]
+size = Vector2(50, 50)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yyghb"]
+albedo_color = Color(0.784314, 0.784314, 0.980392, 1)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_u4jql")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 10, 0)
+
+[node name="XROrigin3D" parent="." instance=ExtResource("4_6hqhy")]
+
+[node name="World" type="Node3D" parent="."]
+
+[node name="Floor" type="CSGMesh3D" parent="World"]
+mesh = SubResource("PlaneMesh_jgwmu")
+material = SubResource("StandardMaterial3D_kwy4w")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="World/Floor"]
+collision_mask = 28
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Floor/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("BoxShape3D_bdjvr")
+
+[node name="Ceiling" type="CSGMesh3D" parent="World"]
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 50, 0)
+mesh = SubResource("PlaneMesh_8ib1u")
+material = SubResource("StandardMaterial3D_u0xi5")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="World/Ceiling"]
+collision_mask = 28
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Ceiling/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("BoxShape3D_bdjvr")
+
+[node name="Wall" type="CSGMesh3D" parent="World"]
+transform = Transform3D(-1, -8.74228e-08, 3.82137e-15, 0, -4.37114e-08, -1, 8.74228e-08, -1, 4.37114e-08, 0, 25, 25)
+mesh = SubResource("PlaneMesh_a6u3y")
+material = SubResource("StandardMaterial3D_fn37j")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="World/Wall"]
+collision_mask = 28
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Wall/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("BoxShape3D_bdjvr")
+
+[node name="Wall2" type="CSGMesh3D" parent="World"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 25, -25)
+mesh = SubResource("PlaneMesh_1psei")
+material = SubResource("StandardMaterial3D_ya40p")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="World/Wall2"]
+collision_mask = 28
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Wall2/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("BoxShape3D_bdjvr")
+
+[node name="Wall3" type="CSGMesh3D" parent="World"]
+transform = Transform3D(1.19249e-08, -1, 4.37114e-08, 0, -4.37114e-08, -1, 1, 1.19249e-08, -5.21253e-16, 25, 25, 0)
+mesh = SubResource("PlaneMesh_y38cl")
+material = SubResource("StandardMaterial3D_ptfs0")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="World/Wall3"]
+collision_mask = 28
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Wall3/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("BoxShape3D_bdjvr")
+
+[node name="Wall4" type="CSGMesh3D" parent="World"]
+transform = Transform3D(1.19249e-08, 1, -4.37114e-08, 0, -4.37114e-08, -1, -1, 1.19249e-08, -5.21253e-16, -25, 25, 0)
+mesh = SubResource("PlaneMesh_15khw")
+material = SubResource("StandardMaterial3D_yyghb")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="World/Wall4"]
+collision_mask = 28
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Wall4/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("BoxShape3D_bdjvr")
+
+[node name="Viewport2Din3D" parent="World" instance=ExtResource("1_ba5bj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -5)
+collision_layer = 5242880
+scene = ExtResource("2_rwpf6")
+transparent = 0
+scene_properties_keys = PackedStringArray("test_ui.gd")
+
+[node name="Enemies" type="Node3D" parent="."]
+
+[node name="Enemy" parent="Enemies" instance=ExtResource("3_3d3k0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, -5)
+
+[node name="Enemy 2" parent="Enemies" instance=ExtResource("3_3d3k0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -5)
+
+[node name="Enemy 3" parent="Enemies" instance=ExtResource("3_3d3k0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Players" type="Node3D" parent="."]
+
+[node name="Player" parent="Players" instance=ExtResource("4_4j2cr")]

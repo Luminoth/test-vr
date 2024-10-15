@@ -8,29 +8,46 @@ namespace VrTest.UI;
 // the MeshInstance3D Mesh and Mesh Material must be marked as "Local to Scene"
 public partial class XrUIHelper : Node3D
 {
-    [Export]
-    private OpenXRCompositionLayer _xrNode;
+    private OpenXRCompositionLayer _xrUI;
+
+    public OpenXRCompositionLayer XrUI
+    {
+        get => _xrUI;
+
+        set
+        {
+            _xrUI = value;
+
+            if(XrManager.Instance.IsXrInitialized) {
+                _xrUI.Show();
+            } else {
+                _xrUI.Hide();
+            }
+        }
+    }
 
     [Export]
-    private MeshInstance3D _noXrNode;
+    private MeshInstance3D _noXrUI;
+
+    private Vector3 _offset;
 
     #region Godot Lifecycle
 
     public override void _Ready()
     {
+        _offset = Position;
+
         if(XrManager.Instance.IsXrInitialized) {
-            _xrNode.Show();
-            _noXrNode.Hide();
+            _noXrUI.Hide();
         } else {
-            _xrNode.Hide();
-            _noXrNode.Show();
+            _noXrUI.Show();
         }
     }
 
     public override void _Process(double delta)
     {
-        _xrNode.GlobalPosition = GlobalPosition;
-        _xrNode.GlobalRotation = GlobalRotation;
+        XrUI.GlobalPosition = GlobalPosition;
+        XrUI.GlobalRotation = GlobalRotation;
     }
 
     #endregion

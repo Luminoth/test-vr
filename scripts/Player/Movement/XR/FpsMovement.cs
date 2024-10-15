@@ -1,3 +1,4 @@
+using VrTest.Managers;
 using VrTest.Player.Input;
 
 namespace VrTest.Player.Movement.XR;
@@ -55,7 +56,7 @@ public partial class FpsMovement : Movement
         // from XRTools, rotate origin with snap turn
         _snapTurnAccum -= Mathf.Abs(input.X) * delta;
         if(_snapTurnAccum <= 0.0f) {
-            Character.RotatePlayer(_snapTurnAngle * Mathf.Sign(input.X));
+            XrManager.Instance.XrPlayer.Rotate(_snapTurnAngle * Mathf.Sign(input.X));
             _snapTurnAccum = _snapTurnDelay;
         }
     }
@@ -70,11 +71,11 @@ public partial class FpsMovement : Movement
     {
         var velocity = Character.Velocity;
 
-        if(Character.IsOnFloor() || Character.Player.AllowAirControl) {
+        if(Character.IsOnFloor() || Character.AllowAirControl) {
             var direction = Character.GlobalBasis * new Vector3(input.X, 0, input.Y);
             if(direction.LengthSquared() > 0.0f) {
-                velocity.X = direction.X * Character.Player.MoveSpeed;
-                velocity.Z = direction.Z * Character.Player.MoveSpeed;
+                velocity.X = direction.X * Character.MoveSpeed;
+                velocity.Z = direction.Z * Character.MoveSpeed;
             } else {
                 velocity.X = velocity.Z = 0.0f;
             }

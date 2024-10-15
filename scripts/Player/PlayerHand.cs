@@ -2,17 +2,37 @@ namespace VrTest.Player;
 
 // this goes on the chararacter under the origin
 // so that we can order scripts correctly
-public partial class PlayerHand : XRController3D
+public partial class PlayerHand : Node3D
 {
     [Signal]
-    public delegate void collisionEventHandler(Node3D body);
+    public delegate void collisionEventHandler(PlayerHand hand, Node3D body);
 
     [Export]
-    private PlayerCharacter _character;
+    private Node3D _model;
+
+    public Node3D Model => _model;
 
     // https://forum.godotengine.org/t/rigid-bodies-as-hands/67646
     [Export]
     AnimatableBody3D _handBody;
+
+    private XRController3D _controller;
+
+    [CanBeNull]
+    public XRController3D Controller
+    {
+        get => _controller;
+
+        set
+        {
+            _controller = value;
+
+            _previousControllerPosition = _controller.GlobalPosition;
+
+            GlobalPosition = _controller.GlobalPosition;
+            _handBody.Position = Vector3.Zero;
+        }
+    }
 
     [Export]
     private int _trackedVelocityCount = 5;
@@ -26,7 +46,7 @@ public partial class PlayerHand : XRController3D
 
     public Vector3 TrackedVelocity => _trackedVelocity;
 
-    private Vector3 _previousPosition;
+    private Vector3 _previousControllerPosition;
 
     #region Godot Lifecycle
 
@@ -34,30 +54,30 @@ public partial class PlayerHand : XRController3D
     {
         _trackedVelocities = new Vector3[_trackedVelocityCount];
 
-        _previousPosition = GlobalPosition;
-
         _handBody.SyncToPhysics = false;
-        _handBody.TopLevel = true;
         _handBody.GlobalPosition = GlobalPosition;
     }
 
     public override void _PhysicsProcess(double delta)
     {
-        var velocity = (GlobalPosition - _previousPosition) / (float)delta;
-        _previousPosition = GlobalPosition;
+        var velocity = (Controller.GlobalPosition - _previousControllerPosition) / (float)delta;
+        _previousControllerPosition = Controller.GlobalPosition;
 
         UpdateTrackedVelocity(velocity);
 
         // try and move our virtual hands
         // https://docs.godotengine.org/en/stable/tutorials/physics/using_character_body_2d.html
-        var handDistance = GlobalPosition - _handBody.GlobalPosition;
+        var handDistance = Controller.GlobalPosition - _handBody.GlobalPosition;
         var collision = _handBody.MoveAndCollide(handDistance);
         if(collision != null && collision.GetCollider() is Node3D body) {
-            EmitSignal(SignalName.collision, body);
+            EmitSignal(SignalName.collision, this, body);
 
             // TODO: we don't want to do this if we hit an enemy
             ResetTrackedVelocity();
         }
+
+        GlobalPosition = _handBody.GlobalPosition;
+        _handBody.Position = Vector3.Zero;
     }
 
     #endregion

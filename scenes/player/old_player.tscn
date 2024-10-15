@@ -1,7 +1,6 @@
-[gd_scene load_steps=23 format=3 uid="uid://c5y8tn5gtle8"]
+[gd_scene load_steps=22 format=3 uid="uid://c5y8tn5gtle8"]
 
 [ext_resource type="Script" path="res://scripts/Player/PlayerCharacter.cs" id="1_7lbn8"]
-[ext_resource type="Script" path="res://scripts/Player/Player.cs" id="1_tt7sn"]
 [ext_resource type="PackedScene" path="res://addons/godot-xr-tools/misc/vr_common_shader_cache.tscn" id="2_xdn8l"]
 [ext_resource type="Script" path="res://scripts/UI/XrUIHelper.cs" id="3_e7e8p"]
 [ext_resource type="PackedScene" uid="uid://b4kad2kuba1yn" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/left_hand_low.tscn" id="3_urgum"]
@@ -10,7 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://cqhw276realc" path="res://addons/godot-xr-tools/functions/function_pointer.tscn" id="5_bixdp"]
 [ext_resource type="Script" path="res://scripts/Player/Input/ControllerInput.cs" id="7_wblcy"]
 [ext_resource type="Script" path="res://scripts/Player/Input/XrInput.cs" id="9_wnoi4"]
-[ext_resource type="PackedScene" uid="uid://cfgf4bc05tc6j" path="res://scenes/player/player_model.tscn" id="10_2l3qw"]
+[ext_resource type="PackedScene" uid="uid://cfgf4bc05tc6j" path="res://scenes/player/model.tscn" id="10_2l3qw"]
 [ext_resource type="Script" path="res://scripts/Player/Movement/NoXR/FpsMovement.cs" id="10_5tu38"]
 [ext_resource type="Script" path="res://scripts/Player/Movement/XR/FpsMovement.cs" id="10_w6st6"]
 [ext_resource type="Script" path="res://scripts/Player/Movement/XR/GorillaMovement.cs" id="11_4yf3q"]
@@ -21,7 +20,7 @@
 [sub_resource type="ViewportTexture" id="ViewportTexture_3ftra"]
 viewport_path = NodePath("SubViewport")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kmhg5"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lfwg3"]
 resource_local_to_scene = true
 transparency = 1
 shading_mode = 0
@@ -29,7 +28,7 @@ albedo_texture = SubResource("ViewportTexture_3ftra")
 
 [sub_resource type="QuadMesh" id="QuadMesh_2od5s"]
 resource_local_to_scene = true
-material = SubResource("StandardMaterial3D_kmhg5")
+material = SubResource("StandardMaterial3D_lfwg3")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_nx7lx"]
 radius = 0.25
@@ -37,31 +36,25 @@ radius = 0.25
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tcjc8"]
 height = 1.0
 
-[node name="XROrigin3D" type="XROrigin3D" node_paths=PackedStringArray("_camera", "_collider")]
-script = ExtResource("1_tt7sn")
-_camera = NodePath("XRCamera3D")
-_collider = NodePath("CharacterBody3D/CollisionShape3D")
+[node name="XROrigin3D" type="XROrigin3D"]
 
 [node name="XRCamera3D" type="XRCamera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 
 [node name="VRCommonShaderCache" parent="XRCamera3D" instance=ExtResource("2_xdn8l")]
 
-[node name="Xr HUD" type="Node3D" parent="XRCamera3D" node_paths=PackedStringArray("_xrNode", "_noXrNode")]
+[node name="Xr HUD" type="Node3D" parent="XRCamera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, -1)
 script = ExtResource("3_e7e8p")
-_xrNode = NodePath("../../OpenXRCompositionLayerQuad")
-_noXrNode = NodePath("MeshInstance3D")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="XRCamera3D/Xr HUD"]
 mesh = SubResource("QuadMesh_2od5s")
 skeleton = NodePath("../..")
 
-[node name="LeftHand" type="XRController3D" parent="." node_paths=PackedStringArray("_character", "_handBody")]
+[node name="LeftHand" type="XRController3D" parent="." node_paths=PackedStringArray("_handBody")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.3, -0.5)
 tracker = &"left_hand"
 script = ExtResource("4_tfqmg")
-_character = NodePath("../CharacterBody3D")
 _handBody = NodePath("AnimatableBody3D")
 
 [node name="LeftHand" parent="LeftHand" instance=ExtResource("3_urgum")]
@@ -75,11 +68,10 @@ collision_mask = 51
 [node name="CollisionShape3D" type="CollisionShape3D" parent="LeftHand/AnimatableBody3D"]
 shape = SubResource("SphereShape3D_nx7lx")
 
-[node name="RightHand" type="XRController3D" parent="." node_paths=PackedStringArray("_character", "_handBody")]
+[node name="RightHand" type="XRController3D" parent="." node_paths=PackedStringArray("_handBody")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.3, -0.5)
 tracker = &"right_hand"
 script = ExtResource("4_tfqmg")
-_character = NodePath("../CharacterBody3D")
 _handBody = NodePath("AnimatableBody3D")
 
 [node name="RightHand" parent="RightHand" instance=ExtResource("4_efixk")]
@@ -104,10 +96,8 @@ alpha_blend = true
 script = ExtResource("7_wblcy")
 _invertVerticalLook = true
 
-[node name="XRInput" type="Node" parent="Input" node_paths=PackedStringArray("_leftHand", "_rightHand")]
+[node name="XRInput" type="Node" parent="Input"]
 script = ExtResource("9_wnoi4")
-_leftHand = NodePath("../../LeftHand")
-_rightHand = NodePath("../../RightHand")
 
 [node name="Movement" type="Node" parent="."]
 
@@ -132,9 +122,8 @@ _input = NodePath("../../../Input/XRInput")
 _jetpackMovement = NodePath("../JetpackMovement")
 _character = NodePath("../../../CharacterBody3D")
 
-[node name="GorillaMovement" type="Node" parent="Movement/XR" node_paths=PackedStringArray("_input", "_character")]
+[node name="GorillaMovement" type="Node" parent="Movement/XR" node_paths=PackedStringArray("_character")]
 script = ExtResource("11_4yf3q")
-_input = NodePath("../../../Input/XRInput")
 _enabled = false
 _character = NodePath("../../../CharacterBody3D")
 
@@ -143,16 +132,15 @@ script = ExtResource("14_8o1oi")
 _input = NodePath("../../../Input/XRInput")
 _character = NodePath("../../../CharacterBody3D")
 
-[node name="CharacterBody3D" type="CharacterBody3D" parent="." node_paths=PackedStringArray("_player", "_model")]
+[node name="CharacterBody3D" type="CharacterBody3D" parent="." node_paths=PackedStringArray("_model", "_collider")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
 collision_layer = 8
 collision_mask = 19
 script = ExtResource("1_7lbn8")
-_player = NodePath("..")
 _model = NodePath("Model")
+_collider = NodePath("CollisionShape3D")
 
-[node name="Model" parent="CharacterBody3D" node_paths=PackedStringArray("_input") instance=ExtResource("10_2l3qw")]
-_input = NodePath("../../Input/XRInput")
+[node name="Model" parent="CharacterBody3D" instance=ExtResource("10_2l3qw")]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)

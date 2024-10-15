@@ -1,0 +1,92 @@
+[gd_scene load_steps=8 format=3 uid="uid://cfgf4bc05tc6j"]
+
+[ext_resource type="Script" path="res://scripts/Player/PlayerModel.cs" id="1_v0c5m"]
+[ext_resource type="Script" path="res://scripts/Player/PlayerHand.cs" id="2_8wu5n"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3uak0"]
+albedo_color = Color(0.313726, 0, 0.313726, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p8rmn"]
+albedo_color = Color(0.912408, 0.000674216, 0.912401, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m8ry4"]
+albedo_color = Color(0.277682, 0.356505, 0.146542, 1)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_futgy"]
+radius = 0.2
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_502kw"]
+radius = 0.2
+
+[node name="Model" type="Node3D" node_paths=PackedStringArray("_headModel", "_leftArmModel", "_leftHand", "_rightArmModel", "_rightHand")]
+script = ExtResource("1_v0c5m")
+_headModel = NodePath("Head")
+_leftArmModel = NodePath("LeftArm")
+_leftHand = NodePath("LeftHand")
+_rightArmModel = NodePath("RightArm")
+_rightHand = NodePath("RightHand")
+
+[node name="Head" type="CSGCombiner3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+
+[node name="Head" type="CSGSphere3D" parent="Head"]
+radius = 0.4
+material = SubResource("StandardMaterial3D_3uak0")
+
+[node name="Nose" type="CSGSphere3D" parent="Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
+radius = 0.1
+material = SubResource("StandardMaterial3D_p8rmn")
+
+[node name="Body" type="CSGCylinder3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)
+height = 0.25
+material = SubResource("StandardMaterial3D_m8ry4")
+
+[node name="LeftArm" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.3, -0.25)
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="LeftArm"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -0.25)
+radius = 0.1
+height = 0.5
+
+[node name="LeftHand" type="Node3D" parent="." node_paths=PackedStringArray("_model", "_handBody")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.3, -0.8)
+script = ExtResource("2_8wu5n")
+_model = NodePath("CSGSphere3D")
+_handBody = NodePath("AnimatableBody3D")
+
+[node name="CSGSphere3D" type="CSGSphere3D" parent="LeftHand"]
+radius = 0.1
+
+[node name="AnimatableBody3D" type="AnimatableBody3D" parent="LeftHand"]
+collision_layer = 4
+collision_mask = 51
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LeftHand/AnimatableBody3D"]
+shape = SubResource("SphereShape3D_futgy")
+
+[node name="RightArm" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.3, -0.25)
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="RightArm"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -0.25)
+radius = 0.1
+height = 0.5
+
+[node name="RightHand" type="Node3D" parent="." node_paths=PackedStringArray("_model", "_handBody")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.3, -0.8)
+script = ExtResource("2_8wu5n")
+_model = NodePath("CSGSphere3D")
+_handBody = NodePath("AnimatableBody3D")
+
+[node name="CSGSphere3D" type="CSGSphere3D" parent="RightHand"]
+radius = 0.1
+
+[node name="AnimatableBody3D" type="AnimatableBody3D" parent="RightHand"]
+collision_layer = 4
+collision_mask = 51
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RightHand/AnimatableBody3D"]
+shape = SubResource("SphereShape3D_502kw")

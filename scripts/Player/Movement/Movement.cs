@@ -62,14 +62,16 @@ public abstract partial class Movement : Node
     protected void ApplyPhysicalRotation()
     {
         // match the character Y rotation to the camera
-        Character.GlobalRotation = Character.GlobalRotation with { Y = Character.Player.Camera.GlobalRotation.Y };
+        Character.GlobalRotation = Character.GlobalRotation with { Y = XrManager.Instance.XrPlayer.Camera.GlobalRotation.Y };
     }
 
     protected void ApplyPhysicalMovement(float delta)
     {
+        var origin = XrManager.Instance.XrPlayer;
+
         // attempt to move the character to be under the camera on the X/Z plane
         var currentPosition = Character.GlobalPosition with { Y = 0.0f };
-        var desiredPosition = Character.Player.Camera.GlobalPosition with { Y = 0.0f };
+        var desiredPosition = origin.Camera.GlobalPosition with { Y = 0.0f };
         var currentVelocity = Character.Velocity;
         Character.Velocity = (desiredPosition - currentPosition) / delta;
         Character.MoveAndSlide();
@@ -77,13 +79,13 @@ public abstract partial class Movement : Node
 
         // move the origin back to match if we didn't make it
         var remaining = desiredPosition - Character.GlobalPosition with { Y = 0.0f };
-        Character.Player.GlobalPosition -= remaining;
+        origin.GlobalPosition -= remaining;
     }
 
     protected void UpdateOrigin(Vector3 previousPosition)
     {
         // move the origin to match the character movement on the X/Z plane
         var distance = Character.GlobalPosition with { Y = 0.0f } - previousPosition with { Y = 0.0f };
-        Character.Player.GlobalPosition += distance;
+        XrManager.Instance.XrPlayer.GlobalPosition += distance;
     }
 }

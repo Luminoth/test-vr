@@ -1,36 +1,39 @@
-using VrTest.Player.Input;
+using VrTest.Managers;
 
 namespace VrTest.Player;
 
 public partial class PlayerModel : Node3D
 {
     [Export]
-    private XrInput _input;
+    private Node3D _headModel;
 
     [Export]
-    private Node3D _head;
+    private Node3D _leftArmModel;
 
     [Export]
-    private Node3D _leftArm;
+    private PlayerHand _leftHand;
 
-    public Node3D LeftArm => _leftArm;
+    public PlayerHand LeftHand => _leftHand;
 
     [Export]
-    private Node3D _rightArm;
+    private Node3D _rightArmModel;
 
-    public Node3D RightArm => _rightArm;
+    [Export]
+    private PlayerHand _rightHand;
+
+    public PlayerHand RightHand => _rightHand;
+
+    private static void TrackHand(PlayerHand hand, Node3D arm)
+    {
+        arm.LookAt(hand.GlobalPosition, Vector3.Up);
+    }
 
     #region Godot Lifecycle
 
     public override void _Process(double delta)
     {
-        // TODO: this is null on the remote player right now
-        // but that entire thing should go away when the
-        // XROrigin is moved to its own thing for multiplayer
-        if(_input != null) {
-            TrackHand(_input.LeftHand, LeftArm);
-            TrackHand(_input.RightHand, RightArm);
-        }
+        TrackHand(_leftHand, _leftArmModel);
+        TrackHand(_rightHand, _rightArmModel);
     }
 
     #endregion
@@ -38,14 +41,9 @@ public partial class PlayerModel : Node3D
     public void ShowHead(bool show)
     {
         if(show) {
-            _head.Show();
+            _headModel.Show();
         } else {
-            _head.Hide();
+            _headModel.Hide();
         }
-    }
-
-    private void TrackHand(PlayerHand hand, Node3D arm)
-    {
-        arm.LookAt(hand.GlobalPosition, Vector3.Up);
     }
 }

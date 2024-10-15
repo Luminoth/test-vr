@@ -1,3 +1,4 @@
+using VrTest.Player;
 using VrTest.Util;
 
 namespace VrTest.Managers;
@@ -7,11 +8,15 @@ public partial class XrManager : SingletonNode<XrManager>
     [Export]
     private int _maximumRefreshRate = 120;
 
+    [CanBeNull]
     private OpenXRInterface _xrInterface;
 
     public bool IsXrInitialized => _xrInterface != null && _xrInterface.IsInitialized();
 
     public bool XrIsFocused { get; private set; }
+
+    [CanBeNull]
+    public XrPlayer XrPlayer { get; set; }
 
     #region Godot Lifecycle
 

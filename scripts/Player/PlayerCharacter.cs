@@ -1,29 +1,75 @@
 using VrTest.Managers;
+using VrTest.UI;
 
 namespace VrTest.Player;
 
-// this goes on the chararacter under the origin
-// so that we can order scripts correctly
 public partial class PlayerCharacter : CharacterBody3D
 {
     [Export]
-    private Player _player;
-
-    public Player Player => _player;
-
-    [Export]
     private PlayerModel _model;
 
-    private float EyeHeight => Player.Height - Player.EyeHeightOffset;
+    public PlayerModel Model => _model;
+
+    [Export]
+    private XrUIHelper _hud;
+
+    [Export]
+    private CollisionShape3D _collider;
+
+    private float Height => ((CapsuleShape3D)_collider.Shape).Height;
+
+    private float Radius => ((CapsuleShape3D)_collider.Shape).Radius;
+
+    [Export]
+    private float _eyeForwardOffset = 0.5f;
+
+    //public float EyeForwardOffset => _eyeForwardOffset;
+
+    [Export]
+    private float _eyeHeightOffset = 0.1f;
+
+    //public float EyeHeightOffset => _eyeHeightOffset;
+
+    private float EyeHeight => Height - _eyeHeightOffset;
+
+    [Export]
+    private float _moveSpeed = 5.0f;
+
+    public float MoveSpeed => _moveSpeed;
+
+    [Export]
+    private float _jumpSpeed = 5.0f;
+
+    //public float JumpSpeed => _jumpSpeed;
+
+    [Export]
+    private bool _allowAirControl;
+
+    public bool AllowAirControl => _allowAirControl;
+
+    [Export]
+    private float _gravityModifier = 2.0f;
+
+    //public float GravityModifier => _gravityModifier;
+
+    [Export]
+    private float _terminalSpeed = 100.0f;
+
+    //public float TerminalSpeed => _terminalSpeed;
 
     #region Godot Lifecycle
 
     public override void _Ready()
     {
-        TopLevel = true;
+        var origin = XrManager.Instance.XrPlayer;
+        Model.LeftHand.Controller = origin.LeftHand;
+        Model.RightHand.Controller = origin.RightHand;
 
-        _model.ShowHead(false);
+        Model.ShowHead(false);
 
+        _hud.XrUI = origin.Hud;
+
+        GD.Print($"Player height: {Height}");
         GD.Print($"Player eye height: {EyeHeight}");
     }
 
@@ -33,20 +79,19 @@ public partial class PlayerCharacter : CharacterBody3D
             // offset the character so the camera is at the eye
             // maybe this could move the origin instead
             // but this actually keeps the camera "in bounds" so is probably correct
-            var eyeOffset = GlobalBasis * new Vector3(0.0f, 0.0f, -Player.EyeForwardOffset);
+            var eyeOffset = GlobalBasis * new Vector3(0.0f, 0.0f, -_eyeForwardOffset);
             GlobalPosition -= eyeOffset;
 
-            // move the origin to fix the camera at the player height
-            // minus a little bit to be at the eye position
-            // (assuming Local reference space here, Local Floor and Stage shouldn't do this)
-            Player.GlobalPosition = Player.GlobalPosition with { Y = GlobalPosition.Y + EyeHeight - Player.Camera.Position.Y };
+            XrManager.Instance.XrPlayer.ResetHeight(EyeHeight);
         } else {
+            var origin = XrManager.Instance.XrPlayer;
+
             // rotate the character to match the origin
-            GlobalRotation = Player.GlobalRotation;
+            GlobalRotation = origin.GlobalRotation;
 
             // move the origin to match the body
             // but just a little in front to match the eyes
-            Player.GlobalPosition = GlobalPosition + (GlobalBasis * new Vector3(0.0f, 0.0f, -Player.EyeForwardOffset));
+            origin.GlobalPosition = GlobalPosition + (GlobalBasis * new Vector3(0.0f, 0.0f, -_eyeForwardOffset));
         }
     }
 
@@ -56,9 +101,9 @@ public partial class PlayerCharacter : CharacterBody3D
     {
         Velocity = Velocity with {
             Y = Mathf.Clamp(
-                Velocity.Y - (float)(gravity * Player.GravityModifier * delta),
-                -Player.TerminalSpeed,
-                Player.TerminalSpeed
+                Velocity.Y - (float)(gravity * _gravityModifier * delta),
+                -_terminalSpeed,
+                _terminalSpeed
             )
         };
     }
@@ -69,7 +114,7 @@ public partial class PlayerCharacter : CharacterBody3D
             return;
         }
 
-        var velocity = Vector3.Up * Player.JumpSpeed;
+        var velocity = Vector3.Up * _jumpSpeed;
         Velocity += velocity;
     }
 
@@ -80,25 +125,11 @@ public partial class PlayerCharacter : CharacterBody3D
         }
 
         // clamp the velocity we add
-        var verticalVelocity = new Vector3(0.0f, Mathf.Clamp(velocity.Y, 0.0f, Player.JumpSpeed), 0.0f);
+        var verticalVelocity = new Vector3(0.0f, Mathf.Clamp(velocity.Y, 0.0f, _jumpSpeed), 0.0f);
 
         // NOTE: controller movement will reset this to match actual input
-        var horizontalVelocity = new Vector3(velocity.X, 0.0f, velocity.Z).LimitLength(Player.MoveSpeed);
+        var horizontalVelocity = new Vector3(velocity.X, 0.0f, velocity.Z).LimitLength(MoveSpeed);
 
         Velocity += verticalVelocity + horizontalVelocity;
-    }
-
-    // from XRTools, rotates the origin around the camera
-    public void RotatePlayer(float angle)
-    {
-        var t1 = Transform3D.Identity;
-        var t2 = Transform3D.Identity;
-        var rot = Transform3D.Identity;
-
-        t1.Origin = -Player.Camera.Position;
-        t2.Origin = Player.Camera.Position;
-        rot = rot.Rotated(Vector3.Down, angle);
-
-        Player.Transform = (Player.Transform * t2 * rot * t1).Orthonormalized();
     }
 }

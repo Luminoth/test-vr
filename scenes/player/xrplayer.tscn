@@ -1,17 +1,27 @@
-[gd_scene load_steps=2 format=3 uid="uid://cunad52eqlcfm"]
+[gd_scene load_steps=3 format=3 uid="uid://cunad52eqlcfm"]
 
 [ext_resource type="Script" path="res://scripts/Player/XrPlayer.cs" id="1_tt7sn"]
+[ext_resource type="PackedScene" path="res://addons/godot-xr-tools/misc/vr_common_shader_cache.tscn" id="2_h54ur"]
 
-[node name="XROrigin3D" type="XROrigin3D" node_paths=PackedStringArray("_camera", "_leftHand", "_rightHand")]
+[node name="XROrigin3D" type="XROrigin3D" node_paths=PackedStringArray("_camera", "_leftHand", "_rightHand", "_hud")]
 script = ExtResource("1_tt7sn")
 _camera = NodePath("XRCamera3D")
 _leftHand = NodePath("LeftHand")
 _rightHand = NodePath("RightHand")
+_hud = NodePath("HUD")
 
 [node name="XRCamera3D" type="XRCamera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+
+[node name="VRCommonShaderCache" parent="XRCamera3D" instance=ExtResource("2_h54ur")]
 
 [node name="LeftHand" type="XRController3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.3, -0.5)
 tracker = &"left_hand"
 
 [node name="RightHand" type="XRController3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.3, -0.5)
 tracker = &"right_hand"
+
+[node name="HUD" type="OpenXRCompositionLayerQuad" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -1.5)
