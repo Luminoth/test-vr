@@ -8,6 +8,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Using Include="Godot" />
+    <Using Include="JetBrains.Annotations" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" Version="2024.2.0" />
