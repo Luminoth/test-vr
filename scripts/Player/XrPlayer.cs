@@ -38,7 +38,7 @@ public partial class XrPlayer : XROrigin3D
     // (assuming Local reference space here, Local Floor and Stage shouldn't do this)
     public void ResetHeight(float eyeHeight)
     {
-        GlobalPosition = GlobalPosition with { Y = GlobalPosition.Y + eyeHeight - Camera.Position.Y };
+        GlobalPosition = GlobalPosition with { Y = eyeHeight - Camera.Position.Y };
     }
 
     // from XRTools, rotates the origin around the camera

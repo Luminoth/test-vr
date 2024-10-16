@@ -82,7 +82,7 @@ public partial class PlayerCharacter : CharacterBody3D
             var eyeOffset = GlobalBasis * new Vector3(0.0f, 0.0f, -_eyeForwardOffset);
             GlobalPosition -= eyeOffset;
 
-            XrManager.Instance.XrPlayer.ResetHeight(EyeHeight);
+            XrManager.Instance.XrPlayer.ResetHeight(GlobalPosition.Y + EyeHeight);
         } else {
             var origin = XrManager.Instance.XrPlayer;
 
