@@ -51,23 +51,25 @@ public partial class FpsMovement : Movement
 
     private void ApplyInputRotation(float delta)
     {
+        var origin = XrManager.Instance.XrPlayer;
         var input = _input.LookState;
 
         // from XRTools, rotate origin with snap turn
         _snapTurnAccum -= Mathf.Abs(input.X) * delta;
         if(_snapTurnAccum <= 0.0f) {
-            XrManager.Instance.XrPlayer.Rotate(_snapTurnAngle * Mathf.Sign(input.X));
+            origin.Rotate(_snapTurnAngle * Mathf.Sign(input.X));
             _snapTurnAccum = _snapTurnDelay;
         }
     }
 
     public override void ApplyRotation(float delta)
     {
-        ApplyPhysicalRotation();
         ApplyInputRotation(delta);
+
+        UpdateCharacterRotation();
     }
 
-    private void ApplyInputMovement(Vector2 input, float delta)
+    private void ApplyInputMovement(Vector2 input)
     {
         var velocity = Character.Velocity;
 
@@ -93,9 +95,9 @@ public partial class FpsMovement : Movement
 
         Character.ApplyGravity(Gravity, delta);
 
-        ApplyInputMovement(_input.MoveState, delta);
+        ApplyInputMovement(_input.MoveState);
 
-        UpdateOrigin(currentPosition);
+        UpdateOriginPosition(currentPosition);
     }
 
     #region Event Handlers

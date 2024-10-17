@@ -56,7 +56,7 @@ public partial class JetpackMovement : Movement
         FpsMovement.ApplyRotation(delta);
     }
 
-    private void ApplyInputMovement(Vector2 input, float delta)
+    private void ApplyInputMovement(Vector2 input)
     {
         var velocity = Character.Velocity;
 
@@ -81,9 +81,9 @@ public partial class JetpackMovement : Movement
 
         var currentPosition = Character.GlobalPosition;
 
-        ApplyInputMovement(_input.MoveState, delta);
+        ApplyInputMovement(_input.MoveState);
 
-        UpdateOrigin(currentPosition);
+        UpdateOriginPosition(currentPosition);
     }
 
     private void DisableJetpack()

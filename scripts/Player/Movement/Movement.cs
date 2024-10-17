@@ -59,9 +59,9 @@ public abstract partial class Movement : Node
 
     protected abstract void ApplyMovement(float delta);
 
-    protected void ApplyPhysicalRotation()
+    // matches the character Y rotation to the camera
+    protected void UpdateCharacterRotation()
     {
-        // match the character Y rotation to the camera
         Character.GlobalRotation = Character.GlobalRotation with { Y = XrManager.Instance.XrPlayer.Camera.GlobalRotation.Y };
     }
 
@@ -82,9 +82,9 @@ public abstract partial class Movement : Node
         origin.GlobalPosition -= remaining;
     }
 
-    protected void UpdateOrigin(Vector3 previousPosition)
+    // moves the origin to match the character movement on the X/Z plane
+    protected void UpdateOriginPosition(Vector3 previousPosition)
     {
-        // move the origin to match the character movement on the X/Z plane
         var distance = Character.GlobalPosition with { Y = 0.0f } - previousPosition with { Y = 0.0f };
         XrManager.Instance.XrPlayer.GlobalPosition += distance;
     }

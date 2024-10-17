@@ -29,7 +29,7 @@ public partial class GorillaMovement : Movement
 
     public override void ApplyRotation(float delta)
     {
-        ApplyPhysicalRotation();
+        UpdateCharacterRotation();
     }
 
     protected override void ApplyMovement(float delta)
@@ -47,7 +47,7 @@ public partial class GorillaMovement : Movement
             Character.Velocity = Character.Velocity with { X = 0.0f, Z = 0.0f };
         }
 
-        UpdateOrigin(currentPosition);
+        UpdateOriginPosition(currentPosition);
     }
 
     private void HandleHandCollision(PlayerHand hand, Node3D body)

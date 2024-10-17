@@ -57,7 +57,7 @@ public partial class FpsMovement : Movement
 
     #endregion
 
-    public override void ApplyRotation(float delta)
+    private void ApplyInputRotation(float delta)
     {
         var origin = XrManager.Instance.XrPlayer;
         var input = _input.LookState;
@@ -70,14 +70,18 @@ public partial class FpsMovement : Movement
         origin.RotateY(-input.X * LookSensitivity * delta);
     }
 
-    protected override void ApplyMovement(float delta)
+    public override void ApplyRotation(float delta)
     {
-        Character.ApplyGravity(Gravity, delta);
+        ApplyInputRotation(delta);
 
+        UpdateCharacterRotation();
+    }
+
+    private void ApplyInputMovement(Vector2 input)
+    {
         var velocity = Character.Velocity;
 
         if(Character.IsOnFloor() || Character.AllowAirControl) {
-            var input = _input.MoveState;
             var direction = Character.GlobalBasis * new Vector3(input.X, 0, input.Y);
             if(direction.LengthSquared() > 0.0f) {
                 velocity.X = direction.X * Character.MoveSpeed;
@@ -89,6 +93,17 @@ public partial class FpsMovement : Movement
 
         Character.Velocity = velocity;
         Character.MoveAndSlide();
+    }
+
+    protected override void ApplyMovement(float delta)
+    {
+        var currentPosition = Character.GlobalPosition;
+
+        Character.ApplyGravity(Gravity, delta);
+
+        ApplyInputMovement(_input.MoveState);
+
+        UpdateOriginPosition(currentPosition);
     }
 
     #region Event Handlers

@@ -56,14 +56,13 @@ public partial class JetpackMovement : Movement
         FpsMovement.ApplyRotation(delta);
     }
 
-    protected override void ApplyMovement(float delta)
+    private void ApplyInputMovement(Vector2 input)
     {
         var velocity = Character.Velocity;
 
         // apply thrust
         velocity.Y = _input.IsJumpHeld() ? _verticalSpeed : 0.0f;
 
-        var input = _input.MoveState;
         var direction = Character.GlobalBasis * new Vector3(input.X, 0, input.Y);
         if(direction.LengthSquared() > 0.0f) {
             velocity.X = direction.X * Character.MoveSpeed;
@@ -74,6 +73,15 @@ public partial class JetpackMovement : Movement
 
         Character.Velocity = velocity;
         Character.MoveAndSlide();
+    }
+
+    protected override void ApplyMovement(float delta)
+    {
+        var currentPosition = Character.GlobalPosition;
+
+        ApplyInputMovement(_input.MoveState);
+
+        UpdateOriginPosition(currentPosition);
     }
 
     private void DisableJetpack()
