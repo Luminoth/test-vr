@@ -1,4 +1,5 @@
 using VrTest.Managers;
+using VrTest.UI;
 
 namespace VrTest.Player;
 
@@ -22,7 +23,10 @@ public partial class XrPlayer : XROrigin3D
     [Export]
     private OpenXRCompositionLayer _hud;
 
-    public OpenXRCompositionLayer Hud => _hud;
+    [Export]
+    private Node3D _hudTarget;
+
+    public Node3D HudTarget => _hudTarget;
 
     #region Godot Lifecycle
 
@@ -32,6 +36,12 @@ public partial class XrPlayer : XROrigin3D
     }
 
     #endregion
+
+    public void InitHud(XrUIHelper hud)
+    {
+        _hud.LayerViewport = hud.Viewport;
+        hud.XrUI = _hud;
+    }
 
     // moves the origin to fix the camera at the player height
     // minus a little bit to be at the eye position

@@ -2,12 +2,20 @@ using VrTest.Managers;
 
 namespace VrTest.UI;
 
-// put this node under the object to track against
+// put this node under the object to follow
 // the OpenXRCompositionLayer goes under the XROrigin3D
 // the MeshInstance3D goes under this node
 // the MeshInstance3D Mesh and Mesh Material must be marked as "Local to Scene"
 public partial class XrUIHelper : Node3D
 {
+    [Export]
+    private SubViewport _viewport;
+
+    public SubViewport Viewport => _viewport;
+
+    [Export]
+    private MeshInstance3D _noXrUI;
+
     private OpenXRCompositionLayer _xrUI;
 
     public OpenXRCompositionLayer XrUI
@@ -26,9 +34,6 @@ public partial class XrUIHelper : Node3D
         }
     }
 
-    [Export]
-    private MeshInstance3D _noXrUI;
-
     private Vector3 _offset;
 
     #region Godot Lifecycle
@@ -46,8 +51,13 @@ public partial class XrUIHelper : Node3D
 
     public override void _Process(double delta)
     {
-        XrUI.GlobalPosition = GlobalPosition;
-        XrUI.GlobalRotation = GlobalRotation;
+        var hudTarget = XrManager.Instance.XrPlayer.HudTarget;
+
+        GlobalPosition = hudTarget.GlobalPosition;
+        GlobalRotation = hudTarget.GlobalRotation;
+
+        _xrUI.GlobalPosition = GlobalPosition;
+        _xrUI.GlobalRotation = GlobalRotation;
     }
 
     #endregion

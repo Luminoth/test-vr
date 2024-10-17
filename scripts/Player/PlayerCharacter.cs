@@ -67,7 +67,7 @@ public partial class PlayerCharacter : CharacterBody3D
 
         Model.ShowHead(false);
 
-        _hud.XrUI = origin.Hud;
+        origin.InitHud(_hud);
 
         GD.Print($"Player height: {Height}");
         GD.Print($"Player eye height: {EyeHeight}");
