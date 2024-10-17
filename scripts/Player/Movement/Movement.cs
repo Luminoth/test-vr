@@ -70,15 +70,17 @@ public abstract partial class Movement : Node
         var origin = XrManager.Instance.XrPlayer;
 
         // attempt to move the character to be under the camera on the X/Z plane
+        // (minus the forward eye offset)
         var currentPosition = Character.GlobalPosition with { Y = 0.0f };
-        var desiredPosition = origin.Camera.GlobalPosition with { Y = 0.0f };
+        var desiredPosition = (origin.Camera.GlobalPosition - Character.EyeForwardOffset) with { Y = 0.0f };
         var currentVelocity = Character.Velocity;
         Character.Velocity = (desiredPosition - currentPosition) / delta;
         Character.MoveAndSlide();
         Character.Velocity = currentVelocity;
 
         // move the origin back to match if we didn't make it
-        var remaining = desiredPosition - Character.GlobalPosition with { Y = 0.0f };
+        var newPosition = Character.GlobalPosition with { Y = 0.0f };
+        var remaining = desiredPosition - newPosition;
         origin.GlobalPosition -= remaining;
     }
 

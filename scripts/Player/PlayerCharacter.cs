@@ -23,12 +23,10 @@ public partial class PlayerCharacter : CharacterBody3D
     [Export]
     private float _eyeForwardOffset = 0.5f;
 
-    //public float EyeForwardOffset => _eyeForwardOffset;
+    public Vector3 EyeForwardOffset => GlobalBasis * new Vector3(0.0f, 0.0f, -_eyeForwardOffset);
 
     [Export]
     private float _eyeHeightOffset = 0.1f;
-
-    //public float EyeHeightOffset => _eyeHeightOffset;
 
     private float EyeHeight => Height - _eyeHeightOffset;
 
@@ -75,19 +73,19 @@ public partial class PlayerCharacter : CharacterBody3D
 
     public override void _PhysicsProcess(double delta)
     {
-        var eyeOffset = GlobalBasis * new Vector3(0.0f, 0.0f, -_eyeForwardOffset);
         var origin = XrManager.Instance.XrPlayer;
 
         if(XrManager.Instance.IsXrInitialized) {
             // offset the character so the camera is at the eye
             // (character behind the eye)
-            // TODO: maybe this could move the origin instead
+            // TODO: maybe this could move the origin instead?
             // but this actually keeps the camera "in bounds" so is probably correct
-            //GlobalPosition -= eyeOffset;
+            // TODO: it does not keep the camera "in bounds" anymore
+            GlobalPosition -= EyeForwardOffset;
         } else {
-            // move the origin to match the body
+            // move the origin to match the character
             // but just a little in front to match the eyes
-            origin.GlobalPosition = GlobalPosition + eyeOffset;
+            origin.GlobalPosition = GlobalPosition + EyeForwardOffset;
         }
 
         origin.ResetHeight(GlobalPosition.Y + EyeHeight);
