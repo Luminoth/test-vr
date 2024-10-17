@@ -80,22 +80,17 @@ public partial class PlayerCharacter : CharacterBody3D
 
         if(XrManager.Instance.IsXrInitialized) {
             // offset the character so the camera is at the eye
-            // maybe this could move the origin instead
+            // (character behind the eye)
+            // TODO: maybe this could move the origin instead
             // but this actually keeps the camera "in bounds" so is probably correct
-            var eyeOffset = GlobalBasis * new Vector3(0.0f, 0.0f, -_eyeForwardOffset);
-            GlobalPosition -= eyeOffset;
-
-            origin.ResetHeight(GlobalPosition.Y + EyeHeight);
+            //GlobalPosition -= eyeOffset;
         } else {
-            var origin = XrManager.Instance.XrPlayer;
-
-            // rotate the character to match the origin
-            GlobalRotation = origin.GlobalRotation;
-
             // move the origin to match the body
             // but just a little in front to match the eyes
             origin.GlobalPosition = GlobalPosition + eyeOffset;
         }
+
+        origin.ResetHeight(GlobalPosition.Y + EyeHeight);
     }
 
     #endregion
