@@ -52,15 +52,17 @@ radius = 0.1
 height = 0.5
 
 [node name="LeftHand" type="Node3D" parent="." node_paths=PackedStringArray("_model", "_handBody")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.3, -0.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.3, -1)
 script = ExtResource("2_8wu5n")
 _model = NodePath("CSGSphere3D")
 _handBody = NodePath("AnimatableBody3D")
 
 [node name="CSGSphere3D" type="CSGSphere3D" parent="LeftHand"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.15)
 radius = 0.1
 
 [node name="AnimatableBody3D" type="AnimatableBody3D" parent="LeftHand"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.15)
 collision_layer = 4
 collision_mask = 51
 
@@ -76,15 +78,17 @@ radius = 0.1
 height = 0.5
 
 [node name="RightHand" type="Node3D" parent="." node_paths=PackedStringArray("_model", "_handBody")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.3, -0.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.3, -1)
 script = ExtResource("2_8wu5n")
 _model = NodePath("CSGSphere3D")
 _handBody = NodePath("AnimatableBody3D")
 
 [node name="CSGSphere3D" type="CSGSphere3D" parent="RightHand"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.15)
 radius = 0.1
 
 [node name="AnimatableBody3D" type="AnimatableBody3D" parent="RightHand"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.15)
 collision_layer = 4
 collision_mask = 51
 

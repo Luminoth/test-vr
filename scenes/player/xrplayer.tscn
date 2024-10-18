@@ -1,7 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://cunad52eqlcfm"]
+[gd_scene load_steps=6 format=3 uid="uid://cunad52eqlcfm"]
 
 [ext_resource type="Script" path="res://scripts/Player/XrPlayer.cs" id="1_tt7sn"]
 [ext_resource type="PackedScene" path="res://addons/godot-xr-tools/misc/vr_common_shader_cache.tscn" id="2_h54ur"]
+[ext_resource type="PackedScene" uid="uid://b4kad2kuba1yn" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/left_hand_low.tscn" id="3_cjla8"]
+[ext_resource type="PackedScene" uid="uid://cqhw276realc" path="res://addons/godot-xr-tools/functions/function_pointer.tscn" id="4_jnnet"]
+[ext_resource type="PackedScene" uid="uid://l2n30mpbkdyw" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/right_hand_low.tscn" id="5_cxuns"]
 
 [node name="XROrigin3D" type="XROrigin3D" node_paths=PackedStringArray("_camera", "_leftHand", "_rightHand", "_hud", "_hudTarget")]
 script = ExtResource("1_tt7sn")
@@ -23,9 +26,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, -0.25, -1.5)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.3, -0.5)
 tracker = &"left_hand"
 
+[node name="LeftHand" parent="LeftHand" instance=ExtResource("3_cjla8")]
+
+[node name="FunctionPointer" parent="LeftHand" instance=ExtResource("4_jnnet")]
+
 [node name="RightHand" type="XRController3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.3, -0.5)
 tracker = &"right_hand"
+
+[node name="RightHand" parent="RightHand" instance=ExtResource("5_cxuns")]
+
+[node name="FunctionPointer" parent="RightHand" instance=ExtResource("4_jnnet")]
 
 [node name="HUD" type="OpenXRCompositionLayerQuad" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 0.65, -1.5)
