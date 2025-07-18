@@ -38,3 +38,18 @@
 * Multiplayer
   * https://forum.godotengine.org/t/multiplayer-xr-players-that-join-follow-player-ones-position/68593
   * Probably easiest thing is to move the character out of the XR piece entirely and have the XR piece just update the one character, which can then be sync'd across the network
+
+## Design ideas
+
+* zero g maps
+  * grav boots
+* whip for hooking things and swinging around
+* wall and obstacle climbing
+
+*** Replace "remote characters" with disabled characters
+  * need a way to simulate them not being multiplayer authorities for now
+* hands are kind of in the wrong spot atm
+* Re-enable shoving enemies
+  * for some reason they're pushable atm and I'm not sure why :/
+* Dash movement
+* Zero G movement
