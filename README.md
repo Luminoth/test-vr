@@ -2,14 +2,12 @@
 
 ## Requirements
 
-* Godot 4.3
+* Godot 4.6
 * https://docs.godotengine.org/en/stable/tutorials/export/exporting_for_android.html
   * OpenJDK (17+)
   * Android SDK (35)
   * Android NDK
   * CMake
-  * JetBrains Annotations
-    * dotnet add package JetBrains.Annotations
 
 ## Running locally on Quest
 
@@ -18,7 +16,7 @@
 * Have to enable Developer Mode through the Meta Quest app
   * Make sure to allow access to files in the headset (notification may be in the notifications tab, it goes away kinda quick)
 * If not using the same signing across PCs, have to adb uninstall first
-* Have to set XR mode to OpenXR (defaults to Regular) and include the Meta OpenXR vendor plugin
+* Have to set XR mode to OpenXR (defaults to Regular) and include the Meta Toolkit plugin
 * Deploy with Remote Debug is useful to get logs in the editor
 * Small Deploy with Network Filesystem seems to crash the app when used
 * Have to use test users until a first build can be uploaded (and this is a long process to kick off)
@@ -27,7 +25,7 @@
 ## Misc
 
 * https://docs.godotengine.org/en/stable/tutorials/xr/setting_up_xr.html
-* https://decacis.github.io/godot_oculus_platform/
+* https://github.com/godot-sdk-integrations/godot-meta-toolkit
 * https://godotvr.github.io/godot-xr-tools/
 * Reference Space is set to Local (don't follow player height)
 
