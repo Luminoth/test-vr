@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://drb8tbpmlpe5j"]
+[gd_scene format=3 uid="uid://drb8tbpmlpe5j"]
 
 [ext_resource type="PackedScene" uid="uid://clujaf3u776a3" path="res://addons/godot-xr-tools/objects/viewport_2d_in_3d.tscn" id="1_g4sxh"]
 [ext_resource type="PackedScene" uid="uid://c5y8tn5gtle8" path="res://scenes/player/old_player.tscn" id="1_irsne"]
@@ -47,111 +47,111 @@ size = Vector2(50, 50)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yyghb"]
 albedo_color = Color(0.784314, 0.784314, 0.980392, 1)
 
-[node name="Node3D" type="Node3D"]
+[node name="Node3D" type="Node3D" unique_id=641806113]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1166479151]
 environment = SubResource("Environment_u4jql")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment" unique_id=1124737487]
 transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 10, 0)
 
-[node name="World" type="Node3D" parent="."]
+[node name="World" type="Node3D" parent="." unique_id=1275843760]
 
-[node name="Floor" type="CSGMesh3D" parent="World"]
+[node name="Floor" type="CSGMesh3D" parent="World" unique_id=2060453665]
 mesh = SubResource("PlaneMesh_jgwmu")
 material = SubResource("StandardMaterial3D_kwy4w")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="World/Floor"]
+[node name="StaticBody3D" type="StaticBody3D" parent="World/Floor" unique_id=636739508]
 collision_mask = 28
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Floor/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Floor/StaticBody3D" unique_id=927476299]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("BoxShape3D_bdjvr")
 
-[node name="Ceiling" type="CSGMesh3D" parent="World"]
+[node name="Ceiling" type="CSGMesh3D" parent="World" unique_id=1716333241]
 transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 50, 0)
 mesh = SubResource("PlaneMesh_8ib1u")
 material = SubResource("StandardMaterial3D_u0xi5")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="World/Ceiling"]
+[node name="StaticBody3D" type="StaticBody3D" parent="World/Ceiling" unique_id=1719428449]
 collision_mask = 28
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Ceiling/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Ceiling/StaticBody3D" unique_id=240891883]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("BoxShape3D_bdjvr")
 
-[node name="Wall" type="CSGMesh3D" parent="World"]
+[node name="Wall" type="CSGMesh3D" parent="World" unique_id=1882639011]
 transform = Transform3D(-1, -8.74228e-08, 3.82137e-15, 0, -4.37114e-08, -1, 8.74228e-08, -1, 4.37114e-08, 0, 25, 25)
 mesh = SubResource("PlaneMesh_a6u3y")
 material = SubResource("StandardMaterial3D_fn37j")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="World/Wall"]
+[node name="StaticBody3D" type="StaticBody3D" parent="World/Wall" unique_id=1655711211]
 collision_mask = 28
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Wall/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Wall/StaticBody3D" unique_id=1105166234]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("BoxShape3D_bdjvr")
 
-[node name="Wall2" type="CSGMesh3D" parent="World"]
+[node name="Wall2" type="CSGMesh3D" parent="World" unique_id=530934373]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 25, -25)
 mesh = SubResource("PlaneMesh_1psei")
 material = SubResource("StandardMaterial3D_ya40p")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="World/Wall2"]
+[node name="StaticBody3D" type="StaticBody3D" parent="World/Wall2" unique_id=66311631]
 collision_mask = 28
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Wall2/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Wall2/StaticBody3D" unique_id=363436262]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("BoxShape3D_bdjvr")
 
-[node name="Wall3" type="CSGMesh3D" parent="World"]
+[node name="Wall3" type="CSGMesh3D" parent="World" unique_id=1528939886]
 transform = Transform3D(1.19249e-08, -1, 4.37114e-08, 0, -4.37114e-08, -1, 1, 1.19249e-08, -5.21253e-16, 25, 25, 0)
 mesh = SubResource("PlaneMesh_y38cl")
 material = SubResource("StandardMaterial3D_ptfs0")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="World/Wall3"]
+[node name="StaticBody3D" type="StaticBody3D" parent="World/Wall3" unique_id=192327440]
 collision_mask = 28
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Wall3/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Wall3/StaticBody3D" unique_id=1742706695]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("BoxShape3D_bdjvr")
 
-[node name="Wall4" type="CSGMesh3D" parent="World"]
+[node name="Wall4" type="CSGMesh3D" parent="World" unique_id=37065773]
 transform = Transform3D(1.19249e-08, 1, -4.37114e-08, 0, -4.37114e-08, -1, -1, 1.19249e-08, -5.21253e-16, -25, 25, 0)
 mesh = SubResource("PlaneMesh_15khw")
 material = SubResource("StandardMaterial3D_yyghb")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="World/Wall4"]
+[node name="StaticBody3D" type="StaticBody3D" parent="World/Wall4" unique_id=1054291969]
 collision_mask = 28
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Wall4/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Wall4/StaticBody3D" unique_id=1049117394]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("BoxShape3D_bdjvr")
 
-[node name="Viewport2Din3D" parent="World" instance=ExtResource("1_g4sxh")]
+[node name="Viewport2Din3D" parent="World" unique_id=1462457489 instance=ExtResource("1_g4sxh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -5)
 collision_layer = 5242880
 scene = ExtResource("4_adj22")
 transparent = 0
 scene_properties_keys = PackedStringArray("test_ui.gd")
 
-[node name="Enemies" type="Node3D" parent="."]
+[node name="Enemies" type="Node3D" parent="." unique_id=550865055]
 
-[node name="Enemy" parent="Enemies" instance=ExtResource("2_txd32")]
+[node name="Enemy" parent="Enemies" unique_id=1456538128 instance=ExtResource("2_txd32")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, -5)
 
-[node name="Enemy 2" parent="Enemies" instance=ExtResource("2_txd32")]
+[node name="Enemy 2" parent="Enemies" unique_id=996304807 instance=ExtResource("2_txd32")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -5)
 
-[node name="Enemy 3" parent="Enemies" instance=ExtResource("2_txd32")]
+[node name="Enemy 3" parent="Enemies" unique_id=2045814019 instance=ExtResource("2_txd32")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
 
-[node name="Players" type="Node3D" parent="."]
+[node name="Players" type="Node3D" parent="." unique_id=850905799]
 
-[node name="XROrigin3D" parent="Players" instance=ExtResource("1_irsne")]
+[node name="XROrigin3D" parent="Players" unique_id=1510533038 instance=ExtResource("1_irsne")]
 
-[node name="Remote Player" parent="Players" instance=ExtResource("5_slauv")]
+[node name="Remote Player" parent="Players" unique_id=1191037334 instance=ExtResource("5_slauv")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 2, 0, -2)
 
-[node name="Remote Player 2" parent="Players" instance=ExtResource("5_slauv")]
+[node name="Remote Player 2" parent="Players" unique_id=988551023 instance=ExtResource("5_slauv")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2, 0, -2)
